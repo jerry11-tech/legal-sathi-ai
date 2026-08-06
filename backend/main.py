@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.routers import auth, chat, documents, navigator, admin
 from database.models import Base
 from database.session import engine
+from config.settings import settings
 
 # Ensure database tables exist
 Base.metadata.create_all(bind=engine)
@@ -14,19 +15,11 @@ app = FastAPI(
 )
 
 # CORS middleware
+origins = [origin.strip() for origin in settings.ALLOWED_ORIGINS.split(",") if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:3001",
-        "http://127.0.0.1:3001",
-        "http://localhost:3002",
-        "http://127.0.0.1:3002",
-        "http://localhost:8000",
-        "http://127.0.0.1:8000",
-    ],
-    allow_origin_regex="https?://.*",
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
