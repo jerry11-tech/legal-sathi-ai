@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     SUPABASE_KEY: str = ""
     
     # CORS
-    ALLOWED_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000,http://localhost:8000,http://127.0.0.1:8000,https://six-walls-wash.loca.lt"
+    ALLOWED_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000,http://localhost:8000,http://127.0.0.1:8000,https://c85ab77e14686538-103-127-23-19.serveousercontent.com"
     
     # AI APIs
     GEMINI_API_KEY: str = ""
