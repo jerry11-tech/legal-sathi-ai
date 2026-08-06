@@ -1,0 +1,38 @@
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.example
+
+# Node dependencies & build
+node_modules/
+frontend/node_modules/
+.next/
+frontend/.next/
+out/
+frontend/out/
+
+# Python dependencies & virtual environments
+venv/
+backend/venv/
+__pycache__/
+backend/__pycache__/
+*.py[cod]
+*$py.class
+
+# Database & Storage
+*.db
+backend/*.db
+chroma/
+backend/chroma/
+sent_emails/
+backend/sent_emails/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+LegalSathi-AI/

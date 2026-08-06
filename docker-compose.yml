@@ -1,0 +1,52 @@
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: legalsathi
+      POSTGRES_PASSWORD: legalsathi_password
+      POSTGRES_DB: legalsathi_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - legalsathi-net
+
+  backend:
+    build: 
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://legalsathi:legalsathi_password@db:5432/legalsathi_db
+      - SECRET_KEY=development_secret_key_change_me
+    depends_on:
+      - db
+    networks:
+      - legalsathi-net
+    volumes:
+      - ./backend:/app
+      - ./chroma:/chroma
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
+    depends_on:
+      - backend
+    networks:
+      - legalsathi-net
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+
+volumes:
+  postgres_data:
+
+networks:
+  legalsathi-net:
+    driver: bridge

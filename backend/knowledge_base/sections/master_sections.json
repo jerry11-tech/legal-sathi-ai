@@ -1,0 +1,47 @@
+[
+  {
+    "act_id": "dv_act_2005",
+    "section_number": "Section 3",
+    "title": "Definition of domestic violence",
+    "content": "Any act, omission or commission or conduct of the respondent shall constitute domestic violence in case it harms or injures or endangers the health, safety, life, limb or well-being, whether mental or physical, of the aggrieved person or tends to do so and includes causing physical abuse, sexual abuse, verbal and emotional abuse and economic abuse.",
+    "punishment": "Protection orders, residence orders, monetary reliefs",
+    "bailable": true,
+    "language": "en"
+  },
+  {
+    "act_id": "pocso_act_2012",
+    "section_number": "Section 4",
+    "title": "Punishment for penetrative sexual assault",
+    "content": "Whoever commits penetrative sexual assault shall be punished with imprisonment of either description for a term which shall not be less than seven years but which may extend to imprisonment for life, and shall also be liable to fine.",
+    "punishment": "7 years to life imprisonment + fine",
+    "bailable": false,
+    "language": "en"
+  },
+  {
+    "act_id": "senior_citizen_act_2007",
+    "section_number": "Section 24",
+    "title": "Exposure and abandonment of senior citizen",
+    "content": "Whoever, having the care or protection of senior citizen leaves, such senior citizen in any place with the intention of wholly abandoning such senior citizen, shall be punishable with imprisonment of either description for a term which may extend to three months or fine which may extend to five thousand rupees or with both.",
+    "punishment": "Up to 3 months imprisonment or Rs 5000 fine or both",
+    "bailable": true,
+    "language": "en"
+  },
+  {
+    "act_id": "it_act_2000",
+    "section_number": "Section 66C",
+    "title": "Punishment for identity theft",
+    "content": "Whoever, fraudulently or dishonestly make use of the electronic signature, password or any other unique identification feature of any other person, shall be punished with imprisonment of either description for a term which may extend to three years and shall also be liable to fine which may extend to rupees one lakh.",
+    "punishment": "Up to 3 years imprisonment + fine up to Rs 1 Lakh",
+    "bailable": true,
+    "language": "en"
+  },
+  {
+    "act_id": "consumer_protection_2019",
+    "section_number": "Section 89",
+    "title": "Punishment for false or misleading advertisement",
+    "content": "Any manufacturer or service provider who causes a false or misleading advertisement to be made which is prejudicial to the interest of consumers shall be punished with imprisonment for a term which may extend to two years and with fine which may extend to ten lakh rupees.",
+    "punishment": "Up to 2 years imprisonment + fine up to Rs 10 Lakhs",
+    "bailable": true,
+    "language": "en"
+  }
+]

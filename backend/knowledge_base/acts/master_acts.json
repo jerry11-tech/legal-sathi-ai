@@ -1,0 +1,47 @@
+[
+  {
+    "id": "dv_act_2005",
+    "domain": "Women's Rights",
+    "title": "Protection of Women from Domestic Violence Act, 2005",
+    "year": 2005,
+    "description": "An Act to provide for more effective protection of the rights of women guaranteed under the Constitution who are victims of violence of any kind occurring within the family.",
+    "government_link": "https://wcd.nic.in/act/protection-women-domestic-violence-act-2005",
+    "language": "en"
+  },
+  {
+    "id": "pocso_act_2012",
+    "domain": "Children's Rights",
+    "title": "Protection of Children from Sexual Offences (POCSO) Act, 2012",
+    "year": 2012,
+    "description": "An Act to protect children from offences of sexual assault, sexual harassment and pornography.",
+    "government_link": "https://wcd.nic.in/act/protection-children-sexual-offences-pocso-act-2012",
+    "language": "en"
+  },
+  {
+    "id": "senior_citizen_act_2007",
+    "domain": "Senior Citizen Rights",
+    "title": "Maintenance and Welfare of Parents and Senior Citizens Act, 2007",
+    "year": 2007,
+    "description": "An Act to provide for more effective provisions for the maintenance and welfare of parents and senior citizens guaranteed and recognised under the Constitution.",
+    "government_link": "https://socialjustice.gov.in/writereaddata/UploadFile/act_mwpsc.pdf",
+    "language": "en"
+  },
+  {
+    "id": "it_act_2000",
+    "domain": "Cyber Bullying & Fraud",
+    "title": "Information Technology Act, 2000",
+    "year": 2000,
+    "description": "An Act to provide legal recognition for transactions carried out by means of electronic data interchange and other means of electronic communication.",
+    "government_link": "https://www.meity.gov.in/content/information-technology-act-2000",
+    "language": "en"
+  },
+  {
+    "id": "consumer_protection_2019",
+    "domain": "Consumer Rights",
+    "title": "Consumer Protection Act, 2019",
+    "year": 2019,
+    "description": "An Act to provide for protection of the interests of consumers and for the said purpose, to establish authorities for timely and effective administration.",
+    "government_link": "https://consumeraffairs.nic.in/en/acts-and-rules/consumer-protection",
+    "language": "en"
+  }
+]
