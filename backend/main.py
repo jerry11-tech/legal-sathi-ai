@@ -37,4 +37,8 @@ def read_root():
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {"status": "ok", "service": "LegalSathi AI Backend", "version": settings.VERSION}
+
+@app.get("/status")
+def status():
+    return {"status": "healthy", "database": "connected"}
