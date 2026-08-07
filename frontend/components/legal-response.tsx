@@ -1,9 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import {
   AlertTriangle,
   BookOpen,
+  Check,
+  Copy,
   FileText,
   Globe,
   Info,
@@ -11,6 +14,7 @@ import {
   Scale,
   ShieldCheck,
   Sparkles,
+  Volume2,
 } from 'lucide-react';
 import Markdown from './markdown';
 
@@ -107,10 +111,42 @@ function BulletList({ items }: { items: string[] }) {
 }
 
 export default function LegalResponseCard({ response }: { response: LegalResponse }) {
+  const [copied, setCopied] = useState(false);
+  const [speaking, setSpeaking] = useState(false);
+
   const rights = parseLines(response.rights);
   const nextSteps = parseLines(response.next_steps);
   const documents = parseLines(response.required_documents);
   const confidence = Math.round((response.confidence_score ?? 0) * 100);
+
+  const handleSpeak = () => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      alert('Text-to-Speech is not supported in your browser.');
+      return;
+    }
+    if (speaking) {
+      window.speechSynthesis.cancel();
+      setSpeaking(false);
+      return;
+    }
+    const textToSpeak = `${response.summary}. ${response.applicable_law}. ${response.explanation}`;
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.onend = () => setSpeaking(false);
+    utterance.onerror = () => setSpeaking(false);
+    setSpeaking(true);
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const handleCopyText = () => {
+    try {
+      const fullText = `LEGAL SUMMARY: ${response.summary}\n\nAPPLICABLE LAW: ${response.applicable_law}\n\nEXPLANATION: ${response.explanation}`;
+      if (navigator?.clipboard?.writeText) {
+        navigator.clipboard.writeText(fullText);
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {}
+  };
 
   const rawUrl = (response.government_website || '').trim();
   const isValidUrl = /^https:\/\/[^\s<>"]+$/i.test(rawUrl);
@@ -206,15 +242,33 @@ export default function LegalResponseCard({ response }: { response: LegalRespons
       )}
 
       {typeof response.confidence_score === 'number' && (
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100">
-          <Link
-            href={`/navigator?q=${encodeURIComponent(response.summary || '')}`}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-3.5 py-1.5 text-xs font-semibold text-blue-600 transition-colors hover:bg-blue-100"
-          >
-            <Sparkles size={14} />
-            <span>Analyze in Case Navigator</span>
-          </Link>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-500">
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              href={`/navigator?q=${encodeURIComponent(response.summary || '')}`}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-3.5 py-1.5 text-xs font-bold text-blue-600 transition-colors hover:bg-blue-100 dark:bg-blue-950 dark:text-blue-300"
+            >
+              <Sparkles size={14} />
+              <span>Analyze in Case Navigator</span>
+            </Link>
+            <button
+              onClick={handleSpeak}
+              className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+                speaking ? 'bg-amber-100 text-amber-800 animate-pulse' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
+              }`}
+            >
+              <Volume2 size={14} />
+              <span>{speaking ? 'Stop Audio' : 'Listen Audio'}</span>
+            </button>
+            <button
+              onClick={handleCopyText}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 transition"
+            >
+              {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
+              <span>{copied ? 'Copied!' : 'Copy Summary'}</span>
+            </button>
+          </div>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
             Confidence {confidence}%
           </span>
