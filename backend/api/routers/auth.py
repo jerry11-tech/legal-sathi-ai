@@ -386,7 +386,6 @@ def delete_account(token: str = Query(...), db: Session = Depends(get_db)):
 def admin_login(req: AdminLoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == req.admin_email.lower(), User.role == "admin").first()
 
-    # Create initial seed admin if none exists
     if not user and req.admin_email.lower() == "admin@legalsathi.ai":
         hashed_pwd = get_password_hash(req.password)
         user = User(
@@ -417,6 +416,6 @@ def admin_login(req: AdminLoginRequest, db: Session = Depends(get_db)):
             "email": user.email,
             "first_name": user.first_name,
             "last_name": user.last_name,
-            "role": "admin",
+            "role": user.role,
         },
     }

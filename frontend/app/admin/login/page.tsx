@@ -21,10 +21,10 @@ export default function AdminLoginPage() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/admin/login`,
+        `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/auth/admin/login`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Remainder': 'true' },
           body: JSON.stringify({ admin_email: adminEmail, password }),
         }
       );

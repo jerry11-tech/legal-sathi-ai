@@ -1,3 +1,9 @@
+import os
+import sys
+
+# Ensure backend directory is in Python path for all environments
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.routers import auth, chat, documents, navigator, admin
