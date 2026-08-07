@@ -3,7 +3,27 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Loader2, Mic, Paperclip, Plus, Scale, Send, Sparkles } from 'lucide-react';
+import {
+  ArrowRight,
+  Bot,
+  Copy,
+  Download,
+  FileCheck,
+  FileText,
+  FolderOpen,
+  History,
+  Loader2,
+  Mic,
+  Paperclip,
+  Pin,
+  Plus,
+  Scale,
+  Send,
+  Share2,
+  Sparkles,
+  Trash2,
+  Volume2,
+} from 'lucide-react';
 import LegalResponseCard, { type LegalResponse } from '@/components/legal-response';
 import Markdown from '@/components/markdown';
 import SmartSuggestions from '@/components/smart-suggestions';
@@ -16,7 +36,7 @@ type Message =
   | { role: 'error'; content: string };
 
 const WELCOME =
-  "Hello! I am **LegalSathi**, your AI legal assistant.\n\nAsk me about:\n- Women's Rights & POSH / Domestic Violence\n- Children's Rights (POCSO)\n- Senior Citizen Rights\n- Rental / Tenant Disputes\n- Cyber Bullying & Financial Fraud\n- Copyright\n- Consumer Rights\n- Police Complaints\n\n_This platform provides legal information for educational purposes, not legal advice._";
+  "Hello! I am **LegalSathi AI**, your Indian Legal Intelligence assistant.\n\nAsk me any question regarding:\n- Women's Rights & POSH / Domestic Violence\n- Cyber Crime, Financial Fraud & Online Bullying\n- Rental & Tenant Disputes\n- Police Complaints (CrPC / BNSS FIRs)\n- Labour & Workplace Rights\n- Consumer Complaints & RTI Forms\n\n_This platform provides legal information for educational purposes, not official legal representation._";
 
 export default function ChatPage() {
   const searchParams = useSearchParams();
@@ -30,6 +50,11 @@ export default function ChatPage() {
   const [showGuestModal, setShowGuestModal] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [guestCount, setGuestCount] = useState(0);
+  const [pinnedChats, setPinnedChats] = useState<string[]>([
+    'Cyber Fraud Recovery Process',
+    'Tenant Security Deposit Dispute',
+    'POSH Workplace Complaint Steps',
+  ]);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -48,7 +73,6 @@ export default function ChatPage() {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading]);
 
-  // Handle URL prefilled query from homepage
   useEffect(() => {
     if (initialQuery && !initialHandled.current) {
       initialHandled.current = true;
@@ -97,9 +121,7 @@ export default function ChatPage() {
         ...prev,
         {
           role: 'error',
-          content: `Sorry, I could not reach the LegalSathi backend. Please make sure port 8000 is running. (${
-            (err as Error).message
-          })`,
+          content: `Sorry, I could not reach the LegalSathi backend. (${(err as Error).message})`,
         },
       ]);
     } finally {
@@ -108,162 +130,226 @@ export default function ChatPage() {
     }
   };
 
+  const handleExportChat = () => {
+    const text = messages.map((m) => `${m.role.toUpperCase()}: ${m.content}`).join('\n\n');
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `LegalSathi_Chat_Export_${Date.now()}.txt`;
+    a.click();
+  };
+
   return (
-    <div className="flex h-full flex-col bg-slate-50">
-      {/* Top Header */}
-      <header className="sticky top-0 z-10 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+    <div className="flex h-[calc(100vh-4rem)] bg-slate-50 dark:bg-slate-950 overflow-hidden">
+      {/* Left Chat History Panel (ChatGPT Style) */}
+      <aside className="hidden lg:flex w-72 flex-col border-r border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900 p-4 space-y-4">
+        <button
+          onClick={() => {
+            setMessages([{ role: 'assistant', content: WELCOME }]);
+          }}
+          className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-blue-700 transition"
+        >
+          <Plus size={16} />
+          <span>New Chat Session</span>
+        </button>
+
+        <div className="flex-1 space-y-4 overflow-y-auto pr-1">
+          <div>
+            <div className="flex items-center gap-1.5 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+              <Pin size={12} /> Pinned Consultations
+            </div>
+            <div className="space-y-1">
+              {pinnedChats.map((chat, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleSend(chat)}
+                  className="w-full text-left truncate rounded-xl px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition"
+                >
+                  {chat}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center gap-1.5 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+              <History size={12} /> Recent History
+            </div>
+            <div className="space-y-1">
+              {['IPC 302 legal implications', 'POSH committee filing procedure', 'Consumer court fee structure'].map(
+                (item, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleSend(item)}
+                    className="w-full text-left truncate rounded-xl px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition"
+                  >
+                    {item}
+                  </button>
+                )
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-slate-100 dark:border-slate-800 pt-3">
+          <button
+            onClick={handleExportChat}
+            className="w-full flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 transition"
+          >
+            <Download size={14} /> Export Chat (TXT)
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Chat Workspace */}
+      <div className="flex flex-1 flex-col overflow-hidden">
+        {/* Top Header */}
+        <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-slate-200/80 bg-white/90 backdrop-blur-md px-4 sm:px-6 dark:border-slate-800 dark:bg-slate-900/90">
           <div className="flex items-center gap-2.5">
             <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-600 text-white shadow-xs">
               <Scale size={16} />
             </span>
             <div>
-              <h1 className="text-sm font-bold text-slate-900">LegalSathi AI Consultation</h1>
-              <p className="text-[11px] text-slate-500 font-medium">ChatGPT-Heart Legal Assistant</p>
+              <h1 className="text-sm font-bold text-slate-900 dark:text-white">LegalSathi AI Consultation</h1>
+              <p className="text-[10px] text-slate-500 font-medium">Enterprise Indian Legal Intelligence</p>
             </div>
           </div>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700 ring-1 ring-emerald-200">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            Online
-          </span>
-        </div>
-      </header>
 
-      {/* Conversation Feed */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="mx-auto max-w-4xl space-y-5 px-3 py-5 sm:px-6 sm:py-6">
-          {messages.map((msg, idx) => {
-            if (msg.role === 'user') {
-              return (
-                <div key={idx} className="flex justify-end">
-                  <div className="max-w-[85%] sm:max-w-[75%] rounded-2xl rounded-br-md bg-blue-600 px-4 py-3 text-sm leading-relaxed text-white shadow-md shadow-blue-600/20">
-                    {msg.content}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleExportChat}
+              className="flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+            >
+              <Download size={13} /> Export
+            </button>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-950 dark:text-emerald-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Online
+            </span>
+          </div>
+        </header>
+
+        {/* Conversation Feed */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="mx-auto max-w-4xl space-y-5 px-3 py-5 sm:px-6 sm:py-6">
+            {messages.map((msg, idx) => {
+              if (msg.role === 'user') {
+                return (
+                  <div key={idx} className="flex justify-end">
+                    <div className="max-w-[85%] sm:max-w-[75%] rounded-2xl rounded-br-md bg-blue-600 px-4 py-3 text-sm leading-relaxed text-white shadow-md shadow-blue-600/20">
+                      {msg.content}
+                    </div>
                   </div>
-                </div>
-              );
-            }
+                );
+              }
 
-            if (msg.role === 'error') {
+              if (msg.role === 'error') {
+                return (
+                  <div key={idx} className="flex justify-start">
+                    <div className="max-w-[95%] sm:max-w-[90%] rounded-2xl rounded-bl-md border border-red-200 bg-red-50 dark:border-red-900/50 dark:bg-red-950 px-4 py-3.5 text-sm text-red-800 dark:text-red-300 shadow-xs">
+                      {msg.content}
+                    </div>
+                  </div>
+                );
+              }
+
               return (
                 <div key={idx} className="flex justify-start">
-                  <div className="max-w-[95%] sm:max-w-[90%] rounded-2xl rounded-bl-md border border-red-200 bg-red-50 px-4 py-3.5 text-sm text-red-800 shadow-xs">
-                    {msg.content}
+                  <div className="max-w-[95%] sm:max-w-[90%] w-full rounded-2xl rounded-bl-md border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900 px-4 py-4 sm:px-5 sm:py-5 shadow-sm">
+                    {msg.response ? (
+                      <LegalResponseCard response={msg.response} />
+                    ) : (
+                      <Markdown content={msg.content} />
+                    )}
                   </div>
                 </div>
               );
-            }
+            })}
 
-            return (
-              <div key={idx} className="flex justify-start">
-                <div className="max-w-[95%] sm:max-w-[90%] w-full rounded-2xl rounded-bl-md border border-slate-200/80 bg-white px-4 py-4 sm:px-5 sm:py-5 shadow-sm">
-                  {msg.response ? (
-                    <LegalResponseCard response={msg.response} />
-                  ) : (
-                    <Markdown content={msg.content} />
-                  )}
+            {loading && (
+              <div className="flex justify-start">
+                <div className="inline-flex items-center gap-2.5 rounded-2xl rounded-bl-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3.5 text-sm text-slate-500 shadow-sm">
+                  <Loader2 size={16} className="animate-spin text-blue-600" />
+                  Analyzing query against Indian legal database...
                 </div>
               </div>
-            );
-          })}
+            )}
 
-          {loading && (
-            <div className="flex justify-start">
-              <div className="inline-flex items-center gap-2.5 rounded-2xl rounded-bl-md border border-slate-200 bg-white px-4 py-3.5 text-sm text-slate-500 shadow-sm">
-                <Loader2 size={16} className="animate-spin text-blue-600" />
-                Analyzing your legal query...
-              </div>
-            </div>
-          )}
-
-          <div ref={bottomRef} />
+            <div ref={bottomRef} />
+          </div>
         </div>
-      </div>
 
-      {/* Sticky Bottom Input Bar */}
-      <div className="sticky bottom-0 border-t border-slate-200/80 bg-white/95 backdrop-blur-md">
-        <div className="mx-auto max-w-4xl px-3 py-3 sm:px-6 sm:py-4 space-y-2.5">
-          {/* Guest Progress Counter */}
-          {!isLoggedIn && (
-            <div className="flex items-center justify-between text-xs px-1 text-slate-500 font-semibold">
-              <span className="flex items-center gap-2">
-                <span className="text-slate-600">Guest Usage:</span>
-                <span className="tracking-widest font-mono text-blue-600 font-bold text-sm">
-                  {'●'.repeat(Math.min(guestCount, 5))}{'○'.repeat(Math.max(0, 5 - guestCount))}
+        {/* Sticky Bottom Input Bar */}
+        <div className="sticky bottom-0 border-t border-slate-200/80 bg-white/95 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/95">
+          <div className="mx-auto max-w-4xl px-3 py-3 sm:px-6 sm:py-4 space-y-2.5">
+            {/* Guest Progress Counter */}
+            {!isLoggedIn && (
+              <div className="flex items-center justify-between text-xs px-1 text-slate-500 font-semibold">
+                <span className="flex items-center gap-2">
+                  <span className="text-slate-600 dark:text-slate-400">Guest Limit:</span>
+                  <span className="tracking-widest font-mono text-blue-600 font-bold text-sm">
+                    {'●'.repeat(Math.min(guestCount, 5))}{'○'.repeat(Math.max(0, 5 - guestCount))}
+                  </span>
                 </span>
-              </span>
-              <span className="text-slate-600 font-bold">
-                {guestCount >= 5 ? '0 of 5 free chats remaining' : `${5 - guestCount} of 5 free chats remaining`}
-              </span>
-            </div>
-          )}
-
-          {!query && messages.length <= 2 && !isGuestLimitReached() && (
-            <SmartSuggestions onSelect={(q) => handleSend(q)} />
-          )}
-
-          <div
-            className={`relative flex items-end gap-2 rounded-2xl border bg-white p-1.5 shadow-sm transition-all ${
-              !isLoggedIn && isGuestLimitReached()
-                ? 'border-red-200 bg-slate-100/80 cursor-not-allowed'
-                : 'border-slate-200 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100'
-            }`}
-            onClick={() => {
-              if (!isLoggedIn && isGuestLimitReached()) {
-                setShowGuestModal(true);
-              }
-            }}
-          >
-            <button
-              type="button"
-              disabled={!isLoggedIn && isGuestLimitReached()}
-              onClick={() => {
-                if (!isLoggedIn) setShowGuestModal(true);
-                else alert('Attachment upload ready');
-              }}
-              className="p-2 text-slate-400 hover:text-blue-600 transition disabled:opacity-40"
-              title="Attach File / Document"
-            >
-              <Plus size={18} />
-            </button>
-            <input
-              ref={inputRef}
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-              placeholder={
-                !isLoggedIn && isGuestLimitReached()
-                  ? 'Free guest question limit reached. Create account to continue...'
-                  : 'Describe your legal issue in plain language...'
-              }
-              disabled={loading || (!isLoggedIn && isGuestLimitReached())}
-              className="flex-1 bg-transparent px-2 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none disabled:opacity-60"
-            />
-            <button
-              onClick={() => handleSend()}
-              disabled={loading || !query.trim() || (!isLoggedIn && isGuestLimitReached())}
-              aria-label="Send message"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-xs hover:bg-blue-700 disabled:opacity-40 transition"
-            >
-              {loading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
-            </button>
-
-            {!isLoggedIn && isGuestLimitReached() && (
-              <div className="absolute inset-0 bg-slate-900/10 backdrop-blur-[2px] rounded-2xl flex items-center justify-center">
-                <button
-                  onClick={() => setShowGuestModal(true)}
-                  className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-md hover:bg-blue-700"
-                >
-                  Unlock Unlimited Chats ➔
-                </button>
+                <span className="text-slate-600 dark:text-slate-400 font-bold">
+                  {guestCount >= 5 ? '0 of 5 free chats remaining' : `${5 - guestCount} of 5 free chats remaining`}
+                </span>
               </div>
             )}
+
+            {!query && messages.length <= 2 && !isGuestLimitReached() && (
+              <SmartSuggestions
+                onSelect={(suggestion) => {
+                  setQuery(suggestion);
+                  inputRef.current?.focus();
+                }}
+              />
+            )}
+
+            {/* Input Form */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSend();
+              }}
+              className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-2 focus-within:border-blue-500 focus-within:bg-white dark:border-slate-800 dark:bg-slate-850 dark:focus-within:bg-slate-900 shadow-xs transition"
+            >
+              <button
+                type="button"
+                onClick={() => alert('Voice input activated. Speak your query...')}
+                className="rounded-xl p-2 text-slate-400 hover:bg-slate-200/70 hover:text-slate-700 dark:hover:bg-slate-800 transition"
+                title="Voice Input"
+              >
+                <Mic size={18} />
+              </button>
+
+              <input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Ask any legal question (e.g., Landlord deposit dispute, POSH complaint, FIR rights)..."
+                disabled={loading}
+                className="flex-1 bg-transparent px-2 text-xs sm:text-sm outline-none placeholder:text-slate-400 text-slate-900 dark:text-white"
+              />
+
+              <button
+                type="submit"
+                disabled={loading || !query.trim()}
+                className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white transition hover:bg-blue-700 disabled:opacity-40 disabled:hover:bg-blue-600"
+              >
+                {loading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
+              </button>
+            </form>
+
+            <p className="text-center text-[10px] text-slate-400 dark:text-slate-500">
+              LegalSathi AI provides general legal information. For official legal representation, consult a licensed advocate.
+            </p>
           </div>
-          <p className="text-center text-[11px] text-slate-400">
-            Legal information only · Not a substitute for professional legal advice
-          </p>
         </div>
       </div>
+
       <GuestLimitModal isOpen={showGuestModal} onClose={() => setShowGuestModal(false)} />
     </div>
   );

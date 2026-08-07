@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import {
   AlertTriangle,
   ArrowRight,
+  Award,
   BookOpen,
   Bot,
   Building2,
@@ -18,12 +19,16 @@ import {
   FileCheck,
   FileSearch,
   FileText,
+  FolderOpen,
+  Gavel,
   Globe,
+  HeartHandshake,
   HelpCircle,
   KeyRound,
   Layers,
   LayoutDashboard,
   Lock,
+  Megaphone,
   Mic,
   PhoneCall,
   Scale,
@@ -43,354 +48,361 @@ import {
 export default function Home() {
   const router = useRouter();
 
+  const legalCategories = [
+    { title: "Women's Rights", code: "POSH / DV Act", href: "/chat?q=Women+Rights", icon: <Shield size={18} className="text-pink-600" /> },
+    { title: "Children Rights", code: "POCSO / RTE", href: "/chat?q=Children+Rights", icon: <HeartHandshake size={18} className="text-amber-600" /> },
+    { title: "Senior Citizen Rights", code: "Maintenance Act", href: "/chat?q=Senior+Citizen", icon: <Users size={18} className="text-purple-600" /> },
+    { title: "Rental & Tenancy Laws", code: "Model Tenancy Act", href: "/chat?q=Rent+Tenancy", icon: <Building2 size={18} className="text-blue-600" /> },
+    { title: "Consumer Rights", code: "Consumer Protection", href: "/chat?q=Consumer+Rights", icon: <CheckSquare size={18} className="text-emerald-600" /> },
+    { title: "Cyber Crime & Fraud", code: "IT Act 2000", href: "/chat?q=Cyber+Fraud", icon: <Lock size={18} className="text-red-600" /> },
+    { title: "Cyber Bullying", code: "Section 66E / 67", href: "/chat?q=Cyber+Bullying", icon: <ShieldAlert size={18} className="text-rose-600" /> },
+    { title: "Employment Law", code: "Labor Code / Wages", href: "/chat?q=Employment", icon: <FileText size={18} className="text-indigo-600" /> },
+    { title: "Property & Land Law", code: "Transfer of Property", href: "/chat?q=Property+Law", icon: <FolderOpen size={18} className="text-cyan-600" /> },
+    { title: "Marriage & Divorce", code: "Hindu / Special Marriage", href: "/chat?q=Marriage+Divorce", icon: <Award size={18} className="text-pink-600" /> },
+    { title: "Domestic Violence", code: "DV Act 2005", href: "/chat?q=Domestic+Violence", icon: <ShieldCheck size={18} className="text-red-600" /> },
+    { title: "RTI (Right to Info)", code: "RTI Act 2005", href: "/chat?q=RTI", icon: <BookOpen size={18} className="text-amber-600" /> },
+    { title: "Police Complaints", code: "CrPC / BNSS FIR", href: "/chat?q=Police+Complaint", icon: <Gavel size={18} className="text-blue-600" /> },
+    { title: "Traffic Rules & Fines", code: "Motor Vehicles Act", href: "/chat?q=Traffic+Rules", icon: <Clock size={18} className="text-orange-600" /> },
+    { title: "Income Tax & Disputes", code: "Income Tax Act 1961", href: "/chat?q=Income+Tax", icon: <FileCheck size={18} className="text-emerald-600" /> },
+    { title: "Copyright Protection", code: "Copyright Act 1957", href: "/chat?q=Copyright", icon: <Sparkles size={18} className="text-purple-600" /> },
+    { title: "Trademark Registration", code: "Trademarks Act", href: "/chat?q=Trademark", icon: <CheckCircle2 size={18} className="text-blue-600" /> },
+    { title: "YouTube & Digital IP", code: "DMCA / IP Guidelines", href: "/chat?q=Digital+IP", icon: <Video size={18} className="text-red-600" /> },
+    { title: "Education Rights", code: "RTE Act 2009", href: "/chat?q=Education+Rights", icon: <BookOpen size={18} className="text-indigo-600" /> },
+    { title: "Digital Privacy", code: "DPDP Act 2023", href: "/chat?q=Digital+Privacy", icon: <Lock size={18} className="text-cyan-600" /> },
+    { title: "Banking Fraud", code: "RBI Ombudsman", href: "/chat?q=Banking+Fraud", icon: <Building2 size={18} className="text-emerald-600" /> },
+    { title: "POSH at Workplace", code: "POSH Act 2013", href: "/chat?q=POSH", icon: <UserCheck size={18} className="text-purple-600" /> },
+    { title: "POCSO Protection", code: "POCSO Act 2012", href: "/chat?q=POCSO", icon: <ShieldAlert size={18} className="text-rose-600" /> },
+    { title: "Legal Aid & Free Counsel", code: "NALSA Act 1987", href: "/chat?q=Free+Legal+Aid", icon: <Scale size={18} className="text-blue-600" /> },
+    { title: "Constitution of India", code: "Fundamental Rights", href: "/chat?q=Constitution", icon: <Gavel size={18} className="text-amber-600" /> },
+  ];
+
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 space-y-16 text-slate-900">
-      {/* Landing Header Top Bar */}
-      <div className="flex items-center justify-between border-b border-slate-200/80 pb-4">
-        <div className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm">
-            <Scale size={18} />
-          </span>
-          <span className="font-bold text-lg text-slate-900">LegalSathi AI</span>
-        </div>
-        <div className="flex items-center gap-2 sm:gap-3">
-          <Link
-            href="/login"
-            className="rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition"
-          >
-            Login
-          </Link>
-          <Link
-            href="/register"
-            className="rounded-xl bg-blue-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-blue-700 transition"
-          >
-            Create Account
-          </Link>
-          <Link
-            href="/chat"
-            className="hidden sm:inline-flex rounded-xl bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-200 transition"
-          >
-            Continue as Guest ➔
-          </Link>
-        </div>
-      </div>
-      {/* SECTION 1 — HERO */}
-      <section className="text-center max-w-4xl mx-auto space-y-6 pt-4">
-        <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-xs font-bold text-blue-700 ring-1 ring-blue-200">
-          <Sparkles size={14} className="text-blue-600" /> AI-Powered Indian Legal Guidance Platform
-        </div>
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-16 text-slate-900 dark:text-slate-100">
+      {/* 1. HERO SECTION */}
+      <section className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-12 lg:p-16 dark:border-slate-800 dark:bg-slate-900 shadow-sm">
+        {/* Subtle Gradient Backdrops */}
+        <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-blue-500/10 blur-3xl" />
+        <div className="absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-indigo-500/10 blur-3xl" />
 
-        <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight text-slate-900">
-          Know Your Rights. <br />
-          <span className="text-blue-600">Understand the Law.</span> <br />
-          Take the Right Action.
-        </h1>
-
-        <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-3xl mx-auto">
-          LegalSathi AI is an AI-powered multilingual legal information and guidance platform that helps people understand Indian laws in simple language. It provides legal information, personalized action plans, document generation, official government resources, and step-by-step guidance for common legal issues.
-        </p>
-
-        <div className="flex flex-col items-center justify-center gap-4 pt-2">
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full sm:w-auto">
-            <Link
-              href="/login"
-              className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-7 py-3.5 text-sm font-bold text-slate-800 hover:bg-slate-50 shadow-xs transition"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/register"
-              className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-600/30 hover:bg-blue-700 transition"
-            >
-              <Sparkles size={18} /> Create Free Account
-            </Link>
-          </div>
-
-          <Link
-            href="/chat"
-            className="text-xs font-semibold text-slate-500 hover:text-slate-800 underline underline-offset-4 transition"
-          >
-            Continue as Guest (5 free chats) ➔
-          </Link>
-        </div>
-
-        {/* Badges */}
-        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 pt-4 text-xs font-bold text-slate-600">
-          <span className="flex items-center gap-1.5"><CheckCircle2 size={16} className="text-emerald-500" /> Free to Use</span>
-          <span className="flex items-center gap-1.5"><CheckCircle2 size={16} className="text-emerald-500" /> Multilingual Support</span>
-          <span className="flex items-center gap-1.5"><CheckCircle2 size={16} className="text-emerald-500" /> AI Powered</span>
-          <span className="flex items-center gap-1.5"><CheckCircle2 size={16} className="text-emerald-500" /> Secure & Private</span>
-        </div>
-      </section>
-
-      {/* SECTION 2 — WHAT IS LEGALSATHI AI? */}
-      <section className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-10 shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          {/* Left Illustration / Product Card */}
-          <div className="rounded-2xl border border-blue-100 bg-gradient-to-tr from-blue-600 via-indigo-600 to-blue-700 p-8 text-white space-y-4 shadow-xl">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-md">
-              <Scale size={24} />
+        <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div className="lg:col-span-7 space-y-6 text-left">
+            <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-xs font-extrabold text-blue-700 ring-1 ring-blue-200/80 dark:bg-blue-950/60 dark:text-blue-300 dark:ring-blue-900">
+              <Sparkles size={14} className="text-blue-600 animate-pulse" />
+              <span>AI-Powered Indian Legal Intelligence Platform</span>
             </div>
-            <h3 className="text-xl font-extrabold leading-snug">
-              Democratizing Legal Information across India
-            </h3>
-            <p className="text-xs sm:text-sm text-blue-100 leading-relaxed">
-              LegalSathi AI converts legal jargon into plain language, mapping out verified legal procedures, rights, statutory provisions, and complaint drafts.
+
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-[1.1] text-slate-900 dark:text-white">
+              Know Your Rights. <br />
+              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 bg-clip-text text-transparent">
+                Understand the Law.
+              </span> <br />
+              Take the Right Action.
+            </h1>
+
+            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+              LegalSathi AI helps Indian citizens understand complex laws, draft formal legal documents, navigate cases step-by-step, and receive actionable legal guidance in plain language.
             </p>
-            <div className="rounded-xl bg-white/10 p-3 text-[11px] font-semibold flex items-center gap-2 border border-white/20">
-              <ShieldCheck size={16} className="text-emerald-300 shrink-0" />
-              <span>Verified Government Links & Statutory References Included</span>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+              <Link
+                href="/chat"
+                className="flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-7 py-4 text-sm font-bold text-white shadow-lg shadow-blue-600/30 hover:bg-blue-700 transition hover:scale-[1.02]"
+              >
+                <Bot size={18} />
+                <span>Start AI Legal Chat</span>
+              </Link>
+              <Link
+                href="/navigator"
+                className="flex items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-white px-7 py-4 text-sm font-bold text-slate-800 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700 transition"
+              >
+                <Sparkles size={18} className="text-blue-600" />
+                <span>Explore Case Navigator</span>
+              </Link>
+            </div>
+
+            {/* Quick Badges */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 text-xs font-bold text-slate-600 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800">
+              <span className="flex items-center gap-2"><CheckCircle2 size={16} className="text-emerald-500 shrink-0" /> 100% Free to Use</span>
+              <span className="flex items-center gap-2"><CheckCircle2 size={16} className="text-emerald-500 shrink-0" /> Multilingual (Hi/Mr/En)</span>
+              <span className="flex items-center gap-2"><CheckCircle2 size={16} className="text-emerald-500 shrink-0" /> AI Powered Engine</span>
+              <span className="flex items-center gap-2"><CheckCircle2 size={16} className="text-emerald-500 shrink-0" /> Secure & Encrypted</span>
+              <span className="flex items-center gap-2"><CheckCircle2 size={16} className="text-emerald-500 shrink-0" /> 24/7 Virtual Assistance</span>
+              <span className="flex items-center gap-2"><CheckCircle2 size={16} className="text-emerald-500 shrink-0" /> Official Govt Links</span>
             </div>
           </div>
 
-          {/* Right Content */}
-          <div className="space-y-4">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Product Overview</span>
-            <h2 className="text-2xl font-bold text-slate-900">What is LegalSathi AI?</h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              LegalSathi AI is an intelligent legal information platform designed to make Indian laws easier to understand for everyone.
-            </p>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Instead of reading complex legal documents or searching across multiple government websites, users can simply describe their legal issue in plain language.
-            </p>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              The AI analyzes the situation and provides structured legal information, applicable laws, user rights, evidence requirements, government authorities, official resources, and practical next steps.
-            </p>
+          {/* Right Product Graphic Card */}
+          <div className="lg:col-span-5">
+            <div className="relative rounded-3xl border border-blue-100 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 p-6 text-white shadow-2xl space-y-5">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-3 w-3 rounded-full bg-red-500" />
+                  <span className="flex h-3 w-3 rounded-full bg-amber-500" />
+                  <span className="flex h-3 w-3 rounded-full bg-emerald-500" />
+                </div>
+                <span className="text-[11px] font-mono text-slate-400">LegalSathi AI v1.0</span>
+              </div>
 
-            <div className="rounded-xl border border-amber-200 bg-amber-50/80 p-3 text-xs text-amber-900 flex items-start gap-2">
-              <AlertTriangle size={16} className="text-amber-600 shrink-0 mt-0.5" />
-              <span>
-                <strong>Educational Guidance:</strong> LegalSathi AI provides legal information and guidance. It does not provide formal legal representation or replace a licensed advocate.
-              </span>
+              <div className="space-y-3 font-mono text-xs">
+                <div className="rounded-xl bg-slate-800/80 p-3 text-slate-300 border border-slate-700/60">
+                  <span className="text-blue-400 font-bold">&gt; Query:</span> Landlord refusing to return deposit of ₹50,000.
+                </div>
+                <div className="rounded-xl bg-blue-900/40 p-3.5 text-blue-100 border border-blue-800/60 space-y-2">
+                  <div className="flex items-center justify-between text-xs font-bold text-blue-300">
+                    <span className="flex items-center gap-1.5"><Scale size={14} /> Analysis Complete</span>
+                    <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full">Model Confidence 98%</span>
+                  </div>
+                  <p className="text-[11px] text-slate-300">
+                    <strong className="text-white">Applicable Act:</strong> Model Tenancy Act & State Rent Control Act.
+                  </p>
+                  <p className="text-[11px] text-slate-300">
+                    <strong className="text-white">Action Steps:</strong> 1. Issue written notice (7 days). 2. Approach Rent Authority / Tribunal.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-2">
+                <span className="text-[11px] text-slate-400">AI Legal Intelligence</span>
+                <Link href="/chat" className="text-xs font-bold text-blue-400 hover:text-blue-300 flex items-center gap-1">
+                  Try Demo Prompt <ArrowRight size={14} />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* SECTION 3 — HOW LEGALSATHI HELPS YOU */}
+      {/* 2. CORE FEATURE CARDS GRID */}
       <section className="space-y-6">
-        <div className="text-center space-y-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Comprehensive Capabilities</span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">How LegalSathi Helps You</h2>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200/80 pb-4 dark:border-slate-800">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Product Capabilities</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Core Legal Features</h2>
+          </div>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Everything you need to navigate legal issues effortlessly.</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {[
-            { title: 'AI Legal Assistant', desc: 'Ask questions in plain language and receive clear legal explanations.', icon: <Bot size={20} className="text-blue-600" /> },
-            { title: 'Case Navigator', desc: 'Convert complex legal problems into step-by-step resolution roadmaps.', icon: <Sparkles size={20} className="text-indigo-600" /> },
-            { title: 'Legal Action Planner', desc: 'Timeline actions: Immediate, 24 Hours, 7 Days, and long-term steps.', icon: <Clock size={20} className="text-emerald-600" /> },
-            { title: 'Document Generator', desc: 'Create automated FIR complaints, legal notices, and RTI forms.', icon: <FileText size={20} className="text-amber-600" /> },
-            { title: 'Document Analyzer', desc: 'Extract key clauses and summarize legal notices or contracts.', icon: <FileSearch size={20} className="text-rose-600" /> },
-            { title: 'Evidence Checklist', desc: 'Track pending, uploaded, and verified proof for your case.', icon: <CheckSquare size={20} className="text-cyan-600" /> },
-            { title: 'Government Links', desc: 'Direct access to verified official government portals (.gov.in / .nic.in).', icon: <Globe size={20} className="text-blue-600" /> },
-            { title: 'Multilingual Support', desc: 'Understand Indian laws in English, Hindi, Marathi, and regional languages.', icon: <BookOpen size={20} className="text-purple-600" /> },
-            { title: 'Voice Support', desc: 'Describe legal problems via voice input for accessible assistance.', icon: <Mic size={20} className="text-pink-600" /> },
-            { title: 'Official Helpline Directory', desc: 'Direct access to Women (1091), Child (1098), and Cyber (1930) helplines.', icon: <PhoneCall size={20} className="text-red-600" /> },
-            { title: 'Verified Legal Info', desc: 'Cited provisions from IPC, CrPC, IT Act, POCSO, DV Act, and Rent Acts.', icon: <ShieldCheck size={20} className="text-emerald-600" /> },
-            { title: 'Download Reports', desc: 'Download editable complaint drafts and action plan TXT/PDF files.', icon: <FileCheck size={20} className="text-blue-600" /> },
-          ].map((item, idx) => (
-            <div key={idx} className="rounded-2xl border border-slate-200 bg-white p-5 space-y-2 shadow-2xs hover:border-blue-300 transition">
-              <div className="h-10 w-10 rounded-xl bg-slate-50 flex items-center justify-center">{item.icon}</div>
-              <h3 className="font-bold text-sm text-slate-900">{item.title}</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* SECTION 4 — HOW IT WORKS */}
-      <section className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 space-y-6 shadow-sm">
-        <div className="text-center space-y-1">
-          <span className="text-xs font-bold uppercase tracking-wider text-blue-600">7-Step Resolution Process</span>
-          <h2 className="text-2xl font-bold text-slate-900">How It Works</h2>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
-          {[
-            { step: 1, title: 'Describe Problem', desc: 'Enter legal issue in plain words' },
-            { step: 2, title: 'AI Analysis', desc: 'AI analyzes facts & urgency' },
-            { step: 3, title: 'Laws Identified', desc: 'Statutory provisions mapped' },
-            { step: 4, title: 'Rights Explained', desc: 'Your legal protections listed' },
-            { step: 5, title: 'Evidence Listed', desc: 'Required documents & proof' },
-            { step: 6, title: 'Action Plan', desc: 'Timeline roadmap generated' },
-            { step: 7, title: 'Draft Notice', desc: 'Generate complaint / FIR' },
-          ].map((s) => (
-            <div key={s.step} className="rounded-2xl border border-slate-200 bg-slate-50/60 p-3.5 space-y-1 text-center">
-              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-[11px] font-bold text-white">
-                {s.step}
-              </span>
-              <h4 className="text-xs font-bold text-slate-900">{s.title}</h4>
-              <p className="text-[10px] text-slate-500 leading-tight">{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* SECTION 5 — WHO CAN USE THIS? */}
-      <section className="space-y-6">
-        <div className="text-center space-y-1">
-          <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Accessible To Everyone</span>
-          <h2 className="text-2xl font-bold text-slate-900">Who Can Use LegalSathi AI?</h2>
-        </div>
-
-        <div className="flex flex-wrap gap-2.5 justify-center">
-          {[
-            'Students', 'Working Professionals', 'Women', 'Senior Citizens', 'Parents',
-            'Tenants', 'Consumers', 'Small Businesses', 'Content Creators', 'YouTubers',
-            'Freelancers', 'Citizens Seeking Legal Info',
-          ].map((user, idx) => (
-            <span key={idx} className="rounded-2xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 shadow-2xs flex items-center gap-2">
-              <UserCheck size={14} className="text-blue-600" /> {user}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      {/* SECTION 6 — LEGAL CATEGORIES */}
-      <section className="space-y-6">
-        <div className="text-center space-y-1">
-          <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Supported Domains</span>
-          <h2 className="text-2xl font-bold text-slate-900">Explore Legal Categories</h2>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-          {[
-            { label: "Women's Rights", query: 'My husband demands dowry and harasses me.' },
-            { label: "Children's Rights", query: 'What protections exist under the POCSO Act for minor children?' },
-            { label: 'Senior Citizen Rights', query: 'Can a senior citizen claim maintenance under Indian law?' },
-            { label: 'Rental Laws', query: 'My landlord is refusing to return my security deposit.' },
-            { label: 'Consumer Rights', query: 'I bought a defective product online and seller refuses refund.' },
-            { label: 'Cyber Crime', query: 'Someone stole money from my bank account via an OTP fraud.' },
-            { label: 'Cyber Bullying', query: 'Someone is posting morphed photos of me online and trolling me.' },
-            { label: 'Police Complaints', query: 'How to file an FIR if police refuse to record a complaint?' },
-            { label: 'Property Disputes', query: 'What legal documents are required for ancestral property partition?' },
-            { label: 'Employment Law', query: 'My employer terminated me without notice and withheld my salary.' },
-            { label: 'Copyright & YouTube', query: 'Someone copied my written work without permission online.' },
-            { label: 'RTI Applications', query: 'How to file an RTI application to seek government information?' },
-            { label: 'Family Law', query: 'What is the procedure for legal separation or mutual divorce?' },
-            { label: 'Traffic Rules', query: 'What are my rights if a traffic police officer issues an illegal fine?' },
-          ].map((cat, idx) => (
-            <button
+            {
+              title: 'AI Legal Chat',
+              desc: 'Ask questions in plain language to get clear guidance under Indian statutory laws.',
+              action: 'Start Chat',
+              href: '/chat',
+              icon: <Bot size={22} className="text-blue-600" />,
+            },
+            {
+              title: 'Case Navigator',
+              desc: 'Convert complex legal problems into step-by-step resolution roadmaps.',
+              action: 'Launch Navigator',
+              href: '/navigator',
+              icon: <Sparkles size={22} className="text-indigo-600" />,
+            },
+            {
+              title: 'Documents Studio',
+              desc: 'Generate formal legal notices, affidavits, complaints, and rental agreements.',
+              action: 'Draft Document',
+              href: '/documents',
+              icon: <FileText size={22} className="text-amber-600" />,
+            },
+            {
+              title: 'My Cases Vault',
+              desc: 'Track saved legal cases, progress checklists, and generated document drafts.',
+              action: 'View Vault',
+              href: '/dashboard',
+              icon: <FolderOpen size={22} className="text-emerald-600" />,
+            },
+            {
+              title: 'Legal Resources',
+              desc: 'Direct links to official acts, Supreme Court judgments, and government portals.',
+              action: 'Explore Resources',
+              href: '/documents',
+              icon: <BookOpen size={22} className="text-purple-600" />,
+            },
+            {
+              title: 'Complaint Generator',
+              desc: 'Auto-generate police complaints (FIR) and consumer grievance notices.',
+              action: 'Generate Complaint',
+              href: '/documents',
+              icon: <FileCheck size={22} className="text-rose-600" />,
+            },
+            {
+              title: 'Legal Templates',
+              desc: 'Ready-to-use legal document templates formatted for Indian legal standards.',
+              action: 'View Templates',
+              href: '/documents',
+              icon: <Layers size={22} className="text-cyan-600" />,
+            },
+            {
+              title: 'Rights Awareness',
+              desc: 'Learn constitutional rights, tenant rights, and worker rights in simple language.',
+              action: 'Learn Rights',
+              href: '/chat?q=Constitutional+Rights',
+              icon: <Scale size={22} className="text-blue-600" />,
+            },
+          ].map((card, idx) => (
+            <div
               key={idx}
-              onClick={() => router.push(`/chat?q=${encodeURIComponent(cat.query)}`)}
-              className="group rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-2xs hover:border-blue-300 hover:bg-blue-50/40 transition"
+              className="group flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-6 transition-all duration-200 hover:-translate-y-1 hover:border-blue-300 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900"
             >
-              <h4 className="text-xs font-bold text-slate-900 group-hover:text-blue-600 flex items-center justify-between">
-                {cat.label} <ArrowRight size={12} />
-              </h4>
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* SECTION 7 — WHY USE LEGALSATHI AI? */}
-      <section className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 space-y-6 shadow-sm">
-        <div className="text-center space-y-1">
-          <span className="text-xs font-bold uppercase tracking-wider text-blue-600">The LegalSathi Advantage</span>
-          <h2 className="text-2xl font-bold text-slate-900">Why Use LegalSathi AI?</h2>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {[
-            { old: 'Searching across multiple scattered government websites', new: 'Ask one plain language query and get immediate structured legal clarity.' },
-            { old: 'Reading complicated, intimidating legalese and statutory codes', new: 'Receive simple, plain English/Hindi explanations with practical rights.' },
-            { old: 'Wondering what steps to take or who to contact', new: 'Receive a personalized, chronological action plan and authority guide.' },
-            { old: 'Relying on unverified blogs or social media legal advice', new: 'Access verified official government portal links (.gov.in / .nic.in).' },
-          ].map((item, idx) => (
-            <div key={idx} className="rounded-2xl border border-slate-200 p-5 space-y-3 bg-slate-50/50">
-              <div className="rounded-xl bg-red-50 p-2.5 text-xs text-red-800 font-semibold border border-red-100 flex items-center gap-2">
-                <span className="text-red-600 font-bold">❌ Before:</span> {item.old}
+              <div className="space-y-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 dark:bg-slate-800 group-hover:bg-blue-50 dark:group-hover:bg-slate-800 transition">
+                  {card.icon}
+                </div>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">{card.title}</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{card.desc}</p>
               </div>
-              <div className="rounded-xl bg-emerald-50 p-2.5 text-xs text-emerald-800 font-bold border border-emerald-100 flex items-center gap-2">
-                <span className="text-emerald-600 font-bold">✓ With LegalSathi:</span> {item.new}
+              <div className="pt-6">
+                <Link
+                  href={card.href}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                  <span>{card.action}</span>
+                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+                </Link>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* SECTION 8 — TECHNOLOGY STACK SHOWCASE */}
+      {/* 3. LEGAL CATEGORIES DIRECTORY (26+ Categories) */}
       <section className="space-y-6">
-        <div className="text-center space-y-2 max-w-3xl mx-auto">
-          <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Architectural Transparency</span>
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Built Using Modern AI & Web Technologies</h2>
-          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-            LegalSathi AI combines Artificial Intelligence, Natural Language Processing, Retrieval-Augmented Generation (RAG), and modern web technologies to provide reliable legal information.
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200/80 pb-4 dark:border-slate-800">
+          <div>
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Legal Domains</span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Explore Legal Categories</h2>
+          </div>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Click any legal category for instant AI breakdown.</p>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+          {legalCategories.map((cat, i) => (
+            <Link
+              key={i}
+              href={cat.href}
+              className="flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-4 transition hover:border-blue-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 group"
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800">{cat.icon}</div>
+                  <ArrowRight size={14} className="text-slate-300 group-hover:text-blue-600 transition" />
+                </div>
+                <h4 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition line-clamp-1">
+                  {cat.title}
+                </h4>
+              </div>
+              <p className="mt-2 text-[10px] font-semibold text-slate-400 dark:text-slate-500 uppercase">{cat.code}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* 4. WHY LEGALSATHI AI TRUST SECTION */}
+      <section className="rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-10 dark:border-slate-800 dark:bg-slate-900 shadow-sm">
+        <div className="max-w-3xl mx-auto text-center space-y-3 mb-8">
+          <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Built on Trust & Verification</span>
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">Why Citizens Choose LegalSathi AI</h2>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            LegalSathi AI is built to provide trustworthy, explainable, and accessible legal guidance rooted in official Indian statutory provisions.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Group 1: AI & ML */}
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 space-y-3 shadow-2xs">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600 border-b pb-3">
-              <Cpu size={18} /> AI & Machine Learning
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {['FastAPI', 'Python 3.12', 'Google Gemini API', 'Sentence Transformers', 'FAISS Vector DB', 'LangChain', 'RAG Pipeline', 'Prompt Engineering'].map((t) => (
-                <span key={t} className="rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-700">{t}</span>
-              ))}
-            </div>
-          </div>
-
-          {/* Group 2: Frontend & UX */}
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 space-y-3 shadow-2xs">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-indigo-600 border-b pb-3">
-              <Code2 size={18} /> Frontend Architect
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {['Next.js 14', 'React 18', 'TypeScript', 'Tailwind CSS', 'ShadCN UI', 'Lucide Icons', 'Framer Motion', 'PWA Ready'].map((t) => (
-                <span key={t} className="rounded-lg bg-indigo-50 px-2.5 py-1 text-xs font-bold text-indigo-700">{t}</span>
-              ))}
-            </div>
-          </div>
-
-          {/* Group 3: Backend & Database */}
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 space-y-3 shadow-2xs">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-600 border-b pb-3">
-              <Server size={18} /> Backend & Database
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {['FastAPI', 'Pydantic v2', 'PostgreSQL', 'SQLite', 'SQLAlchemy 2.0', 'JWT Auth', 'REST APIs', 'Docker Container'].map((t) => (
-                <span key={t} className="rounded-lg bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">{t}</span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 9 — SECURITY & PRIVACY */}
-      <section className="space-y-6">
-        <div className="text-center space-y-1">
-          <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Privacy First</span>
-          <h2 className="text-2xl font-bold text-slate-900">Security & Privacy Standards</h2>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { title: 'Encrypted Auth', icon: <KeyRound size={18} className="text-blue-600" /> },
-            { title: 'Secure File Upload', icon: <FileCheck size={18} className="text-indigo-600" /> },
-            { title: 'Role-Based Access', icon: <ShieldCheck size={18} className="text-emerald-600" /> },
-            { title: 'Private Sessions', icon: <Lock size={18} className="text-amber-600" /> },
-            { title: 'Verified GOV Sources', icon: <Globe size={18} className="text-cyan-600" /> },
-            { title: 'Zero Data Sharing', icon: <Shield size={18} className="text-rose-600" /> },
+            { title: 'Trusted Official Sources', desc: 'All citations map to official government portals (.gov.in / .nic.in).', icon: <ShieldCheck size={24} className="text-emerald-600" /> },
+            { title: 'Explainable AI Logic', desc: 'No black-box answers; every response cites relevant acts and sections.', icon: <Zap size={24} className="text-blue-600" /> },
+            { title: 'Multilingual Support', desc: 'Ask and read legal explanations in English, Hindi, and Marathi.', icon: <Globe size={24} className="text-purple-600" /> },
+            { title: 'Privacy & Security', desc: 'End-to-end encrypted sessions with strict data protection standard.', icon: <Lock size={24} className="text-indigo-600" /> },
           ].map((item, idx) => (
-            <div key={idx} className="rounded-2xl border border-slate-200 bg-white p-4 text-center space-y-2 shadow-2xs">
-              <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50">{item.icon}</div>
-              <h4 className="text-xs font-bold text-slate-900">{item.title}</h4>
+            <div key={idx} className="rounded-2xl border border-slate-100 bg-slate-50/70 p-5 dark:border-slate-800 dark:bg-slate-850 space-y-2">
+              <div className="h-10 w-10 rounded-xl bg-white dark:bg-slate-800 flex items-center justify-center shadow-xs">{item.icon}</div>
+              <h3 className="font-bold text-sm text-slate-900 dark:text-white">{item.title}</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* SECTION 10 — LEGAL DISCLAIMER CARD */}
-      <section className="rounded-3xl border border-amber-200 bg-amber-50/80 p-6 sm:p-8 space-y-3">
-        <div className="flex items-center gap-2.5 text-amber-900 font-bold text-base">
-          <AlertTriangle size={20} className="text-amber-600" /> Official Legal Disclaimer
+      {/* 5. ANNOUNCEMENTS & LEGAL NEWS */}
+      <section className="rounded-3xl border border-blue-200 bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 p-6 sm:p-8 dark:border-blue-900/50 dark:from-slate-900 dark:to-slate-900">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-blue-700 dark:text-blue-400 font-bold text-xs">
+              <Megaphone size={16} />
+              <span>Latest Government Announcement (2024-2026)</span>
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+              New Criminal Criminal Laws (BNS, BNSS, BSA) Fully Implemented Across India
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+              Bharatiya Nyaya Sanhita (BNS) replaced IPC, BNSS replaced CrPC, and BSA replaced Evidence Act. LegalSathi AI provides citations for both old and new acts.
+            </p>
+          </div>
+          <Link
+            href="/chat?q=BNS+BNSS+New+Criminal+Laws"
+            className="shrink-0 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-xs font-bold text-white shadow-sm hover:bg-blue-700 transition"
+          >
+            <span>Learn About New Laws</span>
+            <ArrowRight size={14} />
+          </Link>
         </div>
-        <p className="text-xs sm:text-sm text-amber-900/90 leading-relaxed">
-          LegalSathi AI provides legal information and educational guidance based on publicly available Indian laws and government resources. It does not provide legal advice and does not replace a qualified lawyer. For legal representation or case-specific advice, users should consult a licensed advocate.
-        </p>
       </section>
+
+      {/* 6. SAAS FOOTER */}
+      <footer className="border-t border-slate-200/80 pt-12 pb-8 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 space-y-8">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+          <div className="col-span-2 space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-blue-600 text-white font-bold">
+                <Scale size={14} />
+              </span>
+              <span className="font-extrabold text-sm text-slate-900 dark:text-white">LegalSathi AI</span>
+            </div>
+            <p className="text-xs leading-relaxed max-w-sm">
+              AI-powered multilingual Legal Information and Guidance Platform democratizing legal awareness across India.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <p className="font-bold text-slate-900 dark:text-white text-xs uppercase">Platform</p>
+            <ul className="space-y-1.5">
+              <li><Link href="/chat" className="hover:text-blue-600">AI Legal Chat</Link></li>
+              <li><Link href="/navigator" className="hover:text-blue-600">Case Navigator</Link></li>
+              <li><Link href="/documents" className="hover:text-blue-600">Document Studio</Link></li>
+              <li><Link href="/dashboard" className="hover:text-blue-600">My Cases Vault</Link></li>
+            </ul>
+          </div>
+
+          <div className="space-y-2">
+            <p className="font-bold text-slate-900 dark:text-white text-xs uppercase">Legal Portals</p>
+            <ul className="space-y-1.5">
+              <li><a href="https://www.india.gov.in" target="_blank" rel="noreferrer" className="hover:text-blue-600">India.gov.in</a></li>
+              <li><a href="https://www.indiacode.nic.in" target="_blank" rel="noreferrer" className="hover:text-blue-600">India Code Portal</a></li>
+              <li><a href="https://cybercrime.gov.in" target="_blank" rel="noreferrer" className="hover:text-blue-600">CyberCrime.gov.in</a></li>
+              <li><a href="https://nalsa.gov.in" target="_blank" rel="noreferrer" className="hover:text-blue-600">NALSA Legal Aid</a></li>
+            </ul>
+          </div>
+
+          <div className="space-y-2">
+            <p className="font-bold text-slate-900 dark:text-white text-xs uppercase">Account & Support</p>
+            <ul className="space-y-1.5">
+              <li><Link href="/login" className="hover:text-blue-600">Sign In</Link></li>
+              <li><Link href="/register" className="hover:text-blue-600">Create Account</Link></li>
+              <li><Link href="/profile" className="hover:text-blue-600">Help & Support</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="border-t border-slate-100 dark:border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px]">
+          <p>© {new Date().getFullYear()} LegalSathi AI. All rights reserved. Designed for Indian Jurisprudence.</p>
+          <div className="flex items-center gap-4">
+            <span className="hover:underline">Privacy Policy</span>
+            <span className="hover:underline">Terms of Service</span>
+            <span className="hover:underline">Legal Disclaimer</span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
