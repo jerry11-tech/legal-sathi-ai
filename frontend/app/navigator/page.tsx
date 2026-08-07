@@ -51,8 +51,9 @@ export default function NavigatorPage() {
   useEffect(() => {
     fetchSavedCases();
     const qParam = searchParams.get('q');
-    if (qParam) {
+    if (qParam && !query) {
       setQuery(qParam);
+      handleAnalyze(qParam);
     }
   }, [searchParams]);
 
