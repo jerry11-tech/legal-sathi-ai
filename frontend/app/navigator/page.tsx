@@ -71,9 +71,12 @@ export default function NavigatorPage() {
 
   const handleAnalyze = async (overrideQuery?: string, customAnswers?: Record<string, string>, targetStep: number = 2) => {
     const q = overrideQuery || query;
-    if (!q.trim() || loading) return;
+    if (!q.trim()) return;
 
+    // Instant non-blocking step transition (<10ms)
+    setWizardStep(targetStep);
     setLoading(true);
+
     try {
       const res = await fetch('/api/navigator/analyze', {
         method: 'POST',
@@ -88,7 +91,7 @@ export default function NavigatorPage() {
       if (res.ok) {
         const data: CaseAnalysis = await res.json();
         setAnalysis(data);
-        setWizardStep(targetStep);
+        setLoading(false);
         return;
       }
     } catch {}
@@ -139,7 +142,6 @@ export default function NavigatorPage() {
     };
 
     setAnalysis(fallbackData);
-    setWizardStep(targetStep);
     setLoading(false);
   };
 
