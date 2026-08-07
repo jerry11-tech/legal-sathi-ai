@@ -1,0 +1,31 @@
+Test ID,Module,Test Case,Test Steps / Input,Expected Result,Priority,Status
+TC-001,Homepage & UI,Homepage loading,Open LegalSathi URL,Homepage loads completely without errors,Critical,Passed
+TC-002,Homepage & UI,Logo navigation,Click LegalSathi logo,User returns to Home,Medium,Passed
+TC-003,Homepage & UI,Hero CTA,Click "Ask a Legal Question",AI Chat opens,High,Passed
+TC-004,Homepage & UI,Create Account CTA,Click Create Account,Registration page/modal opens,High,Passed
+TC-005,Homepage & UI,Login CTA,Click Login,Login page/modal opens,High,Passed
+TC-006,Homepage & UI,Guest access,Click Continue as Guest,Guest session is created,High,Passed
+TC-007,Homepage & UI,Sidebar navigation,Click every sidebar item,Correct page opens for each item,High,Passed
+TC-008,Homepage & UI,Active navigation state,Navigate between pages,Current page is visually highlighted,Medium,Passed
+TC-009,Homepage & UI,Browser refresh,Open each route and refresh,Same route remains loaded,High,Passed
+TC-010,Homepage & UI,Responsive UI,Test desktop/tablet/mobile widths,No overlap or clipping,High,Passed
+TC-011,Authentication,Valid registration,Enter valid name/email/password,Account successfully created,Critical,Passed
+TC-012,Authentication,Duplicate email,Register existing email,Proper duplicate-account error,High,Passed
+TC-013,Authentication,Invalid email,Enter abc@,Validation error displayed,Medium,Passed
+TC-014,Authentication,Empty registration fields,Submit empty form,Required-field validation appears,Medium,Passed
+TC-015,Authentication,Weak password,Enter 123456,Weak-password warning/rejection,High,Passed
+TC-016,Authentication,Valid login,Enter correct credentials,User enters application,Critical,Passed
+TC-017,Authentication,Wrong password,Correct email + wrong password,Login rejected,High,Passed
+TC-018,Authentication,Unknown account,Non-existent email,Login rejected without leaking account details,High,Passed
+TC-019,Authentication,Logout,Login -> Logout,Session is terminated,Critical,Passed
+TC-020,Authentication,Protected route after logout,Logout -> directly open /cases,User cannot access protected data,Critical,Passed
+TC-031,AI Chat,Basic legal question,"What is an FIR?",Clear Indian-law-focused answer,Critical,Passed
+TC-041,RAG & Knowledge,Correct document retrieval,Ask question with known source,Correct document retrieved,Critical,Passed
+TC-051,Hallucination & Safety,Fake legal section,Ask about fictional Section 9999,No fabricated answer,Critical,Passed
+TC-061,Multilingual,English,"What is an FIR?",Correct English response,High,Passed
+TC-062,Multilingual,Hindi,"FIR क्या है?",Correct Hindi response,High,Passed
+TC-063,Multilingual,Marathi,"FIR म्हणजे काय?",Correct Marathi response,High,Passed
+TC-071,Case Navigator,Start case,Open Case Navigator,Case workflow starts,High,Passed
+TC-081,Documents,PDF upload,Upload valid PDF,Document accepted and processed,High,Passed
+TC-091,Security & API,SQL injection,' OR 1=1 --,No SQL injection/auth bypass,Critical,Passed
+TC-100,End-to-End,Full end-to-end test,Register -> Chat -> RAG -> Source -> Case -> Document -> Logout,Entire workflow works correctly,Critical,Passed

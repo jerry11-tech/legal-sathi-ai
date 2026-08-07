@@ -1,0 +1,38 @@
+[
+  {
+    "id": "GOLD-001",
+    "question": "What is an FIR and under which act is it registered?",
+    "expected_topic": "Police Complaints & Criminal Procedure",
+    "expected_act": "Code of Criminal Procedure, 1973 (CrPC) / Bharatiya Nagarik Suraksha Sanhita (BNSS)",
+    "expected_section": "Section 154 CrPC / Section 173 BNSS",
+    "expected_key_facts": [
+      "First Information Report",
+      "Cognizable offense",
+      "Registered at police station"
+    ]
+  },
+  {
+    "id": "GOLD-002",
+    "question": "What is the penalty for cyber fraud and phishing under IT Act?",
+    "expected_topic": "Cyber Crime & Online Fraud",
+    "expected_act": "Information Technology Act, 2000",
+    "expected_section": "Section 66D",
+    "expected_key_facts": [
+      "Cheating by personation using computer resource",
+      "Imprisonment up to 3 years",
+      "Fine up to 1 lakh rupees"
+    ]
+  },
+  {
+    "id": "GOLD-003",
+    "question": "Landlord is refusing to return security deposit after notice period.",
+    "expected_topic": "Rental Laws & Property",
+    "expected_act": "Model Tenancy Act & State Rent Control Act",
+    "expected_section": "Tenancy Agreement Provisions",
+    "expected_key_facts": [
+      "Deduction only for damages",
+      "Legal notice required",
+      "Approach Rent Court / Rent Tribunal"
+    ]
+  }
+]
