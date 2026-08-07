@@ -174,9 +174,22 @@ export default function NavigatorPage() {
   };
 
   const handleCopyDraft = () => {
-    navigator.clipboard.writeText(draftContent);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      if (typeof window !== 'undefined' && navigator?.clipboard?.writeText) {
+        navigator.clipboard.writeText(draftContent);
+      } else {
+        const textArea = document.createElement('textarea');
+        textArea.value = draftContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      alert('Copying to clipboard is not supported in your browser.');
+    }
   };
 
   const handleDownloadDraft = () => {
