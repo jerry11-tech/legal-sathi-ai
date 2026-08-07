@@ -50,8 +50,8 @@ export default function RegisterPage() {
       return;
     }
 
-    if (strengthScore < 4) {
-      setErrorMsg('Please satisfy all password strength requirements.');
+    if (formData.password.length < 6) {
+      setErrorMsg('Password must be at least 6 characters long.');
       return;
     }
 
@@ -202,7 +202,31 @@ export default function RegisterPage() {
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
+            </div>
+
+            {/* Password Strength Visual Checklist */}
+            {formData.password.length > 0 && (
+              <div className="rounded-2xl border border-slate-200/80 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-850 space-y-1 text-[11px]">
+                <p className="font-bold text-slate-700 dark:text-slate-300 mb-1">Password Requirements:</p>
+                <div className="grid grid-cols-2 gap-1 font-medium">
+                  <span className={hasMinLength ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-400'}>
+                    {hasMinLength ? '✓' : '○'} At least 8 characters
+                  </span>
+                  <span className={hasUpper ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-400'}>
+                    {hasUpper ? '✓' : '○'} One uppercase (A-Z)
+                  </span>
+                  <span className={hasLower ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-400'}>
+                    {hasLower ? '✓' : '○'} One lowercase (a-z)
+                  </span>
+                  <span className={hasNumber ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-400'}>
+                    {hasNumber ? '✓' : '○'} One number (0-9)
+                  </span>
+                  <span className={hasSpecial ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-slate-400'}>
+                    {hasSpecial ? '✓' : '○'} One symbol (!@#$%)
+                  </span>
                 </div>
+              </div>
+            )}
               </div>
               <div>
                 <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">Confirm Password</label>
