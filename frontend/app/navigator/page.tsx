@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import {
   AlertTriangle,
   ArrowLeft,
@@ -32,6 +33,7 @@ import {
 import type { CaseAnalysis, SavedCase } from './types';
 
 export default function NavigatorPage() {
+  const searchParams = useSearchParams();
   const [wizardStep, setWizardStep] = useState<number>(1);
   const [query, setQuery] = useState('');
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -48,7 +50,11 @@ export default function NavigatorPage() {
 
   useEffect(() => {
     fetchSavedCases();
-  }, []);
+    const qParam = searchParams.get('q');
+    if (qParam) {
+      setQuery(qParam);
+    }
+  }, [searchParams]);
 
   const fetchSavedCases = async () => {
     try {

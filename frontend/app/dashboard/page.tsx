@@ -117,6 +117,19 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* Unified Tab Switcher */}
+      <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
+        <button className="flex items-center gap-2 rounded-xl bg-blue-50 px-3.5 py-2 text-xs font-bold text-blue-600">
+          <FolderOpen size={16} /> Saved Cases
+        </button>
+        <Link
+          href="/documents"
+          className="flex items-center gap-2 rounded-xl bg-slate-100 px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-200 transition"
+        >
+          <FileText size={16} /> Uploaded Documents & Templates
+        </Link>
+      </div>
+
       {/* Search & Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">

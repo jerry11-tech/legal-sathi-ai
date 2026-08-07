@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import {
   AlertTriangle,
   BookOpen,
@@ -9,6 +10,7 @@ import {
   ListChecks,
   Scale,
   ShieldCheck,
+  Sparkles,
 } from 'lucide-react';
 import Markdown from './markdown';
 
@@ -204,7 +206,14 @@ export default function LegalResponseCard({ response }: { response: LegalRespons
       )}
 
       {typeof response.confidence_score === 'number' && (
-        <div className="mt-4 flex justify-end">
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100">
+          <Link
+            href={`/navigator?q=${encodeURIComponent(response.summary || '')}`}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-3.5 py-1.5 text-xs font-semibold text-blue-600 transition-colors hover:bg-blue-100"
+          >
+            <Sparkles size={14} />
+            <span>Analyze in Case Navigator</span>
+          </Link>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-500">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
             Confidence {confidence}%
