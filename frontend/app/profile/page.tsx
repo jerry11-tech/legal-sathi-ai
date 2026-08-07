@@ -124,209 +124,127 @@ export default function ProfilePage() {
     }
   };
 
-  const handleDeleteAccount = async () => {
-    if (!token) return;
-    if (!confirm('Are you sure you want to delete your account? This action is permanent.')) return;
-    try {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/auth/profile/delete?token=${encodeURIComponent(token)}`,
-        { method: 'DELETE' }
-      );
-      localStorage.removeItem('legalsathi_token');
-      localStorage.removeItem('legalsathi_user');
-      router.push('/');
-    } catch {}
-  };
-
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <Loader2 size={32} className="animate-spin text-blue-600" />
+      <div className="flex h-64 items-center justify-center">
+        <Loader2 size={24} className="animate-spin text-blue-600" />
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 space-y-6 text-slate-900">
-      <div className="flex items-center justify-between border-b pb-4">
-        <div className="flex items-center gap-3">
-          <Link href="/dashboard" className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200">
-            <ArrowLeft size={18} />
-          </Link>
-          <div>
-            <h1 className="text-xl font-bold">User Profile & Account</h1>
-            <p className="text-xs text-slate-500">Manage your personal information, language preferences, and security</p>
+    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10 space-y-8 text-slate-900 dark:text-slate-100">
+      <div className="flex items-center justify-between border-b border-slate-200/80 pb-6 dark:border-slate-800">
+        <div>
+          <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+            <User size={14} /> Account & Profile Settings
           </div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-2">
+            User Profile Settings
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Manage personal details, security credentials, and preferred languages.</p>
         </div>
+        <Link href="/dashboard" className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300">
+          ← Back to Vault
+        </Link>
       </div>
 
-      {msg && (
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-xs font-bold text-emerald-800">
-          ✓ {msg}
+      {msg && <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-xs font-bold text-emerald-800">✓ {msg}</div>}
+      {errMsg && <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-xs font-bold text-red-800">⚠️ {errMsg}</div>}
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Profile Card Summary */}
+        <div className="rounded-3xl border border-slate-200/80 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-4">
+          <div className="flex items-center gap-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-xl font-bold text-white uppercase shadow-md shadow-blue-600/30">
+              {user?.first_name?.[0] || 'U'}
+            </div>
+            <div>
+              <h3 className="font-extrabold text-base text-slate-900 dark:text-white">{user?.first_name} {user?.last_name}</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">{user?.email}</p>
+              <span className="inline-block mt-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-[10px] font-bold text-blue-700 dark:bg-blue-950 dark:text-blue-300 uppercase">
+                {user?.role || 'Verified User'}
+              </span>
+            </div>
+          </div>
+
+          <div className="border-t border-slate-100 dark:border-slate-800 pt-4 space-y-2 text-xs">
+            <div className="flex justify-between py-1 border-b border-slate-50 dark:border-slate-800">
+              <span className="text-slate-500">Phone:</span>
+              <span className="font-bold text-slate-800 dark:text-slate-200">{user?.phone || 'Not provided'}</span>
+            </div>
+            <div className="flex justify-between py-1 border-b border-slate-50 dark:border-slate-800">
+              <span className="text-slate-500">State:</span>
+              <span className="font-bold text-slate-800 dark:text-slate-200">{user?.state || 'Delhi'}</span>
+            </div>
+            <div className="flex justify-between py-1">
+              <span className="text-slate-500">Language:</span>
+              <span className="font-bold text-slate-800 dark:text-slate-200 uppercase">{user?.preferred_language || 'en'}</span>
+            </div>
+          </div>
         </div>
-      )}
 
-      {errMsg && (
-        <div className="rounded-2xl border border-red-200 bg-red-50 p-3 text-xs font-bold text-red-800">
-          ⚠️ {errMsg}
+        {/* Update Form */}
+        <div className="lg:col-span-2 rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-6">
+          <form onSubmit={handleUpdateProfile} className="space-y-4">
+            <h3 className="font-bold text-base text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-2">Personal Details</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">First Name</label>
+                <input
+                  type="text"
+                  value={formData.first_name}
+                  onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs text-slate-900 outline-none dark:border-slate-800 dark:bg-slate-850 dark:text-white"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1">Last Name</label>
+                <input
+                  type="text"
+                  value={formData.last_name}
+                  onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+                  className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs text-slate-900 outline-none dark:border-slate-800 dark:bg-slate-850 dark:text-white"
+                />
+              </div>
+            </div>
+
+            <button type="submit" className="rounded-2xl bg-blue-600 px-6 py-2.5 text-xs font-bold text-white shadow-md hover:bg-blue-700 transition">
+              Save Profile Changes
+            </button>
+          </form>
+
+          {/* Change Password */}
+          <form onSubmit={handleChangePassword} className="space-y-4 pt-6 border-t border-slate-100 dark:border-slate-800">
+            <h3 className="font-bold text-base text-slate-900 dark:text-white border-b border-slate-100 dark:border-slate-800 pb-2">Change Password</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <input
+                type="password"
+                placeholder="Current Password"
+                value={pwdData.old_password}
+                onChange={(e) => setPwdData({ ...pwdData, old_password: e.target.value })}
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs outline-none dark:border-slate-800 dark:bg-slate-850 dark:text-white"
+              />
+              <input
+                type="password"
+                placeholder="New Password"
+                value={pwdData.new_password}
+                onChange={(e) => setPwdData({ ...pwdData, new_password: e.target.value })}
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs outline-none dark:border-slate-800 dark:bg-slate-850 dark:text-white"
+              />
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                value={pwdData.confirm_password}
+                onChange={(e) => setPwdData({ ...pwdData, confirm_password: e.target.value })}
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-xs outline-none dark:border-slate-800 dark:bg-slate-850 dark:text-white"
+              />
+            </div>
+            <button type="submit" className="rounded-2xl bg-slate-900 px-6 py-2.5 text-xs font-bold text-white dark:bg-slate-100 dark:text-slate-900 transition">
+              Update Password
+            </button>
+          </form>
         </div>
-      )}
-
-      {/* User Header Avatar */}
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 flex flex-col sm:flex-row items-center gap-6 shadow-sm">
-        <div className="h-20 w-20 rounded-full bg-blue-600 text-white flex items-center justify-center font-extrabold text-2xl shadow-md">
-          {user?.first_name?.[0]?.toUpperCase() || 'U'}{user?.last_name?.[0]?.toUpperCase() || ''}
-        </div>
-        <div className="space-y-1 text-center sm:text-left">
-          <h2 className="text-xl font-bold">{user?.first_name} {user?.last_name}</h2>
-          <p className="text-xs text-slate-500 flex items-center justify-center sm:justify-start gap-1">
-            <Mail size={14} /> {user?.email}
-          </p>
-          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1 text-[11px] font-bold">
-            <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-blue-700">Role: {user?.role}</span>
-            <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-emerald-700">Verified Account</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Profile Form */}
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 space-y-6 shadow-sm">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-blue-600 border-b pb-3">Personal Information</h3>
-        <form onSubmit={handleUpdateProfile} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">First Name</label>
-              <input
-                type="text"
-                value={formData.first_name}
-                onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs outline-none focus:border-blue-500 focus:bg-white"
-              />
-            </div>
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Last Name</label>
-              <input
-                type="text"
-                value={formData.last_name}
-                onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs outline-none focus:border-blue-500 focus:bg-white"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Phone Number</label>
-              <input
-                type="text"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="+91 9876543210"
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs outline-none focus:border-blue-500 focus:bg-white"
-              />
-            </div>
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Preferred Language</label>
-              <select
-                value={formData.preferred_language}
-                onChange={(e) => setFormData({ ...formData, preferred_language: e.target.value })}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs outline-none focus:border-blue-500 focus:bg-white"
-              >
-                <option value="en">English</option>
-                <option value="hi">Hindi (हिंदी)</option>
-                <option value="mr">Marathi (मराठी)</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Country</label>
-              <input
-                type="text"
-                value={formData.country}
-                onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs outline-none focus:border-blue-500 focus:bg-white"
-              />
-            </div>
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">State</label>
-              <input
-                type="text"
-                value={formData.state}
-                onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs outline-none focus:border-blue-500 focus:bg-white"
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className="rounded-xl bg-blue-600 px-6 py-2.5 text-xs font-bold text-white hover:bg-blue-700 transition"
-          >
-            Save Profile Changes
-          </button>
-        </form>
-      </div>
-
-      {/* Security & Password Change */}
-      <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 space-y-6 shadow-sm">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-blue-600 border-b pb-3">Security & Password</h3>
-        <form onSubmit={handleChangePassword} className="space-y-4 max-w-md">
-          <div>
-            <label className="text-xs font-bold text-slate-700 block mb-1">Current Password</label>
-            <input
-              type="password"
-              required
-              value={pwdData.old_password}
-              onChange={(e) => setPwdData({ ...pwdData, old_password: e.target.value })}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs outline-none focus:border-blue-500 focus:bg-white"
-            />
-          </div>
-          <div>
-            <label className="text-xs font-bold text-slate-700 block mb-1">New Password</label>
-            <input
-              type="password"
-              required
-              value={pwdData.new_password}
-              onChange={(e) => setPwdData({ ...pwdData, new_password: e.target.value })}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs outline-none focus:border-blue-500 focus:bg-white"
-            />
-          </div>
-          <div>
-            <label className="text-xs font-bold text-slate-700 block mb-1">Confirm New Password</label>
-            <input
-              type="password"
-              required
-              value={pwdData.confirm_password}
-              onChange={(e) => setPwdData({ ...pwdData, confirm_password: e.target.value })}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs outline-none focus:border-blue-500 focus:bg-white"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="rounded-xl bg-slate-900 px-6 py-2.5 text-xs font-bold text-white hover:bg-slate-800 transition"
-          >
-            Update Password
-          </button>
-        </form>
-      </div>
-
-      {/* Account Deletion Danger Zone */}
-      <div className="rounded-3xl border border-red-200 bg-red-50/50 p-6 space-y-3">
-        <h3 className="text-sm font-bold text-red-700 flex items-center gap-2">
-          <Trash2 size={16} /> Danger Zone
-        </h3>
-        <p className="text-xs text-red-600">
-          Deleting your account will purge all your saved case roadmaps, generated document drafts, and chat history.
-        </p>
-        <button
-          onClick={handleDeleteAccount}
-          className="rounded-xl bg-red-600 px-5 py-2 text-xs font-bold text-white hover:bg-red-700 transition"
-        >
-          Delete My Account Permanently
-        </button>
       </div>
     </div>
   );
