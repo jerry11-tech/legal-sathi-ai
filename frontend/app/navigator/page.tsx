@@ -114,7 +114,7 @@ export default function NavigatorPage() {
         long_term_actions: [{ step: 4, title: 'Follow Up & Court Appearance', purpose: 'Represent case with legal aid or advocate.', why_it_matters: 'Ensures final recovery or relief.', expected_outcome: 'Binding court order or settlement.' }],
       },
       evidence_checklist: [
-        { id: 'ev-1', item: 'Identity Proof (Aadhaar / Voter ID)', description: 'Required for complainant verification.', status: 'verified' },
+        { id: 'ev-1', item: 'Identity Proof (Aadhaar / Voter ID)', description: 'Required for complainant verification.', status: 'pending' },
         { id: 'ev-2', item: 'Written Proof & Transaction Receipts', description: 'Bank statements, rent agreements or chats.', status: 'pending' },
         { id: 'ev-3', item: 'Copies of Notices Exchanged', description: 'Letters or emails sent previously.', status: 'pending' },
       ],
