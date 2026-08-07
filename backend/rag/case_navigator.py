@@ -236,15 +236,14 @@ class CaseNavigatorEngine:
             ],
         }
 
-        # Evidence Checklist
+        # Evidence Checklist - All default to pending until actual file upload
         evidence_list = []
         for i, item_name in enumerate(cfg["evidence"]):
-            status = "uploaded" if i == 0 and answered_count > 0 else "pending"
             evidence_list.append({
                 "id": f"ev-{i+1}",
                 "item": item_name,
                 "description": f"Essential proof supporting {cfg['domain']}",
-                "status": status,
+                "status": "pending",
             })
 
         # Required Documents
