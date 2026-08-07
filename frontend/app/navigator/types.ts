@@ -26,7 +26,16 @@ export type CaseAnalysis = {
     fileSize?: string;
     uploadedAt?: string;
   }>;
-  required_documents: Array<{ doc_name: string; why_needed: string; where_to_obtain: string; accepted_formats: string }>;
+  required_documents: Array<{
+    doc_name: string;
+    why_needed: string;
+    where_to_obtain: string;
+    accepted_formats: string;
+    fileName?: string;
+    fileSize?: string;
+    uploadedAt?: string;
+    status?: 'pending' | 'uploaded';
+  }>;
   authorities: Array<{ name: string; role: string; when_to_contact: string; contact_guide: string; official_website: string }>;
   timeline_steps: Array<{ id: string; step_name: string; description: string; completed: boolean }>;
   risk_analysis: Array<{ risk_type: string; description: string; recommendation: string }>;

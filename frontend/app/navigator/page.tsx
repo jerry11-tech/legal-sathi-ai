@@ -215,6 +215,29 @@ export default function NavigatorPage() {
     }
   };
 
+  const handleUploadRequiredDoc = (docIndex: number, file: File) => {
+    if (!analysis) return;
+    const nowStr = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    const updatedDocs = analysis.required_documents.map((d, idx) => {
+      if (idx === docIndex) {
+        return {
+          ...d,
+          fileName: file.name,
+          fileSize: `${(file.size / 1024).toFixed(1)} KB`,
+          uploadedAt: nowStr,
+          status: 'uploaded' as const,
+        };
+      }
+      return d;
+    });
+
+    setAnalysis({
+      ...analysis,
+      required_documents: updatedDocs,
+    });
+    alert(`✓ Document Received!\nAttached file "${file.name}" for: ${analysis.required_documents[docIndex].doc_name}.`);
+  };
+
   const handleToggleTimeline = (id: string) => {
     if (!analysis) return;
     const updatedT = analysis.timeline_steps.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t));
@@ -646,15 +669,52 @@ export default function NavigatorPage() {
 
                     <div className="space-y-3">
                       {analysis.required_documents.map((doc, idx) => (
-                        <div key={idx} className="rounded-2xl border border-slate-200 p-4 space-y-1.5 bg-white shadow-2xs">
+                        <div key={idx} className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 bg-white dark:bg-slate-900 shadow-2xs">
                           <div className="flex items-center justify-between">
-                            <h4 className="text-xs font-bold text-slate-900">{doc.doc_name}</h4>
-                            <span className="rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
+                            <h4 className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                              {doc.status === 'uploaded' ? <CheckCircle2 size={14} className="text-emerald-500" /> : null}
+                              {doc.doc_name}
+                            </h4>
+                            <span className="rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[10px] font-semibold text-slate-600 dark:text-slate-300">
                               {doc.accepted_formats}
                             </span>
                           </div>
-                          <p className="text-xs text-slate-600"><strong>Why Needed:</strong> {doc.why_needed}</p>
-                          <p className="text-xs text-slate-600"><strong>Where to Obtain:</strong> {doc.where_to_obtain}</p>
+                          <p className="text-xs text-slate-600 dark:text-slate-400"><strong>Why Needed:</strong> {doc.why_needed}</p>
+                          <p className="text-xs text-slate-600 dark:text-slate-400"><strong>Where to Obtain:</strong> {doc.where_to_obtain}</p>
+                          
+                          {/* Attached File Badge */}
+                          {doc.fileName && (
+                            <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/80 dark:border-emerald-900/40 dark:bg-emerald-950/40 p-2 text-xs text-emerald-900 dark:text-emerald-200 mt-2">
+                              <div className="flex items-center gap-1.5 truncate">
+                                <FileCheck size={14} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
+                                <span className="font-bold truncate">{doc.fileName}</span>
+                                {doc.fileSize && <span className="text-[10px] text-emerald-700 dark:text-emerald-400">({doc.fileSize})</span>}
+                              </div>
+                              {doc.uploadedAt && <span className="text-[10px] text-emerald-600 dark:text-emerald-400 shrink-0">{doc.uploadedAt}</span>}
+                            </div>
+                          )}
+
+                          <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                            <input
+                              type="file"
+                              id={`req-doc-file-${idx}`}
+                              className="hidden"
+                              onChange={(e) => {
+                                if (e.target.files?.length) {
+                                  handleUploadRequiredDoc(idx, e.target.files[0]);
+                                }
+                              }}
+                            />
+                            <label
+                              htmlFor={`req-doc-file-${idx}`}
+                              className="cursor-pointer inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-bold text-indigo-600 hover:bg-indigo-50 dark:border-slate-800 dark:bg-slate-800 dark:text-indigo-400 dark:hover:bg-slate-700 transition"
+                            >
+                              <Upload size={12} /> {doc.fileName ? 'Replace Copy' : 'Upload Document Copy'}
+                            </label>
+                            <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${doc.status === 'uploaded' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'}`}>
+                              {doc.status === 'uploaded' ? 'Uploaded' : 'Pending Upload'}
+                            </span>
+                          </div>
                         </div>
                       ))}
                     </div>
