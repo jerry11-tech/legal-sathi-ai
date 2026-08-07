@@ -32,7 +32,7 @@ export default function ResetPasswordPage() {
         `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/auth/reset-password`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Remainder': 'true' },
           body: JSON.stringify({ token, new_password: newPassword, confirm_password: confirmPassword }),
         }
       );

@@ -52,7 +52,9 @@ export default function NavigatorPage() {
 
   const fetchSavedCases = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/navigator/cases`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/navigator/cases`, {
+        headers: { 'Bypass-Tunnel-Remainder': 'true' },
+      });
       if (res.ok) {
         const data = await res.json();
         setSavedCases(data);
@@ -68,7 +70,7 @@ export default function NavigatorPage() {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/navigator/analyze`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Remainder': 'true' },
         body: JSON.stringify({
           query: q,
           answers: customAnswers || answers,
@@ -93,7 +95,7 @@ export default function NavigatorPage() {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/navigator/cases/save`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Remainder': 'true' },
         body: JSON.stringify({
           case_code: analysis.case_id,
           title: analysis.case_summary.slice(0, 80),
@@ -153,7 +155,7 @@ export default function NavigatorPage() {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/navigator/draft`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Remainder': 'true' },
         body: JSON.stringify({
           draft_type: type,
           case_summary: analysis.case_summary,

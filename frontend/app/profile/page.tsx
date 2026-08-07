@@ -57,7 +57,8 @@ export default function ProfilePage() {
     setLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/auth/me?token=${encodeURIComponent(authToken)}`
+        `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/auth/me?token=${encodeURIComponent(authToken)}`,
+        { headers: { 'Bypass-Tunnel-Remainder': 'true' } }
       );
       if (res.ok) {
         const u = await res.json();
@@ -86,7 +87,7 @@ export default function ProfilePage() {
         `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/auth/profile/update?token=${encodeURIComponent(token)}`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Remainder': 'true' },
           body: JSON.stringify(formData),
         }
       );
@@ -110,7 +111,7 @@ export default function ProfilePage() {
         `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/auth/profile/change-password?token=${encodeURIComponent(token)}`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Remainder': 'true' },
           body: JSON.stringify(pwdData),
         }
       );

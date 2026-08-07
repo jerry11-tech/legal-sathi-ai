@@ -83,7 +83,7 @@ export default function ChatPage() {
         `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/chat/`,
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Remainder': 'true' },
           body: JSON.stringify({ query: userMsg.content, language: 'en' }),
         }
       );
