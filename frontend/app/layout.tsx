@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import AppShell from '@/components/layout/app-shell'
-import AvatarWidget from '@/components/avatar/avatar-widget'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -28,7 +27,6 @@ export default function RootLayout({
         <AppShell>
           {children}
         </AppShell>
-        <AvatarWidget />
       </body>
     </html>
   )
