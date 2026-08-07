@@ -32,14 +32,11 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/auth/login`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Remainder': 'true' },
-          body: JSON.stringify({ email, password, remember_me: rememberMe }),
-        }
-      );
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, remember_me: rememberMe }),
+      });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Login failed');
