@@ -53,16 +53,8 @@ class AdminLoginRequest(BaseModel):
     password: str
 
 def validate_password_strength(password: str):
-    if len(password) < 8:
-        raise HTTPException(status_code=400, detail="Password must be at least 8 characters long")
-    if not re.search(r"[A-Z]", password):
-        raise HTTPException(status_code=400, detail="Password must contain at least one uppercase letter")
-    if not re.search(r"[a-z]", password):
-        raise HTTPException(status_code=400, detail="Password must contain at least one lowercase letter")
-    if not re.search(r"\d", password):
-        raise HTTPException(status_code=400, detail="Password must contain at least one number")
-    if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
-        raise HTTPException(status_code=400, detail="Password must contain at least one special character")
+    if len(password) < 6:
+        raise HTTPException(status_code=400, detail="Password must be at least 6 characters long")
 
 
 @router.post("/register")
@@ -91,7 +83,7 @@ def register_user(req: UserRegisterRequest, db: Session = Depends(get_db)):
         country=req.country,
         state=req.state,
         role="user",
-        is_verified=False,
+        is_verified=True,
     )
     db.add(new_user)
     db.commit()

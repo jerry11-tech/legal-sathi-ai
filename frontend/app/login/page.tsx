@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowRight, CheckCircle2, Eye, EyeOff, Loader2, Lock, Mail, Scale, Shield, User } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,6 +15,16 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+
+  useEffect(() => {
+    const reg = searchParams.get('registered');
+    const em = searchParams.get('email');
+    if (em) setEmail(em);
+    if (reg === 'true') {
+      setSuccessMsg('Account created successfully! Please sign in with your credentials below.');
+    }
+  }, [searchParams]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,6 +80,12 @@ export default function LoginPage() {
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Sign in to your LegalSathi AI account to access saved cases & drafts.</p>
             </div>
           </div>
+
+          {successMsg && (
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-3.5 text-xs font-bold text-emerald-800 dark:border-emerald-900/50 dark:bg-emerald-950 dark:text-emerald-300">
+              ✓ {successMsg}
+            </div>
+          )}
 
           {errorMsg && (
             <div className="rounded-2xl border border-red-200 bg-red-50 p-3.5 text-xs font-bold text-red-800 dark:border-red-900/50 dark:bg-red-950 dark:text-red-300">

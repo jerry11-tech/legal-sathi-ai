@@ -69,7 +69,13 @@ export default function RegisterPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Registration failed');
 
-      router.push(`/account/verify-notice?email=${encodeURIComponent(formData.email)}&token=${data.token_preview || ''}`);
+      if (data.access_token) {
+        localStorage.setItem('legalsathi_token', data.access_token);
+        localStorage.setItem('legalsathi_user', JSON.stringify(data.user));
+        router.push('/dashboard');
+      } else {
+        router.push(`/login?email=${encodeURIComponent(formData.email)}&registered=true`);
+      }
     } catch (err) {
       setErrorMsg((err as Error).message);
     } finally {
