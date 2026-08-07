@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import GovtAnnouncementsWidget from '@/components/govt-announcements-widget';
 import {
   AlertTriangle,
   ArrowRight,
@@ -264,6 +265,11 @@ export default function Home() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* VERIFIED GOVERNMENT GAZETTE ANNOUNCEMENTS WIDGET */}
+      <section>
+        <GovtAnnouncementsWidget />
       </section>
 
       {/* 3. LEGAL CATEGORIES DIRECTORY (26+ Categories) */}

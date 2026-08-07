@@ -21,6 +21,7 @@ import {
   User,
 } from 'lucide-react';
 import type { SavedCase } from '../navigator/types';
+import GovtAnnouncementsWidget from '@/components/govt-announcements-widget';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -115,6 +116,9 @@ export default function DashboardPage() {
           <p className="text-3xl font-black text-amber-600 mt-2">26+</p>
         </div>
       </div>
+
+      {/* Verified Government Announcements Widget */}
+      <GovtAnnouncementsWidget />
 
       {/* Unified Tab Switcher */}
       <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">

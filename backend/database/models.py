@@ -170,3 +170,26 @@ class KnowledgeFile(Base):
     file_path = Column(String, nullable=False)
     file_size = Column(String, nullable=True)
     uploaded_at = Column(DateTime, default=datetime.utcnow)
+
+class GovernmentAnnouncement(Base):
+    __tablename__ = "government_announcements"
+
+    id = Column(Integer, primary_key=True, index=True)
+    gazette_notification_no = Column(String, unique=True, index=True, nullable=False)
+    title = Column(String, nullable=False)
+    ministry = Column(String, nullable=False)
+    publication_date = Column(String, nullable=False)
+    effective_date = Column(String, nullable=True)
+    
+    # Official Source Verification
+    official_pdf_url = Column(String, nullable=False) # Must be *.gov.in or *.nic.in
+    pdf_sha256 = Column(String, nullable=False)
+    is_verified_source = Column(Boolean, default=True)
+    
+    # Rule Change Matrix
+    act_affected = Column(String, nullable=False)
+    summary_old_rule = Column(Text, nullable=True)
+    summary_new_rule = Column(Text, nullable=False)
+    key_citizen_impact = Column(Text, nullable=False)
+    
+    created_at = Column(DateTime, default=datetime.utcnow)
