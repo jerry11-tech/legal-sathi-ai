@@ -20,6 +20,7 @@ import {
   X,
 } from 'lucide-react';
 import CommandPalette from '../command-palette';
+import EmergencyHelpline from '../emergency-helpline';
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -218,6 +219,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Command Palette Modal */}
       <CommandPalette isOpen={cmdOpen} onClose={() => setCmdOpen(false)} />
+      {/* Emergency Helplines Widget */}
+      <EmergencyHelpline />
     </div>
   );
 }
