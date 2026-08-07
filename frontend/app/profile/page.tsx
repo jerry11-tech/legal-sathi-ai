@@ -133,7 +133,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-10 space-y-8 text-slate-900 dark:text-slate-100">
+    <div className="mx-auto max-w-7xl w-full px-4 py-8 sm:px-6 lg:px-8 sm:py-10 space-y-8 text-slate-900 dark:text-slate-100">
       <div className="flex items-center justify-between border-b border-slate-200/80 pb-6 dark:border-slate-800">
         <div>
           <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700 dark:bg-blue-950 dark:text-blue-300">

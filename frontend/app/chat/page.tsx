@@ -232,7 +232,7 @@ export default function ChatPage() {
 
         {/* Conversation Feed */}
         <div className="flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-4xl space-y-5 px-3 py-5 sm:px-6 sm:py-6">
+          <div className="mx-auto max-w-6xl w-full space-y-5 px-3 py-5 sm:px-6 sm:py-6">
             {messages.map((msg, idx) => {
               if (msg.role === 'user') {
                 return (
@@ -282,7 +282,7 @@ export default function ChatPage() {
 
         {/* Sticky Bottom Input Bar */}
         <div className="sticky bottom-0 border-t border-slate-200/80 bg-white/95 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/95">
-          <div className="mx-auto max-w-4xl px-3 py-3 sm:px-6 sm:py-4 space-y-2.5">
+          <div className="mx-auto max-w-6xl w-full px-3 py-3 sm:px-6 sm:py-4 space-y-2.5">
             {/* Guest Progress Counter */}
             {!isLoggedIn && (
               <div className="flex items-center justify-between text-xs px-1 text-slate-500 font-semibold">

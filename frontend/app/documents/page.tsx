@@ -53,7 +53,7 @@ export default function DocumentsPage() {
   });
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 space-y-8 text-slate-900 dark:text-slate-100">
+    <div className="mx-auto max-w-7xl w-full px-4 py-8 sm:px-6 lg:px-8 sm:py-10 space-y-8 text-slate-900 dark:text-slate-100">
       {/* Header */}
       <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between border-b border-slate-200/80 pb-6 dark:border-slate-800">
         <div>
