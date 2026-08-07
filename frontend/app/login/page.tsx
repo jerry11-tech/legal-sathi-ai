@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowRight, CheckCircle2, Eye, EyeOff, Loader2, Lock, Mail, Scale, Shield, User } from 'lucide-react';
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -45,7 +45,7 @@ export default function LoginPage() {
       localStorage.setItem('legalsathi_token', data.access_token);
       localStorage.setItem('legalsathi_user', JSON.stringify(data.user));
 
-      if (data.user.role === 'admin') {
+      if (data.user?.role === 'admin') {
         router.push('/admin/dashboard');
       } else {
         router.push('/dashboard');
@@ -202,5 +202,17 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
+        <Loader2 size={24} className="animate-spin text-blue-600" />
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }

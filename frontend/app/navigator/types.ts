@@ -17,7 +17,15 @@ export type CaseAnalysis = {
     actions_7d: Array<{ step: number; title: string; purpose: string; why_it_matters: string; expected_outcome: string }>;
     long_term_actions: Array<{ step: number; title: string; purpose: string; why_it_matters: string; expected_outcome: string }>;
   };
-  evidence_checklist: Array<{ id: string; item: string; description: string; status: 'pending' | 'uploaded' | 'verified' }>;
+  evidence_checklist: Array<{
+    id: string;
+    item: string;
+    description: string;
+    status: 'pending' | 'uploaded' | 'verified';
+    fileName?: string;
+    fileSize?: string;
+    uploadedAt?: string;
+  }>;
   required_documents: Array<{ doc_name: string; why_needed: string; where_to_obtain: string; accepted_formats: string }>;
   authorities: Array<{ name: string; role: string; when_to_contact: string; contact_guide: string; official_website: string }>;
   timeline_steps: Array<{ id: string; step_name: string; description: string; completed: boolean }>;

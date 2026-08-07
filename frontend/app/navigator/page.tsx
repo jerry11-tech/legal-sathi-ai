@@ -167,9 +167,21 @@ export default function NavigatorPage() {
     } catch {}
   };
 
-  const handleToggleEvidence = (id: string, nextStatus: 'pending' | 'uploaded' | 'verified') => {
+  const handleToggleEvidence = (id: string, nextStatus: 'pending' | 'uploaded' | 'verified', fileDetails?: { name: string; size: number }) => {
     if (!analysis) return;
-    const updatedEv = analysis.evidence_checklist.map((e) => (e.id === id ? { ...e, status: nextStatus } : e));
+    const nowStr = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    const updatedEv = analysis.evidence_checklist.map((e) => {
+      if (e.id === id) {
+        return {
+          ...e,
+          status: nextStatus,
+          fileName: fileDetails ? fileDetails.name : e.fileName,
+          fileSize: fileDetails ? `${(fileDetails.size / 1024).toFixed(1)} KB` : e.fileSize,
+          uploadedAt: fileDetails ? nowStr : (e.uploadedAt || nowStr),
+        };
+      }
+      return e;
+    });
     
     // Recalculate progress percentage
     const total = updatedEv.length;
@@ -183,16 +195,23 @@ export default function NavigatorPage() {
     });
   };
 
-  const handleFileUpload = (fileName: string) => {
+  const handleFileUpload = (file: File, targetItemId?: string) => {
     if (!analysis) return;
-    // Find first pending item and mark it uploaded
-    const pendingIdx = analysis.evidence_checklist.findIndex((e) => e.status === 'pending');
-    if (pendingIdx !== -1) {
-      const targetId = analysis.evidence_checklist[pendingIdx].id;
-      handleToggleEvidence(targetId, 'uploaded');
-      alert(`File "${fileName}" attached! Marked "${analysis.evidence_checklist[pendingIdx].item}" as Uploaded.`);
-    } else {
-      alert(`File "${fileName}" uploaded to Case ${analysis.case_id}. All evidence items are already uploaded!`);
+    let targetId = targetItemId;
+
+    if (!targetId) {
+      const pendingItem = analysis.evidence_checklist.find((e) => e.status === 'pending');
+      if (pendingItem) {
+        targetId = pendingItem.id;
+      } else {
+        targetId = analysis.evidence_checklist[0]?.id;
+      }
+    }
+
+    if (targetId) {
+      handleToggleEvidence(targetId, 'uploaded', { name: file.name, size: file.size });
+      const itemObj = analysis.evidence_checklist.find((e) => e.id === targetId);
+      alert(`✓ Document Received!\nFile "${file.name}" uploaded for: ${itemObj?.item || 'Evidence Item'}.\nStatus automatically updated to Uploaded.`);
     }
   };
 
@@ -514,55 +533,97 @@ export default function NavigatorPage() {
 
                     <div className="space-y-3">
                       {analysis.evidence_checklist.map((e) => (
-                        <div key={e.id} className="rounded-2xl border border-slate-200 p-4 space-y-2 bg-slate-50/50">
+                        <div key={e.id} className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-3 bg-slate-50/50 dark:bg-slate-900/50">
                           <div className="flex items-center justify-between">
-                            <p className="text-xs font-bold text-slate-900">{e.item}</p>
+                            <p className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                              {e.status === 'verified' ? (
+                                <CheckCircle2 size={14} className="text-emerald-500" />
+                              ) : e.status === 'uploaded' ? (
+                                <FileCheck size={14} className="text-blue-500" />
+                              ) : null}
+                              {e.item}
+                            </p>
                             <span
-                              className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase ${
+                              className={`rounded-full px-2.5 py-0.5 text-[10px] font-extrabold uppercase ${
                                 e.status === 'verified'
-                                  ? 'bg-emerald-100 text-emerald-800'
+                                  ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
                                   : e.status === 'uploaded'
-                                  ? 'bg-blue-100 text-blue-800'
-                                  : 'bg-amber-100 text-amber-800'
+                                  ? 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300'
+                                  : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
                               }`}
                             >
                               {e.status}
                             </span>
                           </div>
-                          <p className="text-[11px] text-slate-500 leading-relaxed">{e.description}</p>
-                          <div className="flex gap-1.5 pt-1">
-                            {(['pending', 'uploaded', 'verified'] as const).map((st) => (
-                              <button
-                                key={st}
-                                onClick={() => handleToggleEvidence(e.id, st)}
-                                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase transition ${
-                                  e.status === st
-                                    ? st === 'verified'
-                                      ? 'bg-emerald-600 text-white shadow-xs'
-                                      : st === 'uploaded'
-                                      ? 'bg-blue-600 text-white shadow-xs'
-                                      : 'bg-slate-700 text-white'
-                                    : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'
-                                }`}
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">{e.description}</p>
+                          
+                          {/* Received Document Badge */}
+                          {e.fileName && (
+                            <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/80 dark:border-emerald-900/40 dark:bg-emerald-950/40 p-2.5 text-xs text-emerald-900 dark:text-emerald-200">
+                              <div className="flex items-center gap-2 truncate">
+                                <FileCheck size={16} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
+                                <span className="font-bold truncate">{e.fileName}</span>
+                                {e.fileSize && <span className="text-[10px] text-emerald-700 dark:text-emerald-400">({e.fileSize})</span>}
+                              </div>
+                              {e.uploadedAt && <span className="text-[10px] text-emerald-600 dark:text-emerald-400 shrink-0 font-medium">{e.uploadedAt}</span>}
+                            </div>
+                          )}
+
+                          <div className="flex items-center justify-between pt-1 border-t border-slate-200/60 dark:border-slate-800">
+                            {/* File Upload Button per item */}
+                            <div>
+                              <input
+                                type="file"
+                                id={`file-input-${e.id}`}
+                                className="hidden"
+                                onChange={(ev) => {
+                                  if (ev.target.files?.length) {
+                                    handleFileUpload(ev.target.files[0], e.id);
+                                  }
+                                }}
+                              />
+                              <label
+                                htmlFor={`file-input-${e.id}`}
+                                className="cursor-pointer inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-bold text-blue-600 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-800 dark:text-blue-400 dark:hover:bg-slate-700 transition"
                               >
-                                {st}
-                              </button>
-                            ))}
+                                <Upload size={12} /> {e.fileName ? 'Replace File' : 'Upload Proof'}
+                              </label>
+                            </div>
+
+                            <div className="flex gap-1">
+                              {(['pending', 'uploaded', 'verified'] as const).map((st) => (
+                                <button
+                                  key={st}
+                                  onClick={() => handleToggleEvidence(e.id, st)}
+                                  className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase transition ${
+                                    e.status === st
+                                      ? st === 'verified'
+                                        ? 'bg-emerald-600 text-white shadow-xs'
+                                        : st === 'uploaded'
+                                        ? 'bg-blue-600 text-white shadow-xs'
+                                        : 'bg-slate-700 text-white'
+                                      : 'bg-white border border-slate-200 text-slate-500 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400'
+                                  }`}
+                                >
+                                  {st}
+                                </button>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       ))}
                     </div>
 
                     {/* Drag & Drop File Upload Box */}
-                    <div className="rounded-2xl border-2 border-dashed border-blue-200 bg-blue-50/40 p-6 text-center space-y-2">
-                      <Upload size={26} className="mx-auto text-blue-600" />
-                      <p className="text-xs font-bold text-slate-800">Upload Evidence / Attachments</p>
-                      <p className="text-[11px] text-slate-500">Drag & drop proof files (PDF, JPEG, PNG, MP4, MP3)</p>
+                    <div className="rounded-2xl border-2 border-dashed border-blue-200 bg-blue-50/40 dark:border-blue-900/50 dark:bg-blue-950/20 p-6 text-center space-y-2">
+                      <Upload size={26} className="mx-auto text-blue-600 dark:text-blue-400" />
+                      <p className="text-xs font-bold text-slate-800 dark:text-slate-200">Upload Evidence / Attachments</p>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400">Drag & drop proof files (PDF, JPEG, PNG, MP4, MP3)</p>
                       <input
                         type="file"
                         onChange={(e) => {
                           if (e.target.files?.length) {
-                            handleFileUpload(e.target.files[0].name);
+                            handleFileUpload(e.target.files[0]);
                           }
                         }}
                         className="hidden"
@@ -572,7 +633,7 @@ export default function NavigatorPage() {
                         htmlFor="evidence-file-input-step3"
                         className="inline-block cursor-pointer rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-blue-700 transition"
                       >
-                        Browse Files to Attach
+                        Browse & Upload Document
                       </label>
                     </div>
                   </div>
