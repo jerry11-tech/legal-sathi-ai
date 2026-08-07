@@ -59,7 +59,7 @@ export default function NavigatorPage() {
 
   const fetchSavedCases = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/navigator/cases`, {
+      const res = await fetch('/api/navigator/cases', {
         headers: { 'Bypass-Tunnel-Remainder': 'true' },
       });
       if (res.ok) {
@@ -75,7 +75,7 @@ export default function NavigatorPage() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/navigator/analyze`, {
+      const res = await fetch('/api/navigator/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Remainder': 'true' },
         body: JSON.stringify({
@@ -146,7 +146,7 @@ export default function NavigatorPage() {
   const handleSaveCase = async () => {
     if (!analysis) return;
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/navigator/cases/save`, {
+      const res = await fetch('/api/navigator/cases/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Remainder': 'true' },
         body: JSON.stringify({
@@ -225,7 +225,7 @@ export default function NavigatorPage() {
     if (!analysis) return;
     setLoadingDraft(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/navigator/draft`, {
+      const res = await fetch('/api/navigator/draft', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Remainder': 'true' },
         body: JSON.stringify({

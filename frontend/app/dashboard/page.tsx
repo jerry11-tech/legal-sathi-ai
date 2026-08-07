@@ -41,7 +41,7 @@ export default function DashboardPage() {
 
   const fetchSavedCases = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/navigator/cases`, {
+      const res = await fetch('/api/navigator/cases', {
         headers: { 'Bypass-Tunnel-Remainder': 'true' },
       });
       if (res.ok) {
