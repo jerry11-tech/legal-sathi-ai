@@ -59,8 +59,12 @@ export default function NavigatorPage() {
 
   const fetchSavedCases = async () => {
     try {
+      const token = localStorage.getItem('legalsathi_token');
       const res = await fetch('/api/navigator/cases', {
-        headers: { 'Bypass-Tunnel-Remainder': 'true' },
+        headers: { 
+          'Bypass-Tunnel-Remainder': 'true',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
       });
       if (res.ok) {
         const data = await res.json();
@@ -148,9 +152,14 @@ export default function NavigatorPage() {
   const handleSaveCase = async () => {
     if (!analysis) return;
     try {
+      const token = localStorage.getItem('legalsathi_token');
       const res = await fetch('/api/navigator/cases/save', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Remainder': 'true' },
+        headers: { 
+          'Content-Type': 'application/json', 
+          'Bypass-Tunnel-Remainder': 'true',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
         body: JSON.stringify({
           case_code: analysis.case_id,
           title: analysis.case_summary.slice(0, 80),

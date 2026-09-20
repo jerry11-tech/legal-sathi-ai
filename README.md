@@ -57,6 +57,14 @@ start-frontend.bat
 docker-compose up --build
 ```
 
+### Option C: Easy Windows Start
+```powershell
+.\start.ps1
+# To stop:
+.\stop.ps1
+```
+
+
 ---
 
 ## API Endpoints

@@ -42,8 +42,12 @@ export default function DashboardPage() {
 
   const fetchSavedCases = async () => {
     try {
+      const token = localStorage.getItem('legalsathi_token');
       const res = await fetch('/api/navigator/cases', {
-        headers: { 'Bypass-Tunnel-Remainder': 'true' },
+        headers: { 
+          'Bypass-Tunnel-Remainder': 'true',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        },
       });
       if (res.ok) {
         const data = await res.json();

@@ -1,3 +1,4 @@
+import requests
 import json
 import os
 import re
@@ -706,33 +707,36 @@ class LegalEngine:
             "Rights, next_steps and required_documents should be newline bullets starting with "
             "'- '. Keep it accurate, practical and cite real Indian laws. Return ONLY the JSON."
         )
-        payload = json.dumps({
+        payload = {
             "contents": [{"parts": [{"text": prompt}]}],
             "generationConfig": {"temperature": 0.3, "maxOutputTokens": 1024},
-        }).encode("utf-8")
+        }
         url = (
             "https://generativelanguage.googleapis.com/v1beta/models/"
             "gemini-1.5-flash:generateContent?key=" + key
         )
-        req = urllib.request.Request(
-            url, data=payload, headers={"Content-Type": "application/json"}
-        )
-        with urllib.request.urlopen(req, timeout=25) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-        text = data["candidates"][0]["content"]["parts"][0]["text"]
-        text = text.strip()
-        if text.startswith("```"):
-            text = re.sub(r"^```[a-zA-Z]*\n?", "", text)
-            text = re.sub(r"\n?```$", "", text)
-        parsed = json.loads(text)
-        required = {
-            "summary", "applicable_law", "explanation", "rights", "next_steps",
-            "required_documents", "government_website", "confidence_score",
-        }
-        if not required.issubset(parsed.keys()):
+        
+        try:
+            response = requests.post(url, json=payload, timeout=25)
+            response.raise_for_status()
+            data = response.json()
+            text = data["candidates"][0]["content"]["parts"][0]["text"]
+            text = text.strip()
+            if text.startswith("```"):
+                text = re.sub(r"^```[a-zA-Z]*\n?", "", text)
+                text = re.sub(r"\n?```$", "", text)
+            parsed = json.loads(text)
+            required = {
+                "summary", "applicable_law", "explanation", "rights", "next_steps",
+                "required_documents", "government_website", "confidence_score",
+            }
+            if not required.issubset(parsed.keys()):
+                return None
+            parsed["disclaimer"] = DISCLAIMER
+            return parsed
+        except Exception as e:
+            print(f"Gemini API error: {e}")
             return None
-        parsed["disclaimer"] = DISCLAIMER
-        return parsed
 
     def _generic_response(self, query, language="en"):
         return {

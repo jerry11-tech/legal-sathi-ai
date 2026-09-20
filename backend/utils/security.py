@@ -41,3 +41,4 @@ def decode_token(token: str) -> dict:
         return payload
     except JWTError:
         return {}
+

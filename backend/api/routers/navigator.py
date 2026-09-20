@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
 from database.session import get_db
 from database.models import LegalCase
@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from typing import Dict, List, Optional
 import json
 from rag.case_navigator import nav_engine
+from utils.auth_utils import get_current_user_from_token
 
 router = APIRouter()
 
@@ -40,8 +41,14 @@ def generate_draft(req: DraftRequest):
     return draft
 
 @router.get("/cases")
-def list_saved_cases(db: Session = Depends(get_db)):
-    cases = db.query(LegalCase).order_by(LegalCase.updated_at.desc()).all()
+def list_saved_cases(db: Session = Depends(get_db), authorization: str = Header(None)):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Missing or invalid token")
+    
+    token = authorization.split(" ")[1]
+    user = get_current_user_from_token(token, db)
+    
+    cases = db.query(LegalCase).filter(LegalCase.user_id == user.id).order_by(LegalCase.updated_at.desc()).all()
     result = []
     for c in cases:
         try:
@@ -63,8 +70,14 @@ def list_saved_cases(db: Session = Depends(get_db)):
     return result
 
 @router.post("/cases/save")
-def save_case(req: SaveCaseRequest, db: Session = Depends(get_db)):
-    existing = db.query(LegalCase).filter(LegalCase.case_code == req.case_code).first()
+def save_case(req: SaveCaseRequest, db: Session = Depends(get_db), authorization: str = Header(None)):
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Missing or invalid token")
+    
+    token = authorization.split(" ")[1]
+    user = get_current_user_from_token(token, db)
+
+    existing = db.query(LegalCase).filter(LegalCase.case_code == req.case_code, LegalCase.user_id == user.id).first()
     data_str = json.dumps(req.data_json)
     
     if existing:
@@ -78,6 +91,7 @@ def save_case(req: SaveCaseRequest, db: Session = Depends(get_db)):
         return {"status": "updated", "case_code": existing.case_code}
     else:
         new_case = LegalCase(
+            user_id=user.id,
             case_code=req.case_code,
             title=req.title,
             category=req.category,

@@ -98,7 +98,7 @@ class LegalCase(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     case_code = Column(String, unique=True, index=True, nullable=False)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     title = Column(String, nullable=False)
     category = Column(String, nullable=False)
     urgency = Column(String, default="Medium")
