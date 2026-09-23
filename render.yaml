@@ -6,22 +6,15 @@ services:
     startCommand: gunicorn -w 4 -k uvicorn.workers.UvicornWorker backend.main:app
     envVars:
       - key: DATABASE_URL
-        fromService:
-          type: psqldb
-          name: legalsathi-db
-          property: connectionString
+        value: sqlite:///./legalsathi.db
       - key: SECRET_KEY
         generateValue: true
       - key: GEMINI_API_KEY
         sync: false
       - key: ALLOWED_ORIGINS
-        value: https://your-app.vercel.app
+        value: "*"
       - key: FRONTEND_URL
-        value: https://your-app.vercel.app
+        value: https://jerry11-tech.github.io
       - key: NEXT_PUBLIC_API_URL
         sync: false
 
-  - type: psqldb
-    name: legalsathi-db
-    databaseName: legalsathi
-    user: legalsathi_user

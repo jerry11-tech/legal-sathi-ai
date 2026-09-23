@@ -5,6 +5,9 @@ An AI-powered multilingual Legal Information and Guidance Platform built with Ne
 
 > **Disclaimer**: This platform provides legal information, not legal advice. Always consult a licensed advocate for official legal representation.
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/jerry11-tech/legal-sathi-ai)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fjerry11-tech%2Flegal-sathi-ai&root-directory=frontend)
+
 ---
 
 ## Architecture & Tech Stack
