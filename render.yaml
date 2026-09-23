@@ -16,6 +16,10 @@ services:
         sync: false
       - key: ALLOWED_ORIGINS
         value: https://your-app.vercel.app
+      - key: FRONTEND_URL
+        value: https://your-app.vercel.app
+      - key: NEXT_PUBLIC_API_URL
+        sync: false
 
   - type: psqldb
     name: legalsathi-db

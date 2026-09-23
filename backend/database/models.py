@@ -33,6 +33,7 @@ class User(Base):
     sessions = relationship("UserSession", back_populates="user", cascade="all, delete-orphan")
     notifications = relationship("Notification", back_populates="user", cascade="all, delete-orphan")
     bookmarks = relationship("Bookmark", back_populates="user", cascade="all, delete-orphan")
+    evidence_files = relationship("EvidenceFile", back_populates="user", cascade="all, delete-orphan")
 
 class VerificationToken(Base):
     __tablename__ = "verification_tokens"
@@ -150,6 +151,21 @@ class Bookmark(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="bookmarks")
+
+class EvidenceFile(Base):
+    __tablename__ = "evidence_files"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    filename = Column(String, nullable=False)
+    stored_name = Column(String, nullable=False)
+    category = Column(String, nullable=True)
+    file_type = Column(String, nullable=True)
+    file_size = Column(Integer, nullable=True)
+    sha256 = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="evidence_files")
 
 class LegalTemplate(Base):
     __tablename__ = "templates"

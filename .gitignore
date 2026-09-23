@@ -29,6 +29,8 @@ chroma/
 backend/chroma/
 sent_emails/
 backend/sent_emails/
+uploads/
+backend/uploads/
 
 # OS / IDE
 .DS_Store

@@ -18,7 +18,6 @@ import {
   CheckCircle2,
   Upload,
   Trash2,
-  Eye,
   File,
 } from 'lucide-react';
 import GuestLimitModal from '@/components/guest-limit-modal';
@@ -39,68 +38,120 @@ export default function DocumentsPage() {
   const [activeTab, setActiveTab] = useState<'templates' | 'vault'>('templates');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
 
-  const [uploadedDocs, setUploadedDocs] = useState<UploadedDoc[]>([
-    {
-      id: 'doc-1',
-      name: 'Complainant_Aadhaar_Card_Verified.pdf',
-      size: '1.2 MB',
-      uploadedAt: '07 Aug 2026, 10:15 PM',
-      category: 'Identity Proof',
-      type: 'PDF Document',
-    },
-    {
-      id: 'doc-2',
-      name: 'Bank_Statement_Transaction_Proof.pdf',
-      size: '2.4 MB',
-      uploadedAt: '07 Aug 2026, 10:18 PM',
-      category: 'Financial Evidence',
-      type: 'PDF Document',
-    },
-    {
-      id: 'doc-3',
-      name: 'WhatsApp_Chat_Export_Legal_Notice.png',
-      size: '840 KB',
-      uploadedAt: '07 Aug 2026, 10:20 PM',
-      category: 'Written Proof',
-      type: 'PNG Image',
-    },
-  ]);
+  const [uploadedDocs, setUploadedDocs] = useState<UploadedDoc[]>([]);
 
   useEffect(() => {
     const token = localStorage.getItem('legalsathi_token');
     if (token) {
       setIsLoggedIn(true);
+      fetchVaultFiles(token);
     } else {
       setShowModal(true);
     }
   }, []);
 
-  const handleVaultUpload = (files: FileList | null) => {
-    if (!files || files.length === 0) return;
-    const nowStr = new Date().toLocaleDateString('en-IN', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-
-    const newItems: UploadedDoc[] = Array.from(files).map((f, idx) => ({
-      id: `doc-${Date.now()}-${idx}`,
-      name: f.name,
-      size: `${(f.size / 1024).toFixed(1)} KB`,
-      uploadedAt: nowStr,
-      category: f.type.includes('image') ? 'Visual Proof' : 'Document Evidence',
-      type: f.type || 'Legal Document',
-    }));
-
-    setUploadedDocs((prev) => [...newItems, ...prev]);
-    alert(`✓ ${newItems.length} file(s) received and stored in your encrypted Evidence Vault.`);
+  const fetchVaultFiles = async (token: string) => {
+    try {
+      const res = await fetch('/api/vault/files', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setUploadedDocs(data);
+      }
+    } catch {
+      // keep empty list
+    }
   };
 
-  const handleDeleteDoc = (id: string) => {
+  const handleVaultUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const token = localStorage.getItem('legalsathi_token');
+    if (!token) {
+      setShowModal(true);
+      return;
+    }
+
+    setUploading(true);
+    setUploadError('');
+    try {
+      const newItems: UploadedDoc[] = [];
+      for (const f of Array.from(files)) {
+        const form = new FormData();
+        form.append('file', f);
+        form.append('category', f.type.includes('image') ? 'Visual Proof' : 'Document Evidence');
+        const res = await fetch('/api/vault/upload', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+          body: form,
+        });
+        if (res.ok) {
+          const data = await res.json();
+          newItems.push({
+            id: String(data.id),
+            name: data.name,
+            size: data.size,
+            uploadedAt: data.uploadedAt,
+            category: data.category,
+            type: data.type,
+          });
+        } else {
+          const err = await res.json().catch(() => ({ detail: 'Upload failed' }));
+          throw new Error(err.detail || 'Upload failed');
+        }
+      }
+      if (newItems.length > 0) {
+        setUploadedDocs((prev) => [...newItems, ...prev]);
+        alert(`✓ ${newItems.length} file(s) received and stored in your encrypted Evidence Vault.`);
+      }
+    } catch (err) {
+      setUploadError((err as Error).message || 'Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDeleteDoc = async (id: string) => {
+    const token = localStorage.getItem('legalsathi_token');
+    if (token) {
+      try {
+        await fetch(`/api/vault/${id}`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } catch {
+        // continue removing locally even if the server call fails
+      }
+    }
     setUploadedDocs((prev) => prev.filter((d) => d.id !== id));
+  };
+
+  const handleDownloadDoc = async (id: string, name: string) => {
+    const token = localStorage.getItem('legalsathi_token');
+    if (!token) return;
+    try {
+      const res = await fetch(`/api/vault/download/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) {
+        alert('Download failed');
+        return;
+      }
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch {
+      alert('Download failed');
+    }
   };
 
   const categories = ['All', 'Police & Criminal', 'Cyber Crime', 'Rental & Property', 'Consumer Rights', 'RTI & Public'];
@@ -265,10 +316,13 @@ export default function DocumentsPage() {
             />
             <label
               htmlFor="vault-file-input"
-              className="inline-flex cursor-pointer items-center gap-2 rounded-2xl bg-blue-600 px-5 py-3 text-xs font-bold text-white shadow-md hover:bg-blue-700 transition"
+              className="inline-flex cursor-pointer items-center gap-2 rounded-2xl bg-blue-600 px-5 py-3 text-xs font-bold text-white shadow-md hover:bg-blue-700 transition disabled:opacity-60"
             >
-              <Plus size={16} /> Select & Upload Evidence Files
+              <Plus size={16} /> {uploading ? 'Uploading...' : 'Select & Upload Evidence Files'}
             </label>
+            {uploadError && (
+              <p className="text-xs font-bold text-red-600 dark:text-red-400">{uploadError}</p>
+            )}
           </div>
 
           {/* Uploaded Documents List */}
@@ -308,11 +362,11 @@ export default function DocumentsPage() {
 
                     <div className="flex items-center gap-2 shrink-0">
                       <button
-                        onClick={() => alert(`Opening preview for ${doc.name}`)}
+                        onClick={() => handleDownloadDoc(doc.id, doc.name)}
                         className="rounded-xl border border-slate-200 p-2 text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
-                        title="Preview Document"
+                        title="Download Document"
                       >
-                        <Eye size={16} />
+                        <Download size={16} />
                       </button>
                       <button
                         onClick={() => handleDeleteDoc(doc.id)}

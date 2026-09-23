@@ -22,6 +22,16 @@ class Settings(BaseSettings):
     # AI APIs
     GEMINI_API_KEY: str = ""
     NEXT_PUBLIC_API_URL: str = "http://localhost:8000"
+
+    # Frontend base URL (used in email links)
+    FRONTEND_URL: str = "http://localhost:3000"
+
+    # SMTP
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""
+    EMAIL_FROM: str = "noreply@legalsathi.ai"
     
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

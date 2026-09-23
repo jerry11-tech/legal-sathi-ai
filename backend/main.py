@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.routers import auth, chat, documents, navigator, admin, announcements
+from api.routers import auth, chat, documents, navigator, admin, announcements, vault
 from database.models import Base
 from database.session import engine
 from config.settings import settings
@@ -37,6 +37,7 @@ app.include_router(documents.router, prefix="/api/documents", tags=["documents"]
 app.include_router(navigator.router, prefix="/api/navigator", tags=["navigator"])
 app.include_router(admin.router, prefix="/api/admin", tags=["admin"])
 app.include_router(announcements.router, prefix="/api/announcements", tags=["announcements"])
+app.include_router(vault.router, prefix="/api/vault", tags=["vault"])
 
 @app.get("/")
 def read_root():
