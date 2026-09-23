@@ -25,7 +25,7 @@ An AI-powered multilingual Legal Information and Guidance Platform built with Ne
 
 ### Step 2: Backend Deployment (Render Free)
 1. Go to [Render Dashboard](https://dashboard.render.com) and click **New +** -> **Blueprint**.
-2. Connect the GitHub repository: `buildwithdhiraj-afk/legal-sathi-ai`.
+2. Connect the GitHub repository: `jerry11-tech/legal-sathi-ai`.
 3. Set the Environment Variables:
    - `DATABASE_URL`: Your Supabase/Neon PostgreSQL URL (or default SQLite)
    - `SECRET_KEY`: Random 32+ character string
@@ -34,7 +34,7 @@ An AI-powered multilingual Legal Information and Guidance Platform built with Ne
 4. Deploy the backend service. Your backend API URL will be `https://<your-render-backend>.onrender.com`.
 
 ### Step 3: Frontend Deployment (Vercel Free)
-1. Go to [Vercel](https://vercel.com/new) and import `buildwithdhiraj-afk/legal-sathi-ai`.
+1. Go to [Vercel](https://vercel.com/new) and import `jerry11-tech/legal-sathi-ai`.
 2. Set **Root Directory** to `frontend`.
 3. Set Environment Variable:
    - `NEXT_PUBLIC_API_URL`: `https://<your-render-backend>.onrender.com`
@@ -46,7 +46,7 @@ An AI-powered multilingual Legal Information and Guidance Platform built with Ne
 
 ```bash
 # Clone the repository
-git clone https://github.com/buildwithdhiraj-afk/legal-sathi-ai.git
+git clone https://github.com/jerry11-tech/legal-sathi-ai.git
 cd legal-sathi-ai
 
 # Option A: Start Backend & Frontend via Batch Scripts (Windows)
