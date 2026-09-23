@@ -26,24 +26,12 @@ export async function POST(req: NextRequest) {
         );
       }
     } catch {
-      // Direct Serverless fallback if backend unreachable
+      // Backend unreachable - fail closed instead of fabricating auth
+      return NextResponse.json(
+        { detail: 'Authentication service is temporarily unavailable. Please try again later.' },
+        { status: 503 }
+      );
     }
-
-    const emailName = (body.email || '').split('@')[0] || 'User';
-    return NextResponse.json({
-      access_token: `jwt_demo_token_${Date.now()}`,
-      token_type: 'bearer',
-      user: {
-        id: Date.now(),
-        email: body.email,
-        first_name: emailName,
-        last_name: 'User',
-        role: body.email === 'admin@legalsathi.ai' ? 'admin' : 'user',
-        preferred_language: 'en',
-        country: 'India',
-        state: 'Delhi',
-      },
-    });
   } catch (error) {
     return NextResponse.json(
       { detail: (error as Error).message || 'Failed to authenticate login' },

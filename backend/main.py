@@ -7,12 +7,41 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.routers import auth, chat, documents, navigator, admin, announcements, vault
-from database.models import Base
-from database.session import engine
+from database.models import Base, User
+from database.session import engine, SessionLocal
 from config.settings import settings
+from utils.security import get_password_hash
 
 # Ensure database tables exist
 Base.metadata.create_all(bind=engine)
+
+
+def _bootstrap_admin():
+    email = (settings.ADMIN_EMAIL or "").strip().lower()
+    password = settings.ADMIN_PASSWORD or ""
+    if not email or not password:
+        return
+    with SessionLocal() as db:
+        existing = db.query(User).filter(User.email == email).first()
+        if existing:
+            return
+        admin_user = User(
+            email=email,
+            hashed_password=get_password_hash(password),
+            first_name=settings.ADMIN_FIRST_NAME,
+            last_name=settings.ADMIN_LAST_NAME,
+            role="admin",
+            is_verified=True,
+            is_active=True,
+            phone=settings.ADMIN_PHONE,
+            country=settings.ADMIN_COUNTRY,
+            state=settings.ADMIN_STATE,
+        )
+        db.add(admin_user)
+        db.commit()
+
+
+_bootstrap_admin()
 
 app = FastAPI(
     title="LegalSathi AI",
@@ -26,6 +55,7 @@ origins = [origin.strip() for origin in settings.ALLOWED_ORIGINS.split(",") if o
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=settings.ALLOWED_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

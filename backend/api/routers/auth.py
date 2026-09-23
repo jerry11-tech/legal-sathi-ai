@@ -83,7 +83,7 @@ def register_user(req: UserRegisterRequest, db: Session = Depends(get_db)):
         country=req.country,
         state=req.state,
         role="user",
-        is_verified=True,
+        is_verified=False,
     )
     db.add(new_user)
     db.commit()
@@ -110,7 +110,6 @@ def register_user(req: UserRegisterRequest, db: Session = Depends(get_db)):
         "status": "success",
         "message": "Please verify your email before accessing your account.",
         "email": new_user.email,
-        "token_preview": token_str,
     }
 
 
@@ -217,7 +216,6 @@ def forgot_password(req: ForgotPasswordRequest, db: Session = Depends(get_db)):
     return {
         "status": "success",
         "message": "Password reset instructions sent to your email.",
-        "token_preview": token_str,
     }
 
 
@@ -385,21 +383,6 @@ def delete_account(token: str = Query(...), db: Session = Depends(get_db)):
 @router.post("/admin/login")
 def admin_login(req: AdminLoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == req.admin_email.lower(), User.role == "admin").first()
-
-    if not user and req.admin_email.lower() == "admin@legalsathi.ai":
-        hashed_pwd = get_password_hash(req.password)
-        user = User(
-            email="admin@legalsathi.ai",
-            hashed_password=hashed_pwd,
-            first_name="Admin",
-            last_name="System",
-            role="admin",
-            is_verified=True,
-            is_active=True,
-        )
-        db.add(user)
-        db.commit()
-        db.refresh(user)
 
     if not user or not verify_password(req.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid administrator credentials")
