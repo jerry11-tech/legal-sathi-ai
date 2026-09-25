@@ -35,14 +35,16 @@ async function handle(
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { path: string[] } }
+  context: { params: Promise<{ path: string[] }> }
 ) {
-  return handle('GET', req, params.path);
+  const { path } = await context.params;
+  return handle('GET', req, path);
 }
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { path: string[] } }
+  context: { params: Promise<{ path: string[] }> }
 ) {
-  return handle('POST', req, params.path);
+  const { path } = await context.params;
+  return handle('POST', req, path);
 }
