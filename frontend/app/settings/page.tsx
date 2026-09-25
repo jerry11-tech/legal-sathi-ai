@@ -5,13 +5,29 @@ import Link from 'next/link';
 import { ArrowLeft, Bell, Download, Globe, Lock, Moon, Shield, Sun, Trash2 } from 'lucide-react';
 
 export default function SettingsPage() {
-  const [theme, setTheme] = useState('light');
-  const [language, setLanguage] = useState('en');
+  const [theme, setTheme] = useState(() =>
+    typeof window !== 'undefined' ? (localStorage.getItem('legalsathi_theme') || 'light') : 'light'
+  );
+  const [language, setLanguage] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return (
+        localStorage.getItem('legalsathi_lang') ||
+        JSON.parse(localStorage.getItem('legalsathi_user') || '{}').preferred_language ||
+        'en'
+      );
+    }
+    return 'en';
+  });
   const [emailNotifs, setEmailNotifs] = useState(true);
   const [securityAlerts, setSecurityAlerts] = useState(true);
   const [msg, setMsg] = useState('');
 
   const handleSave = () => {
+    localStorage.setItem('legalsathi_lang', language);
+    localStorage.setItem('legalsathi_theme', theme);
+    const existing = JSON.parse(localStorage.getItem('legalsathi_user') || '{}');
+    existing.preferred_language = language;
+    localStorage.setItem('legalsathi_user', JSON.stringify(existing));
     setMsg('Settings updated successfully!');
     setTimeout(() => setMsg(''), 3000);
   };

@@ -661,17 +661,10 @@ class LegalEngine:
 
         confidence = round(min(0.99, 0.55 + 0.12 * score), 2)
 
-        language_note = ""
-        if language and language.lower() != "en":
-            language_note = (
-                f"(Answer generated in English; the knowledge base is currently available in "
-                f"English. You requested: {language})"
-            )
-
         response = {
             "summary": domain["summary"],
             "applicable_law": "; ".join(act_titles),
-            "explanation": explanation + (("\n" + language_note) if language_note else ""),
+            "explanation": explanation,
             "rights": "\n".join(f"- {r}" for r in domain["rights"]),
             "next_steps": "\n".join(f"- {s}" for s in domain["next_steps"]),
             "required_documents": "\n".join(f"- {d}" for d in domain["required_documents"]),
@@ -698,6 +691,12 @@ class LegalEngine:
         if not self._gemini_available():
             return None
         key = settings.GEMINI_API_KEY.strip()
+        lang_names = {
+            "en": "English",
+            "hi": "Hindi (Devanagari script)",
+            "mr": "Marathi (Devanagari script)",
+        }
+        lang_name = lang_names.get((language or "en").lower(), "English")
         prompt = (
             "You are LegalSathi, an Indian legal information assistant. Using the legal domain "
             f"'{domain['name']}' and the query '{query}', provide a JSON object with exactly "
@@ -707,6 +706,12 @@ class LegalEngine:
             "Rights, next_steps and required_documents should be newline bullets starting with "
             "'- '. Keep it accurate, practical and cite real Indian laws. Return ONLY the JSON."
         )
+        if lang_name != "English":
+            prompt += (
+                f"\nWrite EVERY value, including all bullet entries, entirely in {lang_name} using "
+                "the native script. Do not leave any part in English. Legal terms may include the "
+                "English term in brackets after the translated term."
+            )
         payload = {
             "contents": [{"parts": [{"text": prompt}]}],
             "generationConfig": {"temperature": 0.3, "maxOutputTokens": 1024},

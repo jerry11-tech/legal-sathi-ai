@@ -112,13 +112,18 @@ function ChatPageContent() {
 
     try {
       const token = typeof window !== 'undefined' ? localStorage.getItem('legalsathi_token') : null;
+      const lang =
+        (typeof window !== 'undefined' && localStorage.getItem('legalsathi_lang')) ||
+        JSON.parse(typeof window !== 'undefined' ? localStorage.getItem('legalsathi_user') || '{}' : '{}')
+          .preferred_language ||
+        'en';
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({ query: userMsg.content, language: 'en' }),
+        body: JSON.stringify({ query: userMsg.content, language: lang }),
       });
 
       if (!res.ok) throw new Error(`Request failed: ${res.status}`);
