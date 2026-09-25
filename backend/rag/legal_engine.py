@@ -14,6 +14,7 @@ from config.settings import settings
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ACTS_PATH = os.path.join(BASE_DIR, "knowledge_base", "acts", "master_acts.json")
 SECTIONS_PATH = os.path.join(BASE_DIR, "knowledge_base", "sections", "master_sections.json")
+TRANSLATIONS_PATH = os.path.join(BASE_DIR, "knowledge_base", "translations.json")
 
 DISCLAIMER = (
     "This platform provides general legal information for education only, "
@@ -572,6 +573,46 @@ def _load_json(path):
         return json.load(f)
 
 
+@lru_cache(maxsize=1)
+def _load_translations():
+    if not os.path.exists(TRANSLATIONS_PATH):
+        return {}
+    with open(TRANSLATIONS_PATH, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _translate(response, domain_name, language):
+    trans = _load_translations()
+    lang_data = trans.get((language or "en").lower())
+    if not lang_data:
+        return response
+    entry = lang_data.get(domain_name) or lang_data.get("_generic", {})
+    if not entry:
+        return response
+    out = dict(response)
+    for out_key, field in (
+        ("summary", "summary"),
+        ("explanation", "explanation"),
+        ("applicable_law", "law"),
+        ("rights", "rights"),
+        ("next_steps", "next_steps"),
+        ("required_documents", "required_documents"),
+    ):
+        val = entry.get(field)
+        if not val:
+            continue
+        if out_key in ("rights", "next_steps", "required_documents"):
+            out[out_key] = "\n".join(f"- {item}" for item in val)
+        elif isinstance(val, list):
+            out[out_key] = "; ".join(val)
+        else:
+            out[out_key] = val
+    disclaimers = lang_data.get("_disclaimer")
+    if disclaimers:
+        out["disclaimer"] = disclaimers
+    return out
+
+
 class LegalEngine:
     def __init__(self):
         self._acts = []
@@ -641,7 +682,10 @@ class LegalEngine:
         domain, score = self.detect_domain(query)
 
         if domain is None:
-            return self.sanitize_links_in_response(self._generic_response(query, language))
+            resp = self._generic_response(query, language)
+            if (language or "en").lower() in ("hi", "mr"):
+                resp = _translate(resp, None, language)
+            return self.sanitize_links_in_response(resp)
 
         kb_act = self._kb_act(domain.get("kb_act_id")) if domain.get("kb_act_id") else None
         kb_text = self._kb_section_text(domain.get("kb_act_id")) if domain.get("kb_act_id") else []
@@ -672,6 +716,9 @@ class LegalEngine:
             "disclaimer": DISCLAIMER,
             "confidence_score": confidence,
         }
+
+        if (language or "en").lower() in ("hi", "mr"):
+            response = _translate(response, domain["name"], language)
 
         try:
             gemini = self._gemini_enhance(domain, query, language)
