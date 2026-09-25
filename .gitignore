@@ -41,3 +41,4 @@ LegalSathi-AI/
 *.log
 
 .vercel
+.gitignore.bak
