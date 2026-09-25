@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { proxyFetch } from '@/lib/backend';
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const targetBackend = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
     try {
-      const backendRes = await fetch(`${targetBackend.replace(/\/$/, '')}/api/auth/admin/login`, {
+      const backendRes = await proxyFetch('/api/auth/admin/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { proxyFetch } from '@/lib/backend';
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const targetBackend = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
     const authHeader = req.headers.get('Authorization');
 
     try {
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       };
       if (authHeader) headers['Authorization'] = authHeader;
 
-      const backendRes = await fetch(`${targetBackend.replace(/\/$/, '')}/api/navigator/cases/save`, {
+      const backendRes = await proxyFetch('/api/navigator/cases/save', {
         method: 'POST',
         headers,
         body: JSON.stringify(body),
