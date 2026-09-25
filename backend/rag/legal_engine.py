@@ -716,34 +716,42 @@ class LegalEngine:
             "contents": [{"parts": [{"text": prompt}]}],
             "generationConfig": {"temperature": 0.3, "maxOutputTokens": 1024},
         }
-        url = (
-            "https://generativelanguage.googleapis.com/v1beta/models/"
-            + settings.GEMINI_MODEL
-            + ":generateContent?key="
-            + key
-        )
-        
-        try:
-            response = requests.post(url, json=payload, timeout=25)
-            response.raise_for_status()
-            data = response.json()
-            text = data["candidates"][0]["content"]["parts"][0]["text"]
-            text = text.strip()
-            if text.startswith("```"):
-                text = re.sub(r"^```[a-zA-Z]*\n?", "", text)
-                text = re.sub(r"\n?```$", "", text)
-            parsed = json.loads(text)
-            required = {
-                "summary", "applicable_law", "explanation", "rights", "next_steps",
-                "required_documents", "government_website", "confidence_score",
-            }
-            if not required.issubset(parsed.keys()):
-                return None
-            parsed["disclaimer"] = DISCLAIMER
-            return parsed
-        except Exception as e:
-            print(f"Gemini API error: {e}")
-            return None
+
+        model_candidates = [settings.GEMINI_MODEL] + [
+            m.strip() for m in settings.GEMINI_FALLBACK_MODELS.split(",") if m.strip()
+        ]
+        seen = set()
+        model_candidates = [m for m in model_candidates if not (m in seen or seen.add(m))]
+
+        for model in model_candidates:
+            url = (
+                "https://generativelanguage.googleapis.com/v1beta/models/"
+                + model
+                + ":generateContent?key="
+                + key
+            )
+            try:
+                response = requests.post(url, json=payload, timeout=25)
+                response.raise_for_status()
+                data = response.json()
+                text = data["candidates"][0]["content"]["parts"][0]["text"]
+                text = text.strip()
+                if text.startswith("```"):
+                    text = re.sub(r"^```[a-zA-Z]*\n?", "", text)
+                    text = re.sub(r"\n?```$", "", text)
+                parsed = json.loads(text)
+                required = {
+                    "summary", "applicable_law", "explanation", "rights", "next_steps",
+                    "required_documents", "government_website", "confidence_score",
+                }
+                if not required.issubset(parsed.keys()):
+                    continue
+                parsed["disclaimer"] = DISCLAIMER
+                return parsed
+            except Exception as e:
+                print(f"Gemini API error ({model}): {e}")
+                continue
+        return None
 
     def _generic_response(self, query, language="en"):
         return {
