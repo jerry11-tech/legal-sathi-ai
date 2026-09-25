@@ -44,6 +44,6 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: str = ""
     EMAIL_FROM: str = "noreply@legalsathi.ai"
     
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(env_file=[".env", "/etc/secrets/.env"], extra="ignore")
 
 settings = Settings()
