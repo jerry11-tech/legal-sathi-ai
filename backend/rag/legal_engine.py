@@ -692,7 +692,7 @@ class LegalEngine:
     @staticmethod
     def _gemini_available():
         key = (settings.GEMINI_API_KEY or "").strip()
-        return key.startswith("AIza") and "your_" not in key and "mock" not in key
+        return bool(key) and "your_" not in key and "mock" not in key
 
     def _gemini_enhance(self, domain, query, language="en"):
         if not self._gemini_available():
@@ -713,7 +713,9 @@ class LegalEngine:
         }
         url = (
             "https://generativelanguage.googleapis.com/v1beta/models/"
-            "gemini-1.5-flash:generateContent?key=" + key
+            + settings.GEMINI_MODEL
+            + ":generateContent?key="
+            + key
         )
         
         try:

@@ -438,7 +438,7 @@ GENERATORS = {
 
 def _gemini_available() -> bool:
     key = (settings.GEMINI_API_KEY or "").strip()
-    return key.startswith("AIza") and "your_" not in key and "mock" not in key
+    return bool(key) and "your_" not in key and "mock" not in key
 
 
 def _gemini_fill(doc_type: str, doc_key: str, details: dict, content: str) -> str:
@@ -459,7 +459,9 @@ def _gemini_fill(doc_type: str, doc_key: str, details: dict, content: str) -> st
     }
     url = (
         "https://generativelanguage.googleapis.com/v1beta/models/"
-        "gemini-1.5-flash:generateContent?key=" + key
+        + settings.GEMINI_MODEL
+        + ":generateContent?key="
+        + key
     )
     try:
         response = requests.post(url, json=payload, timeout=30)

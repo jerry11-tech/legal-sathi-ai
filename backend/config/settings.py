@@ -31,6 +31,7 @@ class Settings(BaseSettings):
     
     # AI APIs
     GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-3.8-flash"
     NEXT_PUBLIC_API_URL: str = "http://localhost:8000"
 
     # Frontend base URL (used in email links)
