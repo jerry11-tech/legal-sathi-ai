@@ -80,15 +80,3 @@ def health():
 @app.get("/status")
 def status():
     return {"status": "healthy", "database": "connected"}
-
-
-@app.get("/debug/env")
-def debug_env():
-    return {
-        "admin_email_set": bool(settings.ADMIN_EMAIL),
-        "admin_password_set": bool(settings.ADMIN_PASSWORD),
-        "gemini_api_key_set": bool(settings.GEMINI_API_KEY),
-        "root_dotenv_exists": os.path.exists(".env"),
-        "secrets_dotenv_exists": os.path.exists("/etc/secrets/.env"),
-        "secrets_dir_exists": os.path.isdir("/etc/secrets"),
-    }
