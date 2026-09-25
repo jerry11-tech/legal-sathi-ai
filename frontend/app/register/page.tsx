@@ -264,33 +264,31 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            {(otpState.sent || (otpState.otsMsg && !otpState.sent)) && (
-              <div className="space-y-2 rounded-2xl border border-line bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900">
-                {otpState.otsMsg && (
-                  <p className={`text-[11px] ${otpState.devCode ? 'font-bold text-emerald-600 dark:text-emerald-400' : 'text-bodytext dark:text-slate-400'}`}>
-                    {otpState.otsMsg}
-                  </p>
-                )}
-                {otpState.devCode && (
-                  <p className="text-[11px] text-bodytext dark:text-slate-400">
-                    Demo mode (no SMS credits connected): your OTP is{' '}
-                    <code className="rounded bg-navy px-1.5 py-0.5 font-mono text-xs font-black text-bright">{otpState.devCode}</code>
-                  </p>
-                )}
-                <div>
-                  <label className="mb-1 block text-[11px] font-bold text-navy-text dark:text-slate-300">Enter OTP</label>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={6}
-                    value={formData.otp_code}
-                    onChange={(e) => setFormData({ ...formData, otp_code: e.target.value.replace(/\D/g, '') })}
-                    placeholder="6-digit code"
-                    className={`${inputClass} font-mono text-sm tracking-[0.35em]`}
-                  />
-                </div>
+            <div className="space-y-2 rounded-2xl border border-line bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900">
+              {otpState.otsMsg && (
+                <p className={`text-[11px] ${otpState.devCode ? 'font-bold text-emerald-600 dark:text-emerald-400' : 'text-bodytext dark:text-slate-400'}`}>
+                  {otpState.otsMsg}
+                </p>
+              )}
+              {otpState.devCode && (
+                <p className="text-[11px] text-bodytext dark:text-slate-400">
+                  Demo mode (no SMS credits connected): your OTP is{' '}
+                  <code className="rounded bg-navy px-1.5 py-0.5 font-mono text-xs font-black text-bright">{otpState.devCode}</code>
+                </p>
+              )}
+              <div>
+                <label className="mb-1 block text-[11px] font-bold text-navy-text dark:text-slate-300">Enter OTP (sent via SMS)</label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={6}
+                  value={formData.otp_code}
+                  onChange={(e) => setFormData({ ...formData, otp_code: e.target.value.replace(/\D/g, '') })}
+                  placeholder="6-digit code"
+                  className={`${inputClass} font-mono text-sm tracking-[0.35em]`}
+                />
               </div>
-            )}
+            </div>
 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div>
