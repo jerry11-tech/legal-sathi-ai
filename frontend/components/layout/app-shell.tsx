@@ -75,8 +75,30 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       const uStr = localStorage.getItem('legalsathi_user');
       if (uStr) setUser(JSON.parse(uStr));
       else setUser(null);
+      const code = localStorage.getItem('legalsathi_lang') || '';
+      if (code === 'hi') setCurrentLang('Hindi');
+      else if (code === 'mr') setCurrentLang('Marathi');
+      else setCurrentLang('English');
     } catch {}
   }, [pathname]);
+
+  const handleLangCycle = () => {
+    setCurrentLang((prev) => {
+      const next = prev === 'English' ? 'Hindi' : prev === 'Hindi' ? 'Marathi' : 'English';
+      const code = next === 'English' ? 'en' : next === 'Hindi' ? 'hi' : 'mr';
+      try {
+        localStorage.setItem('legalsathi_lang', code);
+        const uStr = localStorage.getItem('legalsathi_user');
+        if (uStr) {
+          const u = JSON.parse(uStr);
+          u.preferred_language = code;
+          localStorage.setItem('legalsathi_user', JSON.stringify(u));
+          setUser(u);
+        }
+      } catch {}
+      return next;
+    });
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -350,7 +372,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           {!collapsedNav && <span>{darkMode ? 'Light' : 'Dark'}</span>}
         </button>
         <button
-          onClick={() => setCurrentLang(currentLang === 'English' ? 'Hindi' : currentLang === 'Hindi' ? 'Marathi' : 'English')}
+          onClick={handleLangCycle}
           title="Change Language"
           className="flex items-center gap-1 rounded-lg border border-line px-2.5 py-2 text-[11px] font-bold text-navy-text transition hover:bg-soft dark:border-slate-800 dark:text-slate-300"
         >
@@ -504,6 +526,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               variant="icon"
               triggerClassName="hidden h-10 w-10 sm:inline-flex"
             />
+
+            <Link
+              href="/settings"
+              aria-label="Settings"
+              className="rounded-lg border border-line p-2 text-navy-text transition hover:bg-slate-100 dark:border-slate-800 dark:text-slate-300"
+            >
+              <Settings size={16} />
+            </Link>
 
             <button
               aria-label="Notifications"
