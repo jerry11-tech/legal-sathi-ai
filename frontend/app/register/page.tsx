@@ -14,6 +14,7 @@ export default function RegisterPage() {
     last_name: '',
     email: '',
     phone: '',
+    otp_code: '',
     password: '',
     confirm_password: '',
     preferred_language: 'en',
@@ -27,6 +28,14 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
+  const [otpState, setOtpState] = useState({
+    sending: false,
+    sent: false,
+    seconds: 0,
+    devCode: '',
+    otsMsg: '',
+  });
+
   // Password strength rules
   const pwd = formData.password;
   const hasMinLength = pwd.length >= 8;
@@ -37,9 +46,55 @@ export default function RegisterPage() {
 
   const strengthScore = [hasMinLength, hasUpper, hasLower, hasNumber, hasSpecial].filter(Boolean).length;
 
+  const handleSendOtp = async () => {
+    setErrorMsg('');
+    const phone = formData.phone.trim();
+    if (phone.replace(/\D/g, '').length < 10) {
+      setErrorMsg('Enter a valid mobile number to receive the OTP.');
+      return;
+    }
+    setOtpState((s) => ({ ...s, sending: true, otsMsg: '' }));
+    try {
+      const res = await fetch('/api/auth/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, purpose: 'register' }),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        throw new Error(readApiError((data as any)?.detail) || `Could not send OTP (${res.status})`);
+      }
+      setOtpState((s) => ({
+        ...s,
+        sending: false,
+        sent: true,
+        seconds: (data?.resend_after || 60),
+        devCode: data?.dev_code || '',
+        otsMsg: 'OTP sent to your mobile number.',
+      }));
+      const start = Date.now();
+      const interval = window.setInterval(() => {
+        const left = (data?.resend_after || 60) - Math.floor((Date.now() - start) / 1000);
+        if (left <= 0) {
+          window.clearInterval(interval);
+          setOtpState((s) => ({ ...s, seconds: 0 }));
+        } else {
+          setOtpState((s) => ({ ...s, seconds: left }));
+        }
+      }, 1000);
+    } catch (err) {
+      setOtpState((s) => ({ ...s, sending: false, otsMsg: (err as Error).message }));
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
+
+    if (!formData.phone.trim() || !formData.otp_code.trim()) {
+      setErrorMsg('Verify your mobile number with the OTP before registering.');
+      return;
+    }
 
     if (!formData.agree_terms || !formData.agree_privacy) {
       setErrorMsg('You must agree to the Terms & Conditions and Privacy Policy.');
@@ -182,15 +237,60 @@ export default function RegisterPage() {
               </div>
               <div>
                 <label className="mb-1 block text-xs font-bold text-navy-text dark:text-slate-300">Mobile Number</label>
-                <input
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="+91 98765 43210"
-                  className={inputClass}
-                />
+                <div className="flex gap-2">
+                  <input
+                    type="tel"
+                    required
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="+91 98765 43210"
+                    className={inputClass}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleSendOtp}
+                    disabled={otpState.sending || otpState.seconds > 0}
+                    className="shrink-0 rounded-xl bg-gradient-to-r from-royal to-bright px-3 text-[10px] font-bold text-white shadow-md shadow-royal/30 transition hover:opacity-90 disabled:opacity-40"
+                  >
+                    {otpState.seconds > 0
+                      ? `Resend (${otpState.seconds}s)`
+                      : otpState.sending
+                        ? 'Sending…'
+                        : otpState.sent
+                          ? 'Resend OTP'
+                          : 'Send OTP'}
+                  </button>
+                </div>
               </div>
             </div>
+
+            {(otpState.sent || (otpState.otsMsg && !otpState.sent)) && (
+              <div className="space-y-2 rounded-2xl border border-line bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-900">
+                {otpState.otsMsg && (
+                  <p className={`text-[11px] ${otpState.devCode ? 'font-bold text-emerald-600 dark:text-emerald-400' : 'text-bodytext dark:text-slate-400'}`}>
+                    {otpState.otsMsg}
+                  </p>
+                )}
+                {otpState.devCode && (
+                  <p className="text-[11px] text-bodytext dark:text-slate-400">
+                    Demo mode (no SMS credits connected): your OTP is{' '}
+                    <code className="rounded bg-navy px-1.5 py-0.5 font-mono text-xs font-black text-bright">{otpState.devCode}</code>
+                  </p>
+                )}
+                <div>
+                  <label className="mb-1 block text-[11px] font-bold text-navy-text dark:text-slate-300">Enter OTP</label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={6}
+                    value={formData.otp_code}
+                    onChange={(e) => setFormData({ ...formData, otp_code: e.target.value.replace(/\D/g, '') })}
+                    placeholder="6-digit code"
+                    className={`${inputClass} font-mono text-sm tracking-[0.35em]`}
+                  />
+                </div>
+              </div>
+            )}
 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div>

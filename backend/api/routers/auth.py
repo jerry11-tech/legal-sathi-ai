@@ -3,7 +3,7 @@ import re
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from database.session import get_db
-from database.models import User, VerificationToken, PasswordResetToken, UserSession, AuditLog
+from database.models import User, VerificationToken, PasswordResetToken, UserSession, AuditLog, PhoneOtp
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from utils.security import (
@@ -19,6 +19,8 @@ from utils.email_service import (
     send_password_reset_email,
     send_welcome_email,
 )
+from utils.sms_service import generate_otp, send_otp_sms
+from config.settings import settings
 
 router = APIRouter()
 
@@ -26,7 +28,8 @@ class UserRegisterRequest(BaseModel):
     first_name: str
     last_name: str
     email: EmailStr
-    phone: Optional[str] = None
+    phone: str
+    otp_code: Optional[str] = None
     password: str
     confirm_password: str
     preferred_language: str = "en"
@@ -39,6 +42,15 @@ class UserLoginRequest(BaseModel):
     email: EmailStr
     password: str
     remember_me: bool = False
+
+class SendOtpRequest(BaseModel):
+    phone: str
+    purpose: str = "register"
+
+class VerifyOtpRequest(BaseModel):
+    phone: str
+    otp_code: str
+    purpose: str = "register"
 
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
@@ -57,6 +69,91 @@ def validate_password_strength(password: str):
         raise HTTPException(status_code=400, detail="Password must be at least 6 characters long")
 
 
+def _validate_phone(phone: str):
+    if not re.fullmatch(r"\+?[0-9]{10,15}", phone):
+        raise HTTPException(status_code=400, detail="Enter a valid mobile number")
+
+
+@router.post("/send-otp")
+def send_otp(req: SendOtpRequest, db: Session = Depends(get_db)):
+    phone = req.phone.strip()
+    _validate_phone(phone)
+    now = datetime.utcnow()
+
+    existing = (
+        db.query(PhoneOtp)
+        .filter(PhoneOtp.phone == phone)
+        .order_by(PhoneOtp.id.desc())
+        .first()
+    )
+    if existing and existing.resend_at and now < existing.resend_at:
+        wait_secs = int((existing.resend_at - now).total_seconds()) + 1
+        raise HTTPException(status_code=429, detail=f"Please wait {wait_secs} seconds before requesting a new OTP")
+
+    # A phone number can only be used for one account
+    if req.purpose == "register":
+        existing_user = db.query(User).filter(User.phone == phone).first()
+        if existing_user:
+            raise HTTPException(status_code=400, detail="An account already exists with this mobile number")
+
+    code = generate_otp()
+    for old in db.query(PhoneOtp).filter(PhoneOtp.phone == phone).all():
+        db.delete(old)
+    otp_entry = PhoneOtp(
+        phone=phone,
+        otp_code=code,
+        purpose=req.purpose,
+        expires_at=now + timedelta(minutes=settings.OTP_EXPIRY_MINUTES),
+        resend_at=now + timedelta(seconds=settings.OTP_RESEND_SECONDS),
+    )
+    db.add(otp_entry)
+    db.commit()
+
+    try:
+        sent_via, dev_code = send_otp_sms(phone, code)
+    except Exception:
+        db.delete(otp_entry)
+        db.commit()
+        raise HTTPException(status_code=502, detail="Failed to send SMS. Please try again.")
+
+    payload = {
+        "status": "success",
+        "message": "OTP sent to your mobile number.",
+        "resend_after": settings.OTP_RESEND_SECONDS,
+        "expires_in_minutes": settings.OTP_EXPIRY_MINUTES,
+        "sent_via": sent_via,
+    }
+    if dev_code:
+        payload["dev_code"] = dev_code
+    return payload
+
+
+@router.post("/verify-otp")
+def verify_otp(req: VerifyOtpRequest, db: Session = Depends(get_db)):
+    phone = req.phone.strip()
+    _validate_phone(phone)
+    now = datetime.utcnow()
+
+    otp_entry = (
+        db.query(PhoneOtp)
+        .filter(PhoneOtp.phone == phone, PhoneOtp.used == False, PhoneOtp.purpose == req.purpose)
+        .order_by(PhoneOtp.id.desc())
+        .first()
+    )
+    if not otp_entry or otp_entry.expires_at < now:
+        raise HTTPException(status_code=400, detail="OTP expired. Request a new one.")
+    if otp_entry.otp_code != req.otp_code.strip():
+        otp_entry.attempts += 1
+        if otp_entry.attempts >= 5:
+            otp_entry.used = True
+        db.commit()
+        raise HTTPException(status_code=400, detail="Incorrect OTP entered.")
+    if otp_entry.attempts >= 5:
+        raise HTTPException(status_code=400, detail="Too many incorrect attempts. Request a new OTP.")
+
+    return {"status": "success", "message": "Mobile number verified."}
+
+
 @router.post("/register")
 def register_user(req: UserRegisterRequest, db: Session = Depends(get_db)):
     if not req.agree_terms or not req.agree_privacy:
@@ -67,9 +164,37 @@ def register_user(req: UserRegisterRequest, db: Session = Depends(get_db)):
 
     validate_password_strength(req.password)
 
+    phone = req.phone.strip()
+    _validate_phone(phone)
+
+    if not req.otp_code:
+        raise HTTPException(status_code=400, detail="OTP is required. Verify your mobile number first.")
+
     existing = db.query(User).filter(User.email == req.email.lower()).first()
     if existing:
         raise HTTPException(status_code=400, detail="An account with this email address already exists")
+
+    existing_phone = db.query(User).filter(User.phone == phone).first()
+    if existing_phone:
+        raise HTTPException(status_code=400, detail="An account already exists with this mobile number")
+
+    now = datetime.utcnow()
+    otp_entry = (
+        db.query(PhoneOtp)
+        .filter(PhoneOtp.phone == phone, PhoneOtp.used == False, PhoneOtp.purpose == "register")
+        .order_by(PhoneOtp.id.desc())
+        .first()
+    )
+    if not otp_entry or otp_entry.expires_at < now:
+        raise HTTPException(status_code=400, detail="OTP expired. Request a new one.")
+    if otp_entry.otp_code != req.otp_code.strip():
+        otp_entry.attempts += 1
+        if otp_entry.attempts >= 5:
+            otp_entry.used = True
+        db.commit()
+        raise HTTPException(status_code=400, detail="Incorrect OTP entered.")
+    if otp_entry.attempts >= 5:
+        raise HTTPException(status_code=400, detail="Too many incorrect attempts. Request a new OTP.")
 
     hashed_pwd = get_password_hash(req.password)
 
@@ -78,37 +203,25 @@ def register_user(req: UserRegisterRequest, db: Session = Depends(get_db)):
         hashed_password=hashed_pwd,
         first_name=req.first_name,
         last_name=req.last_name,
-        phone=req.phone,
+        phone=phone,
         preferred_language=req.preferred_language,
         country=req.country,
         state=req.state,
         role="user",
-        is_verified=False,
+        is_verified=True,
     )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
 
-    # Generate email verification token (24 hrs)
-    token_str = generate_random_token()
-    token_entry = VerificationToken(
-        user_id=new_user.id,
-        token=token_str,
-        token_type="email_verify",
-        expires_at=datetime.utcnow() + timedelta(hours=24),
-    )
-    db.add(token_entry)
-
-    # Log Audit
+    # Mark OTP as consumed
+    otp_entry.used = True
     db.add(AuditLog(user_id=new_user.id, action="USER_REGISTERED"))
     db.commit()
 
-    # Dispatch Verification Email
-    send_verification_email(new_user.email, new_user.first_name, token_str)
-
     return {
         "status": "success",
-        "message": "Please verify your email before accessing your account.",
+        "message": "Registration successful. You can log in now.",
         "email": new_user.email,
     }
 
