@@ -1,10 +1,19 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Mail, ShieldCheck, Scale, ArrowRight } from 'lucide-react';
 
 export default function VerifyNoticePage() {
+  return (
+    <Suspense fallback={null}>
+      <VerifyNoticePageContent />
+    </Suspense>
+  );
+}
+
+function VerifyNoticePageContent() {
   const searchParams = useSearchParams();
   const email = searchParams.get('email') || 'your email';
   const token = searchParams.get('token') || '';

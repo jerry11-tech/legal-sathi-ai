@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
@@ -33,6 +33,14 @@ import {
 import type { CaseAnalysis, SavedCase } from './types';
 
 export default function NavigatorPage() {
+  return (
+    <Suspense fallback={null}>
+      <NavigatorPageContent />
+    </Suspense>
+  );
+}
+
+function NavigatorPageContent() {
   const searchParams = useSearchParams();
   const [wizardStep, setWizardStep] = useState<number>(1);
   const [query, setQuery] = useState('');

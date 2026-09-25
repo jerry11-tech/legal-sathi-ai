@@ -1,11 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { readApiError } from '@/lib/api-error';
 
 export default function VerifyPage() {
+  return (
+    <Suspense fallback={null}>
+      <VerifyPageContent />
+    </Suspense>
+  );
+}
+
+function VerifyPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get('token');

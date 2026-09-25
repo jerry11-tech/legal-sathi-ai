@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -39,6 +39,14 @@ const WELCOME =
   "Hello! I am **LegalSathi AI**, your Indian Legal Intelligence assistant.\n\nAsk me any question regarding:\n- Women's Rights & POSH / Domestic Violence\n- Cyber Crime, Financial Fraud & Online Bullying\n- Rental & Tenant Disputes\n- Police Complaints (CrPC / BNSS FIRs)\n- Labour & Workplace Rights\n- Consumer Complaints & RTI Forms\n\n_This platform provides legal information for educational purposes, not official legal representation._";
 
 export default function ChatPage() {
+  return (
+    <Suspense fallback={null}>
+      <ChatPageContent />
+    </Suspense>
+  );
+}
+
+function ChatPageContent() {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get('q') || '';
 
