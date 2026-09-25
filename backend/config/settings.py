@@ -43,13 +43,6 @@ class Settings(BaseSettings):
     SMTP_USER: str = ""
     SMTP_PASSWORD: str = ""
     EMAIL_FROM: str = "noreply@legalsathi.ai"
-
-    # SMS OTP (Msg91 — Indian provider; dev mode when key is empty)
-    MSG91_AUTH_KEY: str = ""
-    MSG91_SENDER_ID: str = "LGSATHI"
-    MSG91_OTP_TEMPLATE_ID: str = ""
-    OTP_EXPIRY_MINUTES: int = 5
-    OTP_RESEND_SECONDS: int = 60
     
     model_config = SettingsConfigDict(env_file=[".env", "/etc/secrets/.env"], extra="ignore")
 

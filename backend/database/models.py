@@ -71,19 +71,6 @@ class UserSession(Base):
 
     user = relationship("User", back_populates="sessions")
 
-class PhoneOtp(Base):
-    __tablename__ = "phone_otps"
-
-    id = Column(Integer, primary_key=True, index=True)
-    phone = Column(String, index=True, nullable=False)
-    otp_code = Column(String, nullable=False)
-    purpose = Column(String, default="register")
-    attempts = Column(Integer, default=0)
-    used = Column(Boolean, default=False)
-    expires_at = Column(DateTime, nullable=False)
-    resend_at = Column(DateTime, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
-
 class ChatHistory(Base):
     __tablename__ = "chat_history"
     
