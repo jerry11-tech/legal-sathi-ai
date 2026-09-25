@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Loader2, AlertCircle } from 'lucide-react';
+import { readApiError } from '@/lib/api-error';
 
 export default function VerifyPage() {
   const searchParams = useSearchParams();
@@ -21,12 +22,12 @@ export default function VerifyPage() {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/auth/verify-email?token=${encodeURIComponent(token)}`
         );
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.detail || 'Verification failed');
+        const data = await res.json().catch(() => null);
+        if (!res.ok) throw new Error(readApiError((data as any)?.detail) || 'Verification failed');
 
         router.push('/account/verified');
       } catch (err) {
-        setErrorMsg((err as Error).message);
+        setErrorMsg((err as Error).message || 'Something went wrong. Please try again.');
       }
     };
 
@@ -34,19 +35,19 @@ export default function VerifyPage() {
   }, [token, router]);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-xl space-y-4">
+    <div className="flex min-h-screen items-center justify-center bg-hero p-4 dark:bg-navy-deeper">
+      <div className="w-full max-w-md space-y-4 rounded-3xl border border-line bg-white p-8 text-center shadow-card dark:border-slate-800 dark:bg-[#0B1331]">
         {errorMsg ? (
           <>
             <AlertCircle size={40} className="mx-auto text-red-500" />
-            <h2 className="text-xl font-bold text-slate-900">Verification Failed</h2>
-            <p className="text-xs text-red-600 font-semibold">{errorMsg}</p>
+            <h2 className="text-xl font-bold text-navy-text dark:text-white">Verification Failed</h2>
+            <p className="text-xs font-semibold text-red-600">{errorMsg}</p>
           </>
         ) : (
           <>
-            <Loader2 size={40} className="mx-auto text-blue-600 animate-spin" />
-            <h2 className="text-xl font-bold text-slate-900">Verifying Email Address...</h2>
-            <p className="text-xs text-slate-500">Please wait while we confirm your account details.</p>
+            <Loader2 size={40} className="mx-auto animate-spin text-royal" />
+            <h2 className="text-xl font-bold text-navy-text dark:text-white">Verifying Email Address...</h2>
+            <p className="text-xs text-bodytext">Please wait while we confirm your account details.</p>
           </>
         )}
       </div>

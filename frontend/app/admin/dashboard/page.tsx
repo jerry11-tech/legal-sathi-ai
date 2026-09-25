@@ -60,36 +60,38 @@ export default function AdminDashboardPage() {
   const [saveStatus, setSaveStatus] = useState('');
 
   useEffect(() => {
-    const t = localStorage.getItem('legalsathi_admin_token');
+    const t = localStorage.getItem('legalsathi_admin_token') || localStorage.getItem('legalsathi_token');
     if (!t) {
-      router.push('/admin/login');
+      router.push('/login');
       return;
     }
     setToken(t);
     fetchData(t);
+    const liveId = setInterval(() => fetchData(t, true), 10000);
+    return () => clearInterval(liveId);
   }, [router]);
 
-  const fetchData = async (authToken: string) => {
-    setLoading(true);
+  const fetchData = async (authToken: string, silent = false) => {
+    if (!silent) setLoading(true);
     try {
       const [resStats, resUsers, resSettings] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/admin/stats?token=${encodeURIComponent(authToken)}`),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/admin/users?token=${encodeURIComponent(authToken)}`),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/admin/settings?token=${encodeURIComponent(authToken)}`),
+        fetch(`/api/admin/stats?token=${encodeURIComponent(authToken)}`),
+        fetch(`/api/admin/users?token=${encodeURIComponent(authToken)}`),
+        fetch(`/api/admin/settings?token=${encodeURIComponent(authToken)}`),
       ]);
 
       if (resStats.ok) setStats(await resStats.json());
       if (resUsers.ok) setUsers(await resUsers.json());
       if (resSettings.ok) setSettingsData(await resSettings.json());
     } catch {}
-    setLoading(false);
+    if (!silent) setLoading(false);
   };
 
   const handleUserAction = async (userId: number, action: string) => {
     if (!token) return;
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/admin/users/action?token=${encodeURIComponent(token)}`,
+        `/api/admin/users/action?token=${encodeURIComponent(token)}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -107,7 +109,7 @@ export default function AdminDashboardPage() {
     if (!token) return;
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/admin/settings?token=${encodeURIComponent(token)}`,
+        `/api/admin/settings?token=${encodeURIComponent(token)}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -143,6 +145,9 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="flex items-center gap-3">
+          <span className="hidden items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-950/40 px-3 py-1 text-[10px] font-bold text-emerald-400 sm:inline-flex">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" /> LIVE · auto-sync
+          </span>
           <button
             onClick={() => token && fetchData(token)}
             className="p-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 hover:text-white"
@@ -153,7 +158,8 @@ export default function AdminDashboardPage() {
           <button
             onClick={() => {
               localStorage.removeItem('legalsathi_admin_token');
-              router.push('/admin/login');
+              localStorage.removeItem('legalsathi_token');
+              router.push('/login');
             }}
             className="flex items-center gap-1.5 rounded-xl border border-red-500/30 bg-red-950/30 px-3.5 py-1.5 text-xs font-bold text-red-400 hover:bg-red-900/40"
           >

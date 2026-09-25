@@ -42,15 +42,15 @@ export default function GovtAnnouncementsWidget() {
   return (
     <div className="w-full space-y-4">
       {/* Header Banner */}
-      <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+      <div className="flex items-center justify-between border-b border-line pb-3 dark:border-slate-800">
         <div className="flex items-center gap-2">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600 text-white shadow-xs">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-royal text-white shadow-xs">
             <ShieldCheck size={16} />
           </span>
           <div>
-            <h3 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white flex items-center gap-2">
+            <h3 className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-navy-text dark:text-white">
               Latest Government Law Announcements (2024–2026)
-              <span className="rounded-full bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800 dark:text-emerald-300">
+              <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-extrabold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
                 ✓ 100% Official Govt Verified
               </span>
             </h3>
@@ -59,35 +59,35 @@ export default function GovtAnnouncementsWidget() {
       </div>
 
       {/* Grid of Verified Gazette Items */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {announcements.map((item) => (
           <div
             key={item.id}
-            className="group flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-white dark:border-slate-800 dark:bg-slate-900 p-4 shadow-2xs hover:border-blue-300 dark:hover:border-blue-800 transition"
+            className="group flex flex-col justify-between rounded-2xl border border-line bg-white p-4 shadow-soft transition hover:border-royal/40 dark:border-slate-800 dark:bg-[#0B1331]"
           >
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="inline-flex items-center gap-1 rounded-md bg-blue-50 dark:bg-blue-950 px-2 py-0.5 text-[10px] font-bold text-blue-700 dark:text-blue-300">
+                <span className="inline-flex items-center gap-1 rounded-md bg-soft px-2 py-0.5 text-[10px] font-bold text-royal dark:bg-slate-800 dark:text-blue-300">
                   <Building2 size={11} /> {item.ministry.split('(')[0]}
                 </span>
-                <span className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 flex items-center gap-1">
+                <span className="flex items-center gap-1 text-[10px] font-semibold text-bodytext dark:text-slate-500">
                   <Calendar size={11} /> {item.publication_date}
                 </span>
               </div>
 
-              <h4 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition leading-snug">
+              <h4 className="text-xs font-bold leading-snug text-navy-text transition group-hover:text-royal dark:text-white">
                 {item.title}
               </h4>
 
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+              <p className="line-clamp-2 text-[11px] leading-relaxed text-bodytext dark:text-slate-400">
                 {item.key_citizen_impact}
               </p>
             </div>
 
-            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between mt-3">
+            <div className="mt-3 flex items-center justify-between border-t border-line pt-3 dark:border-slate-800">
               <button
                 onClick={() => setSelectedAnnouncement(item)}
-                className="text-[11px] font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+                className="flex items-center gap-1 text-[11px] font-bold text-royal hover:underline dark:text-blue-400"
               >
                 <span>View Rule Changes</span>
                 <ArrowRight size={12} />
@@ -110,24 +110,24 @@ export default function GovtAnnouncementsWidget() {
 
       {/* Comparative Modal: Old Rule vs New Government Rule */}
       {selectedAnnouncement && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-xs p-4">
-          <div className="w-full max-w-2xl overflow-hidden rounded-3xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in duration-150">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-deeper/70 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-2xl space-y-5 overflow-hidden rounded-3xl border border-line bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-150 dark:border-slate-800 dark:bg-[#0B1331]">
             {/* Modal Header */}
-            <div className="flex items-start justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
+            <div className="flex items-start justify-between border-b border-line pb-4 dark:border-slate-800">
               <div>
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950 px-3 py-1 text-xs font-bold text-emerald-800 dark:text-emerald-300 mb-2">
+                <div className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
                   <ShieldCheck size={14} /> Official Gazette Notification: {selectedAnnouncement.gazette_notification_no}
                 </div>
-                <h3 className="text-lg font-black text-slate-900 dark:text-white leading-tight">
+                <h3 className="text-lg font-black leading-tight text-navy-text dark:text-white">
                   {selectedAnnouncement.title}
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                <p className="mt-1 text-xs text-bodytext dark:text-slate-400">
                   Issued by {selectedAnnouncement.ministry} • Published {selectedAnnouncement.publication_date}
                 </p>
               </div>
               <button
                 onClick={() => setSelectedAnnouncement(null)}
-                className="rounded-xl border border-slate-200 dark:border-slate-800 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                className="rounded-xl border border-line p-2 text-bodytext transition hover:text-navy-text dark:border-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
               >
                 <X size={18} />
               </button>
@@ -157,18 +157,18 @@ export default function GovtAnnouncementsWidget() {
             </div>
 
             {/* Key Citizen Impact */}
-            <div className="rounded-2xl border border-blue-200 dark:border-blue-900/40 bg-blue-50/50 dark:bg-blue-950/30 p-4 space-y-1.5">
-              <h4 className="text-xs font-extrabold uppercase tracking-wider text-blue-900 dark:text-blue-200 flex items-center gap-1.5">
-                <Sparkles size={14} className="text-blue-600 dark:text-blue-400" /> Practical Impact for Indian Citizens
+            <div className="space-y-1.5 rounded-2xl border border-royal/25 bg-soft p-4 dark:border-slate-800 dark:bg-slate-900/60">
+              <h4 className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-navy-text dark:text-blue-200">
+                <Sparkles size={14} className="text-royal dark:text-blue-400" /> Practical Impact for Indian Citizens
               </h4>
-              <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+              <p className="text-xs leading-relaxed text-bodytext dark:text-slate-300">
                 {selectedAnnouncement.key_citizen_impact}
               </p>
             </div>
 
             {/* Modal Footer & Direct PDF Verification */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-200 dark:border-slate-800">
-              <div className="text-[11px] text-slate-400 flex items-center gap-1 truncate">
+            <div className="flex flex-col items-center justify-between gap-3 border-t border-line pt-3 sm:flex-row dark:border-slate-800">
+              <div className="flex items-center gap-1 truncate text-[11px] text-bodytext">
                 <FileText size={12} />
                 <span className="truncate">SHA-256: {selectedAnnouncement.pdf_sha256.slice(0, 24)}...</span>
               </div>

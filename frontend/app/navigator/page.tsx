@@ -274,6 +274,15 @@ export default function NavigatorPage() {
         setDraftTitle(data.title);
         setDraftContent(data.content);
         setWizardStep(5);
+
+        const token = typeof window !== 'undefined' ? localStorage.getItem('legalsathi_token') : null;
+        if (token) {
+          fetch('/api/documents/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ doc_type: type, details: { title: data.title, case_summary: analysis.case_summary } }),
+          }).catch(() => {});
+        }
       }
     } catch {}
     setLoadingDraft(false);
@@ -308,39 +317,39 @@ export default function NavigatorPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col">
+    <div className="flex min-h-screen flex-col bg-transparent text-navy-text dark:text-slate-100">
       {/* Top Header */}
-      <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/90 backdrop-blur-md">
+      <header className="sticky top-[68px] z-20 border-b border-line bg-white/95 backdrop-blur dark:bg-[#0B1331]/90">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-2 group">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-600/30">
+            <Link href="/" className="group flex items-center gap-2">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-navy text-white shadow-soft">
                 <Scale size={18} />
               </span>
               <div>
-                <h1 className="text-base font-bold tracking-tight text-slate-900 group-hover:text-blue-700 transition">
+                <h1 className="text-base font-bold tracking-tight text-navy-text transition group-hover:text-royal dark:text-white">
                   LegalSathi AI
                 </h1>
-                <span className="text-[11px] font-semibold text-blue-600">Case Navigator & Roadmap</span>
+                <span className="text-[11px] font-semibold text-royal">Case Navigator & Roadmap</span>
               </div>
             </Link>
           </div>
 
-          <nav className="hidden md:flex items-center gap-4 text-xs font-semibold">
-            <Link href="/chat" className="text-slate-600 hover:text-blue-600">Chat</Link>
-            <Link href="/navigator" className="text-blue-600 font-bold border-b-2 border-blue-600 pb-1">Navigator</Link>
-            <Link href="/documents" className="text-slate-600 hover:text-blue-600">Documents</Link>
-            <Link href="/dashboard" className="text-slate-600 hover:text-blue-600">Dashboard</Link>
+          <nav className="hidden items-center gap-4 text-xs font-semibold md:flex">
+            <Link href="/chat" className="text-bodytext transition hover:text-royal">Chat</Link>
+            <Link href="/navigator" className="border-b-2 border-royal pb-1 font-bold text-royal">Navigator</Link>
+            <Link href="/documents" className="text-bodytext transition hover:text-royal">Documents</Link>
+            <Link href="/dashboard" className="text-bodytext transition hover:text-royal">Dashboard</Link>
           </nav>
 
           {analysis && (
             <div className="flex items-center gap-2">
-              <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700 border border-blue-200">
+              <span className="hidden border border-royal/25 bg-soft px-3 py-1 text-xs font-bold text-royal sm:inline-flex items-center gap-1.5 rounded-full">
                 <Sparkles size={13} /> {analysis.case_id}
               </span>
               <button
                 onClick={handleSaveCase}
-                className="flex items-center gap-1.5 rounded-xl bg-blue-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-sm hover:bg-blue-700 transition"
+                className="flex items-center gap-1.5 rounded-xl bg-royal px-3.5 py-1.5 text-xs font-bold text-white shadow-sm transition hover:bg-bright"
               >
                 <Save size={14} /> Save Case
               </button>
@@ -350,17 +359,17 @@ export default function NavigatorPage() {
       </header>
 
       {/* Main Body Container */}
-      <main className="flex-1 mx-auto max-w-7xl w-full px-3 py-5 sm:px-6 sm:py-6">
+      <main className="mx-auto w-full max-w-7xl flex-1 px-3 py-5 sm:px-6 sm:py-6">
         {/* Saved Status Alert */}
         {savedStatusMsg && (
-          <div className="mb-4 rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-xs font-bold text-emerald-800 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-xs font-bold text-emerald-800">
             <span>✓ {savedStatusMsg}</span>
             <button onClick={() => setSavedStatusMsg('')} className="text-emerald-600 hover:text-emerald-900">Dismiss</button>
           </div>
         )}
 
         {/* Wizard Stepper Progress Bar */}
-        <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-2xs">
+        <div className="mb-6 rounded-2xl border border-line bg-white p-4 shadow-soft dark:bg-[#0B1331]">
           <div className="flex items-center justify-between">
             {[
               { step: 1, label: 'Problem' },
@@ -369,32 +378,32 @@ export default function NavigatorPage() {
               { step: 4, label: 'Roadmap & Authorities' },
               { step: 5, label: 'Generate Drafts' },
             ].map((s, idx, arr) => (
-              <div key={s.step} className="flex items-center gap-2 flex-1">
+              <div key={s.step} className="flex flex-1 items-center gap-2">
                 <button
                   onClick={() => {
                     if (analysis || s.step === 1) setWizardStep(s.step);
                   }}
                   className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold transition ${
                     wizardStep === s.step
-                      ? 'bg-blue-600 text-white shadow-sm ring-4 ring-blue-100'
+                      ? 'bg-royal text-white shadow-sm ring-4 ring-royal/15'
                       : wizardStep > s.step
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-slate-100 text-slate-400'
+                      ? 'bg-mint text-white'
+                      : 'bg-line text-bodytext'
                   }`}
                 >
                   {wizardStep > s.step ? '✓' : s.step}
                 </button>
                 <span
-                  className={`hidden sm:inline-block text-xs font-semibold ${
-                    wizardStep === s.step ? 'text-blue-600 font-bold' : 'text-slate-500'
+                  className={`hidden text-xs font-semibold sm:inline-block ${
+                    wizardStep === s.step ? 'font-bold text-royal' : 'text-bodytext'
                   }`}
                 >
                   {s.label}
                 </span>
                 {idx < arr.length - 1 && (
                   <div
-                    className={`hidden sm:block flex-1 h-0.5 mx-2 ${
-                      wizardStep > s.step ? 'bg-emerald-500' : 'bg-slate-200'
+                    className={`mx-2 hidden h-0.5 flex-1 sm:block ${
+                      wizardStep > s.step ? 'bg-mint' : 'bg-line'
                     }`}
                   />
                 )}
@@ -406,14 +415,14 @@ export default function NavigatorPage() {
         {/* STEP 1: PROBLEM INTAKE */}
         {wizardStep === 1 && (
           <div className="space-y-6">
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm space-y-5">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-600">
+            <div className="space-y-5 rounded-3xl border border-line bg-white p-6 shadow-soft sm:p-8 dark:bg-[#0B1331]">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-royal">
                 <Sparkles size={16} /> Step 1: Legal Problem Entry
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+              <h2 className="text-xl font-bold text-navy-text sm:text-2xl dark:text-white">
                 What legal issue are you facing?
               </h2>
-              <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+              <p className="text-xs leading-relaxed text-bodytext sm:text-sm dark:text-slate-400">
                 Describe the situation in your own words. The Navigator will analyze facts, assess urgency, generate an evidence checklist, and map out appropriate legal steps.
               </p>
 
@@ -422,12 +431,12 @@ export default function NavigatorPage() {
                 onChange={(e) => setQuery(e.target.value)}
                 rows={5}
                 placeholder="e.g. My landlord in Delhi is refusing to return my security deposit of ₹50,000 even though I vacated on time and gave 30 days notice..."
-                className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 transition"
+                className="w-full rounded-2xl border border-line bg-slate-50 p-4 text-sm text-navy-text outline-none transition placeholder:text-bodytext/70 focus:border-royal focus:bg-white focus:ring-2 focus:ring-royal/15 dark:bg-slate-900 dark:text-white dark:focus:bg-[#0B1331]"
               />
 
               {/* Sample Starter Queries */}
               <div>
-                <p className="text-xs font-semibold text-slate-500 mb-2">Quick Examples:</p>
+                <p className="mb-2 text-xs font-semibold text-bodytext">Quick Examples:</p>
                 <div className="flex flex-wrap gap-2">
                   {[
                     'My landlord is refusing to return my security deposit of ₹50,000.',
@@ -442,7 +451,7 @@ export default function NavigatorPage() {
                       onClick={() => {
                         setQuery(example);
                       }}
-                      className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 transition"
+                      className="rounded-full border border-line bg-white px-3 py-1.5 text-xs font-medium text-bodytext transition hover:border-royal/40 hover:bg-soft hover:text-royal"
                     >
                       "{example.slice(0, 55)}..."
                     </button>
@@ -454,14 +463,14 @@ export default function NavigatorPage() {
                 <button
                   type="button"
                   onClick={() => setQuery('My landlord in Delhi is refusing to return my security deposit of 50000 rupees.')}
-                  className="text-xs text-blue-600 font-semibold hover:underline"
+                  className="text-xs font-semibold text-royal hover:underline"
                 >
                   Try sample query
                 </button>
                 <button
                   onClick={() => handleAnalyze(query, answers, 2)}
                   disabled={loading || !query.trim()}
-                  className="flex items-center gap-2 rounded-2xl bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-md hover:bg-blue-700 disabled:opacity-50 transition"
+                  className="flex items-center gap-2 rounded-2xl bg-royal px-6 py-3 text-sm font-bold text-white shadow-md transition hover:bg-bright disabled:opacity-50"
                 >
                   {loading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
                   Continue to Follow-ups
@@ -473,45 +482,45 @@ export default function NavigatorPage() {
 
         {/* STEP 2: CLARIFYING QUESTIONS */}
         {wizardStep === 2 && (
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm space-y-6">
+          <div className="space-y-6 rounded-3xl border border-line bg-white p-6 shadow-soft sm:p-8 dark:bg-[#0B1331]">
             {!analysis ? (
-              <div className="p-8 text-center space-y-3">
-                <p className="text-xs text-slate-500">Please enter a legal problem in Step 1 first.</p>
-                <button onClick={() => setWizardStep(1)} className="rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white">
+              <div className="space-y-3 p-8 text-center">
+                <p className="text-xs text-bodytext">Please enter a legal problem in Step 1 first.</p>
+                <button onClick={() => setWizardStep(1)} className="rounded-xl bg-royal px-4 py-2 text-xs font-bold text-white">
                   Go to Step 1
                 </button>
               </div>
             ) : (
               <>
-                <div className="flex items-center justify-between border-b pb-4">
+                <div className="flex items-center justify-between border-b border-line pb-4">
                   <div>
-                    <span className="text-xs font-bold uppercase text-blue-600">Step 2: Clarifying Questions</span>
-                    <h2 className="text-lg font-bold text-slate-900 mt-1">Help Us Refine Your Case Facts</h2>
+                    <span className="text-xs font-bold uppercase text-royal">Step 2: Clarifying Questions</span>
+                    <h2 className="mt-1 text-lg font-bold text-navy-text dark:text-white">Help Us Refine Your Case Facts</h2>
                   </div>
-                  <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
+                  <span className="rounded-full bg-soft px-3 py-1 text-xs font-bold text-royal">
                     Category: {analysis.legal_category}
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   {analysis.clarifying_questions.map((q) => (
-                    <div key={q.id} className="rounded-2xl border border-slate-200 p-4 bg-slate-50/50 space-y-2">
-                      <label className="text-xs font-bold text-slate-800 block">{q.question}</label>
+                    <div key={q.id} className="space-y-2 rounded-2xl border border-line bg-slate-50/60 p-4 dark:bg-slate-900/60">
+                      <label className="block text-xs font-bold text-navy-text">{q.question}</label>
                       <input
                         type="text"
                         value={answers[q.id] || ''}
                         onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
                         placeholder="Enter details..."
-                        className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs outline-none focus:border-blue-500"
+                        className="w-full rounded-xl border border-line bg-white px-3 py-2 text-xs text-navy-text outline-none transition focus:border-royal dark:bg-[#0B1331] dark:text-white"
                       />
                     </div>
                   ))}
                 </div>
 
-                <div className="flex justify-between pt-4 border-t">
+                <div className="flex justify-between border-t border-line pt-4">
                   <button
                     onClick={() => setWizardStep(1)}
-                    className="flex items-center gap-1 text-xs font-semibold text-slate-600 hover:text-slate-900"
+                    className="flex items-center gap-1 text-xs font-semibold text-bodytext hover:text-navy-text"
                   >
                     <ArrowLeft size={14} /> Back to Step 1
                   </button>
@@ -520,7 +529,7 @@ export default function NavigatorPage() {
                       handleAnalyze(query, answers, 3);
                     }}
                     disabled={loading}
-                    className="flex items-center gap-1.5 rounded-2xl bg-blue-600 px-6 py-2.5 text-xs font-bold text-white hover:bg-blue-700 shadow-sm"
+                    className="flex items-center gap-1.5 rounded-2xl bg-royal px-6 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-bright"
                   >
                     {loading ? <Loader2 size={14} className="animate-spin" /> : null}
                     Next: Evidence & Docs <ArrowRight size={14} />
@@ -533,77 +542,77 @@ export default function NavigatorPage() {
 
         {/* STEP 3: EVIDENCE & DOCUMENTS */}
         {wizardStep === 3 && (
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm space-y-6">
+          <div className="space-y-6 rounded-3xl border border-line bg-white p-6 shadow-soft sm:p-8 dark:bg-[#0B1331]">
             {!analysis ? (
-              <div className="p-8 text-center space-y-3">
-                <p className="text-xs text-slate-500">Please complete intake in Step 1 first.</p>
+              <div className="space-y-3 p-8 text-center">
+                <p className="text-xs text-bodytext">Please complete intake in Step 1 first.</p>
               </div>
             ) : (
               <>
-                <div className="flex items-center justify-between border-b pb-4">
+                <div className="flex items-center justify-between border-b border-line pb-4">
                   <div>
-                    <span className="text-xs font-bold uppercase text-blue-600">Step 3: Evidence & Document Checklist</span>
-                    <h2 className="text-lg font-bold text-slate-900 mt-1">Organize Your Case Proof</h2>
+                    <span className="text-xs font-bold uppercase text-royal">Step 3: Evidence & Document Checklist</span>
+                    <h2 className="mt-1 text-lg font-bold text-navy-text dark:text-white">Organize Your Case Proof</h2>
                   </div>
                   <div className="flex gap-2 text-xs font-bold">
-                    <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-600">
+                    <span className="rounded-full bg-line px-3 py-1 text-navy-text">
                       Pending: {analysis.evidence_checklist.filter((e) => e.status === 'pending').length}
                     </span>
-                    <span className="rounded-full bg-blue-100 px-3 py-1 text-blue-700">
+                    <span className="rounded-full bg-soft px-3 py-1 text-royal">
                       Uploaded: {analysis.evidence_checklist.filter((e) => e.status === 'uploaded').length}
                     </span>
-                    <span className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-800">
+                    <span className="rounded-full bg-mint/15 px-3 py-1 text-mint">
                       Verified: {analysis.evidence_checklist.filter((e) => e.status === 'verified').length}
                     </span>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   {/* Evidence Checklist Card */}
                   <div className="space-y-4">
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                      <CheckSquare size={16} className="text-blue-600" /> Evidence Checklist & Status
+                    <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-bodytext">
+                      <CheckSquare size={16} className="text-royal" /> Evidence Checklist & Status
                     </h3>
 
                     <div className="space-y-3">
                       {analysis.evidence_checklist.map((e) => (
-                        <div key={e.id} className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-3 bg-slate-50/50 dark:bg-slate-900/50">
+                        <div key={e.id} className="space-y-3 rounded-2xl border border-line bg-slate-50/50 p-4 dark:border-slate-800 dark:bg-slate-900/50">
                           <div className="flex items-center justify-between">
-                            <p className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                            <p className="flex items-center gap-1.5 text-xs font-bold text-navy-text dark:text-white">
                               {e.status === 'verified' ? (
-                                <CheckCircle2 size={14} className="text-emerald-500" />
+                                <CheckCircle2 size={14} className="text-mint" />
                               ) : e.status === 'uploaded' ? (
-                                <FileCheck size={14} className="text-blue-500" />
+                                <FileCheck size={14} className="text-royal" />
                               ) : null}
                               {e.item}
                             </p>
                             <span
                               className={`rounded-full px-2.5 py-0.5 text-[10px] font-extrabold uppercase ${
                                 e.status === 'verified'
-                                  ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                                  ? 'bg-mint/15 text-mint dark:bg-emerald-950 dark:text-emerald-300'
                                   : e.status === 'uploaded'
-                                  ? 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300'
+                                  ? 'bg-soft text-royal dark:bg-slate-800 dark:text-blue-300'
                                   : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
                               }`}
                             >
                               {e.status}
                             </span>
                           </div>
-                          <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">{e.description}</p>
+                          <p className="text-[11px] leading-relaxed text-bodytext dark:text-slate-400">{e.description}</p>
                           
                           {/* Received Document Badge */}
                           {e.fileName && (
-                            <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/80 dark:border-emerald-900/40 dark:bg-emerald-950/40 p-2.5 text-xs text-emerald-900 dark:text-emerald-200">
+                            <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/80 p-2.5 text-xs text-emerald-900 dark:border-emerald-900/40 dark:bg-emerald-950/40 dark:text-emerald-200">
                               <div className="flex items-center gap-2 truncate">
-                                <FileCheck size={16} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
-                                <span className="font-bold truncate">{e.fileName}</span>
+                                <FileCheck size={16} className="shrink-0 text-emerald-600 dark:text-emerald-400" />
+                                <span className="truncate font-bold">{e.fileName}</span>
                                 {e.fileSize && <span className="text-[10px] text-emerald-700 dark:text-emerald-400">({e.fileSize})</span>}
                               </div>
-                              {e.uploadedAt && <span className="text-[10px] text-emerald-600 dark:text-emerald-400 shrink-0 font-medium">{e.uploadedAt}</span>}
+                              {e.uploadedAt && <span className="shrink-0 text-[10px] font-medium text-emerald-600 dark:text-emerald-400">{e.uploadedAt}</span>}
                             </div>
                           )}
 
-                          <div className="flex items-center justify-between pt-1 border-t border-slate-200/60 dark:border-slate-800">
+                          <div className="flex items-center justify-between border-t border-line pt-1 dark:border-slate-800">
                             {/* File Upload Button per item */}
                             <div>
                               <input
@@ -618,7 +627,7 @@ export default function NavigatorPage() {
                               />
                               <label
                                 htmlFor={`file-input-${e.id}`}
-                                className="cursor-pointer inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[11px] font-bold text-blue-600 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-800 dark:text-blue-400 dark:hover:bg-slate-700 transition"
+                                className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-line bg-white px-2.5 py-1 text-[11px] font-bold text-royal transition hover:bg-soft dark:border-slate-700 dark:bg-slate-800 dark:text-blue-400 dark:hover:bg-slate-700"
                               >
                                 <Upload size={12} /> {e.fileName ? 'Replace File' : 'Upload Proof'}
                               </label>
@@ -632,11 +641,11 @@ export default function NavigatorPage() {
                                   className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase transition ${
                                     e.status === st
                                       ? st === 'verified'
-                                        ? 'bg-emerald-600 text-white shadow-xs'
+                                        ? 'bg-mint text-white shadow-xs'
                                         : st === 'uploaded'
-                                        ? 'bg-blue-600 text-white shadow-xs'
+                                        ? 'bg-royal text-white shadow-xs'
                                         : 'bg-slate-700 text-white'
-                                      : 'bg-white border border-slate-200 text-slate-500 hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400'
+                                      : 'bg-white border border-line text-bodytext hover:bg-soft dark:border-slate-800 dark:bg-[#0B1331] dark:text-slate-400'
                                   }`}
                                 >
                                   {st}
@@ -649,10 +658,10 @@ export default function NavigatorPage() {
                     </div>
 
                     {/* Drag & Drop File Upload Box */}
-                    <div className="rounded-2xl border-2 border-dashed border-blue-200 bg-blue-50/40 dark:border-blue-900/50 dark:bg-blue-950/20 p-6 text-center space-y-2">
-                      <Upload size={26} className="mx-auto text-blue-600 dark:text-blue-400" />
-                      <p className="text-xs font-bold text-slate-800 dark:text-slate-200">Upload Evidence / Attachments</p>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400">Drag & drop proof files (PDF, JPEG, PNG, MP4, MP3)</p>
+                    <div className="space-y-2 rounded-2xl border-2 border-dashed border-line bg-soft p-6 text-center dark:border-slate-800 dark:bg-slate-900/40">
+                      <Upload size={26} className="mx-auto text-royal dark:text-blue-400" />
+                      <p className="text-xs font-bold text-navy-text dark:text-slate-200">Upload Evidence / Attachments</p>
+                      <p className="text-[11px] text-bodytext dark:text-slate-400">Drag & drop proof files (PDF, JPEG, PNG, MP4, MP3)</p>
                       <input
                         type="file"
                         onChange={(e) => {
@@ -665,7 +674,7 @@ export default function NavigatorPage() {
                       />
                       <label
                         htmlFor="evidence-file-input-step3"
-                        className="inline-block cursor-pointer rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-blue-700 transition"
+                        className="inline-block cursor-pointer rounded-xl bg-royal px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-bright"
                       >
                         Browse & Upload Document
                       </label>
@@ -674,38 +683,38 @@ export default function NavigatorPage() {
 
                   {/* Required Documents Guide */}
                   <div className="space-y-4">
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                      <FileText size={16} className="text-indigo-600" /> Required Documents Guide
+                    <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-bodytext">
+                      <FileText size={16} className="text-accentpurple" /> Required Documents Guide
                     </h3>
 
                     <div className="space-y-3">
                       {analysis.required_documents.map((doc, idx) => (
-                        <div key={idx} className="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-2 bg-white dark:bg-slate-900 shadow-2xs">
+                        <div key={idx} className="space-y-2 rounded-2xl border border-line bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-[#0B1331]">
                           <div className="flex items-center justify-between">
-                            <h4 className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                              {doc.status === 'uploaded' ? <CheckCircle2 size={14} className="text-emerald-500" /> : null}
+                            <h4 className="flex items-center gap-1.5 text-xs font-bold text-navy-text dark:text-white">
+                              {doc.status === 'uploaded' ? <CheckCircle2 size={14} className="text-mint" /> : null}
                               {doc.doc_name}
                             </h4>
-                            <span className="rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[10px] font-semibold text-slate-600 dark:text-slate-300">
+                            <span className="rounded-md bg-line px-2 py-0.5 text-[10px] font-semibold text-navy-text dark:bg-slate-800 dark:text-slate-300">
                               {doc.accepted_formats}
                             </span>
                           </div>
-                          <p className="text-xs text-slate-600 dark:text-slate-400"><strong>Why Needed:</strong> {doc.why_needed}</p>
-                          <p className="text-xs text-slate-600 dark:text-slate-400"><strong>Where to Obtain:</strong> {doc.where_to_obtain}</p>
+                          <p className="text-xs text-bodytext dark:text-slate-400"><strong>Why Needed:</strong> {doc.why_needed}</p>
+                          <p className="text-xs text-bodytext dark:text-slate-400"><strong>Where to Obtain:</strong> {doc.where_to_obtain}</p>
                           
                           {/* Attached File Badge */}
                           {doc.fileName && (
-                            <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/80 dark:border-emerald-900/40 dark:bg-emerald-950/40 p-2 text-xs text-emerald-900 dark:text-emerald-200 mt-2">
+                            <div className="mt-2 flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/80 p-2 text-xs text-emerald-900 dark:border-emerald-900/40 dark:bg-emerald-950/40 dark:text-emerald-200">
                               <div className="flex items-center gap-1.5 truncate">
-                                <FileCheck size={14} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
-                                <span className="font-bold truncate">{doc.fileName}</span>
+                                <FileCheck size={14} className="shrink-0 text-emerald-600 dark:text-emerald-400" />
+                                <span className="truncate font-bold">{doc.fileName}</span>
                                 {doc.fileSize && <span className="text-[10px] text-emerald-700 dark:text-emerald-400">({doc.fileSize})</span>}
                               </div>
-                              {doc.uploadedAt && <span className="text-[10px] text-emerald-600 dark:text-emerald-400 shrink-0">{doc.uploadedAt}</span>}
+                              {doc.uploadedAt && <span className="shrink-0 text-[10px] text-emerald-600 dark:text-emerald-400">{doc.uploadedAt}</span>}
                             </div>
                           )}
 
-                          <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                          <div className="flex items-center justify-between border-t border-line pt-2 dark:border-slate-800">
                             <input
                               type="file"
                               id={`req-doc-file-${idx}`}
@@ -718,11 +727,11 @@ export default function NavigatorPage() {
                             />
                             <label
                               htmlFor={`req-doc-file-${idx}`}
-                              className="cursor-pointer inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-bold text-indigo-600 hover:bg-indigo-50 dark:border-slate-800 dark:bg-slate-800 dark:text-indigo-400 dark:hover:bg-slate-700 transition"
+                              className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-line bg-soft px-2.5 py-1 text-[11px] font-bold text-accentpurple transition hover:bg-line dark:border-slate-800 dark:bg-slate-800 dark:text-indigo-400 dark:hover:bg-slate-700"
                             >
                               <Upload size={12} /> {doc.fileName ? 'Replace Copy' : 'Upload Document Copy'}
                             </label>
-                            <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${doc.status === 'uploaded' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'}`}>
+                            <span className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase ${doc.status === 'uploaded' ? 'bg-mint/15 text-mint dark:bg-emerald-950 dark:text-emerald-300' : 'bg-line text-bodytext dark:bg-slate-800 dark:text-slate-400'}`}>
                               {doc.status === 'uploaded' ? 'Uploaded' : 'Pending Upload'}
                             </span>
                           </div>
@@ -732,16 +741,16 @@ export default function NavigatorPage() {
                   </div>
                 </div>
 
-                <div className="flex justify-between pt-4 border-t">
+                <div className="flex justify-between border-t border-line pt-4">
                   <button
                     onClick={() => setWizardStep(2)}
-                    className="flex items-center gap-1 text-xs font-semibold text-slate-600"
+                    className="flex items-center gap-1 text-xs font-semibold text-bodytext"
                   >
                     <ArrowLeft size={14} /> Back to Step 2
                   </button>
                   <button
                     onClick={() => setWizardStep(4)}
-                    className="flex items-center gap-1.5 rounded-2xl bg-blue-600 px-6 py-2.5 text-xs font-bold text-white hover:bg-blue-700 shadow-sm"
+                    className="flex items-center gap-1.5 rounded-2xl bg-royal px-6 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-bright"
                   >
                     Next: Roadmap & Authorities <ArrowRight size={14} />
                   </button>
@@ -753,48 +762,48 @@ export default function NavigatorPage() {
 
         {/* STEP 4: ROADMAP & AUTHORITIES */}
         {wizardStep === 4 && (
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm space-y-6">
+          <div className="space-y-6 rounded-3xl border border-line bg-white p-6 shadow-soft sm:p-8 dark:bg-[#0B1331]">
             {!analysis ? (
               <div className="p-8 text-center">
-                <p className="text-xs text-slate-500">Please run case intake first.</p>
+                <p className="text-xs text-bodytext">Please run case intake first.</p>
               </div>
             ) : (
               <>
-                <div className="flex items-center justify-between border-b pb-4">
+                <div className="flex items-center justify-between border-b border-line pb-4">
                   <div>
-                    <span className="text-xs font-bold uppercase text-blue-600">Step 4: Action Roadmap & Authorities</span>
-                    <h2 className="text-lg font-bold text-slate-900 mt-1">Personalized Legal Action Plan</h2>
+                    <span className="text-xs font-bold uppercase text-royal">Step 4: Action Roadmap & Authorities</span>
+                    <h2 className="mt-1 text-lg font-bold text-navy-text dark:text-white">Personalized Legal Action Plan</h2>
                   </div>
                   <button
                     onClick={handleSaveCase}
-                    className="flex items-center gap-1.5 rounded-xl bg-blue-600 px-3.5 py-1.5 text-xs font-bold text-white shadow-xs hover:bg-blue-700"
+                    className="flex items-center gap-1.5 rounded-xl bg-royal px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition hover:bg-bright"
                   >
                     <Save size={14} /> Save Case
                   </button>
                 </div>
 
                 {/* Chronological Action Plan Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="rounded-2xl border border-red-200 bg-red-50/40 p-4 space-y-2">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-red-700 flex items-center gap-1.5">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div className="space-y-2 rounded-2xl border border-red-200 bg-red-50/40 p-4 dark:border-red-900/30 dark:bg-red-950/20">
+                    <h4 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-red-700">
                       <AlertTriangle size={14} /> Immediate Actions (Do Right Now)
                     </h4>
                     {analysis.action_plan.immediate_actions.map((act) => (
-                      <div key={act.step} className="rounded-xl border border-red-100 bg-white p-3 space-y-1">
-                        <p className="text-xs font-bold text-slate-900">{act.step}. {act.title}</p>
-                        <p className="text-[11px] text-slate-600"><strong>Why:</strong> {act.why_it_matters}</p>
+                      <div key={act.step} className="space-y-1 rounded-xl border border-red-100 bg-white p-3 dark:border-red-900/30 dark:bg-[#0B1331]">
+                        <p className="text-xs font-bold text-navy-text dark:text-white">{act.step}. {act.title}</p>
+                        <p className="text-[11px] text-bodytext dark:text-slate-400"><strong>Why:</strong> {act.why_it_matters}</p>
                       </div>
                     ))}
                   </div>
 
-                  <div className="rounded-2xl border border-amber-200 bg-amber-50/40 p-4 space-y-2">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-amber-700 flex items-center gap-1.5">
+                  <div className="space-y-2 rounded-2xl border border-amber-200 bg-amber-50/40 p-4 dark:border-amber-900/30 dark:bg-amber-950/20">
+                    <h4 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-700">
                       <Clock size={14} /> Within 24 Hours
                     </h4>
                     {analysis.action_plan.actions_24h.map((act) => (
-                      <div key={act.step} className="rounded-xl border border-amber-100 bg-white p-3 space-y-1">
-                        <p className="text-xs font-bold text-slate-900">{act.step}. {act.title}</p>
-                        <p className="text-[11px] text-slate-600"><strong>Why:</strong> {act.why_it_matters}</p>
+                      <div key={act.step} className="space-y-1 rounded-xl border border-amber-100 bg-white p-3 dark:border-amber-900/30 dark:bg-[#0B1331]">
+                        <p className="text-xs font-bold text-navy-text dark:text-white">{act.step}. {act.title}</p>
+                        <p className="text-[11px] text-bodytext dark:text-slate-400"><strong>Why:</strong> {act.why_it_matters}</p>
                       </div>
                     ))}
                   </div>
@@ -802,41 +811,41 @@ export default function NavigatorPage() {
 
                 {/* Authorities Section */}
                 <div className="space-y-3 pt-2">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                    <Shield size={16} className="text-blue-600" /> Recommended Authorities to Contact
+                  <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-bodytext">
+                    <Shield size={16} className="text-royal" /> Recommended Authorities to Contact
                   </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     {analysis.authorities.map((auth, idx) => (
-                      <div key={idx} className="rounded-2xl border border-blue-100 bg-blue-50/30 p-4 space-y-1.5">
+                      <div key={idx} className="space-y-1.5 rounded-2xl border border-line bg-soft/70 p-4 dark:border-slate-800 dark:bg-slate-900/50">
                         <div className="flex items-center justify-between">
-                          <h4 className="text-xs font-bold text-slate-900">{auth.name}</h4>
+                          <h4 className="text-xs font-bold text-navy-text dark:text-white">{auth.name}</h4>
                           <a
                             href={auth.official_website}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-[11px] font-bold text-blue-600 hover:underline flex items-center gap-1"
+                            className="flex items-center gap-1 text-[11px] font-bold text-royal hover:underline"
                           >
                             <Globe size={12} /> Portal ↗
                           </a>
                         </div>
-                        <p className="text-xs text-slate-600"><strong>Role:</strong> {auth.role}</p>
-                        <p className="text-xs text-slate-600"><strong>When to Contact:</strong> {auth.when_to_contact}</p>
+                        <p className="text-xs text-bodytext dark:text-slate-400"><strong>Role:</strong> {auth.role}</p>
+                        <p className="text-xs text-bodytext dark:text-slate-400"><strong>When to Contact:</strong> {auth.when_to_contact}</p>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="flex justify-between pt-4 border-t">
+                <div className="flex justify-between border-t border-line pt-4">
                   <button
                     onClick={() => setWizardStep(3)}
-                    className="flex items-center gap-1 text-xs font-semibold text-slate-600"
+                    className="flex items-center gap-1 text-xs font-semibold text-bodytext"
                   >
                     <ArrowLeft size={14} /> Back to Step 3
                   </button>
                   <button
                     onClick={() => handleGenerateDraft(analysis.draft_type)}
                     disabled={loadingDraft}
-                    className="flex items-center gap-1.5 rounded-2xl bg-blue-600 px-6 py-2.5 text-xs font-bold text-white hover:bg-blue-700 shadow-sm"
+                    className="flex items-center gap-1.5 rounded-2xl bg-royal px-6 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-bright"
                   >
                     {loadingDraft ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}
                     Generate {analysis.draft_type} <ArrowRight size={14} />
@@ -849,23 +858,23 @@ export default function NavigatorPage() {
 
         {/* STEP 5: DRAFT GENERATOR */}
         {wizardStep === 5 && (
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-3">
+          <div className="space-y-4 rounded-3xl border border-line bg-white p-6 shadow-soft sm:p-8 dark:bg-[#0B1331]">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-3">
               <div>
-                <span className="text-xs font-bold uppercase text-blue-600">Step 5: Automated Draft Document</span>
-                <h2 className="text-lg font-bold text-slate-900 mt-0.5">{draftTitle || 'Draft Document'}</h2>
+                <span className="text-xs font-bold uppercase text-royal">Step 5: Automated Draft Document</span>
+                <h2 className="mt-0.5 text-lg font-bold text-navy-text dark:text-white">{draftTitle || 'Draft Document'}</h2>
               </div>
               {draftContent && (
                 <div className="flex gap-2">
                   <button
                     onClick={handleCopyDraft}
-                    className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                    className="flex items-center gap-1 rounded-xl border border-line bg-white px-3 py-1.5 text-xs font-semibold text-navy-text transition hover:bg-soft dark:bg-slate-800 dark:text-slate-300"
                   >
                     <Copy size={13} /> {copied ? 'Copied!' : 'Copy'}
                   </button>
                   <button
                     onClick={handleDownloadDraft}
-                    className="flex items-center gap-1 rounded-xl bg-blue-600 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-blue-700"
+                    className="flex items-center gap-1 rounded-xl bg-royal px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-bright"
                   >
                     <Download size={13} /> Download .TXT
                   </button>
@@ -878,19 +887,19 @@ export default function NavigatorPage() {
               onChange={(e) => setDraftContent(e.target.value)}
               rows={16}
               placeholder="Generated draft text will appear here..."
-              className="w-full rounded-2xl border border-slate-200 bg-slate-900 p-4 text-xs font-mono text-slate-100 outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full rounded-2xl border border-line bg-slate-900 p-4 text-xs font-mono text-slate-100 outline-none focus:ring-2 focus:ring-royal/50"
             />
 
             <div className="flex justify-between pt-2">
               <button
                 onClick={() => setWizardStep(4)}
-                className="flex items-center gap-1 text-xs font-semibold text-slate-600"
+                className="flex items-center gap-1 text-xs font-semibold text-bodytext"
               >
                 <ArrowLeft size={14} /> Back to Step 4
               </button>
               <Link
                 href="/dashboard"
-                className="flex items-center gap-1 text-xs font-bold text-blue-600 hover:underline"
+                className="flex items-center gap-1 text-xs font-bold text-royal hover:underline"
               >
                 View Saved Cases Dashboard ➔
               </Link>

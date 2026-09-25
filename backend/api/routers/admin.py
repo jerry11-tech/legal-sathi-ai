@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from pydantic import BaseModel, EmailStr
 from typing import Optional, List
 from database.session import get_db
-from database.models import User, GeneratedDocument, ChatHistory, LegalCase, AuditLog, SystemSetting, LegalTemplate, KnowledgeFile
+from database.models import User, GeneratedDocument, ChatHistory, LegalCase, AuditLog, SystemSetting, LegalTemplate, KnowledgeFile, EvidenceFile
 from utils.security import get_password_hash, verify_password, create_access_token, decode_token
 
 router = APIRouter()
@@ -162,6 +163,14 @@ def get_admin_stats(token: str = Query(...), db: Session = Depends(get_db)):
     total_documents = db.query(GeneratedDocument).count()
     total_cases = db.query(LegalCase).count()
 
+    total_storage_bytes = db.query(func.coalesce(func.sum(EvidenceFile.file_size), 0)).scalar()
+    if total_storage_bytes >= 1024 * 1024:
+        storage_used = f"{total_storage_bytes / (1024 * 1024):.1f} MB"
+    elif total_storage_bytes >= 1024:
+        storage_used = f"{total_storage_bytes / 1024:.0f} KB"
+    else:
+        storage_used = f"{int(total_storage_bytes or 0)} B"
+
     return {
         "total_users": total_users,
         "active_users": active_users,
@@ -172,7 +181,7 @@ def get_admin_stats(token: str = Query(...), db: Session = Depends(get_db)):
         "api_usage": "Normal (99.9% uptime)",
         "most_used_category": "Rental Disputes & Women's Rights",
         "average_response_time": "0.45s",
-        "storage_used": "14.2 MB",
+        "storage_used": storage_used,
     }
 
 

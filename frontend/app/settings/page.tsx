@@ -31,41 +31,41 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 space-y-6 text-slate-900">
-      <div className="flex items-center justify-between border-b pb-4">
+    <div className="mx-auto w-full max-w-4xl space-y-6 px-4 py-8 text-navy-text sm:px-6 dark:text-slate-100">
+      <div className="flex items-center justify-between border-b border-line pb-4 dark:border-slate-800">
         <div className="flex items-center gap-3">
-          <Link href="/dashboard" className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200">
-            <ArrowLeft size={18} />
+          <Link href="/dashboard" className="rounded-xl bg-line p-2 transition hover:bg-soft">
+            <ArrowLeft size={18} className="text-navy-text" />
           </Link>
           <div>
-            <h1 className="text-xl font-bold">Platform & App Settings</h1>
-            <p className="text-xs text-slate-500">Configure appearance, language, notification preferences, and privacy</p>
+            <h1 className="text-xl font-bold text-navy-text dark:text-white">Platform & App Settings</h1>
+            <p className="text-xs text-bodytext">Configure appearance, language, notification preferences, and privacy</p>
           </div>
         </div>
       </div>
 
       {msg && (
-        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-xs font-bold text-emerald-800">
+        <div className="rounded-2xl border border-mint/40 bg-mint/10 p-3 text-xs font-bold text-mint">
           ✓ {msg}
         </div>
       )}
 
       {/* Preferences Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {/* Appearance & Language */}
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 space-y-4 shadow-sm">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-blue-600 border-b pb-2 flex items-center gap-2">
+        <div className="space-y-4 rounded-3xl border border-line bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-[#0B1331]">
+          <h3 className="flex items-center gap-2 border-b border-line pb-2 text-xs font-bold uppercase tracking-wider text-royal dark:border-slate-800">
             <Globe size={16} /> Appearance & Language
           </h3>
 
           <div>
-            <label className="text-xs font-bold text-slate-700 block mb-1">Theme</label>
+            <label className="mb-1 block text-xs font-bold text-navy-text dark:text-slate-300">Theme</label>
             <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => setTheme('light')}
                 className={`flex-1 flex items-center justify-center gap-2 rounded-xl border p-3 text-xs font-bold transition ${
-                  theme === 'light' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-600'
+                  theme === 'light' ? 'border-royal bg-soft text-royal' : 'border-line text-bodytext'
                 }`}
               >
                 <Sun size={16} /> Light Mode
@@ -74,7 +74,7 @@ export default function SettingsPage() {
                 type="button"
                 onClick={() => setTheme('dark')}
                 className={`flex-1 flex items-center justify-center gap-2 rounded-xl border p-3 text-xs font-bold transition ${
-                  theme === 'dark' ? 'border-blue-600 bg-slate-900 text-white' : 'border-slate-200 text-slate-600'
+                  theme === 'dark' ? 'border-royal bg-navy text-white' : 'border-line text-bodytext'
                 }`}
               >
                 <Moon size={16} /> Dark Mode
@@ -83,11 +83,11 @@ export default function SettingsPage() {
           </div>
 
           <div>
-            <label className="text-xs font-bold text-slate-700 block mb-1">Language</label>
+            <label className="mb-1 block text-xs font-bold text-navy-text dark:text-slate-300">Language</label>
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 p-2.5 text-xs outline-none focus:border-blue-500"
+              className="w-full rounded-xl border border-line bg-soft p-2.5 text-xs text-navy-text outline-none transition focus:border-royal dark:border-slate-800 dark:bg-slate-800/60 dark:text-white"
             >
               <option value="en">English (Official)</option>
               <option value="hi">Hindi (हिंदी)</option>
@@ -97,29 +97,29 @@ export default function SettingsPage() {
         </div>
 
         {/* Notifications & Security */}
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 space-y-4 shadow-sm">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-blue-600 border-b pb-2 flex items-center gap-2">
+        <div className="space-y-4 rounded-3xl border border-line bg-white p-6 shadow-soft dark:border-slate-800 dark:bg-[#0B1331]">
+          <h3 className="flex items-center gap-2 border-b border-line pb-2 text-xs font-bold uppercase tracking-wider text-royal dark:border-slate-800">
             <Bell size={16} /> Notifications & Security
           </h3>
 
-          <div className="space-y-3 text-xs text-slate-700">
-            <label className="flex items-center justify-between cursor-pointer">
+          <div className="space-y-3 text-xs text-navy-text dark:text-slate-300">
+            <label className="flex cursor-pointer items-center justify-between">
               <span>Email Notifications for Saved Cases</span>
               <input
                 type="checkbox"
                 checked={emailNotifs}
                 onChange={(e) => setEmailNotifs(e.target.checked)}
-                className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                className="h-4 w-4 rounded border-line bg-soft text-royal focus:ring-royal"
               />
             </label>
 
-            <label className="flex items-center justify-between cursor-pointer">
+            <label className="flex cursor-pointer items-center justify-between">
               <span>Security Alert Emails for New Device Logins</span>
               <input
                 type="checkbox"
                 checked={securityAlerts}
                 onChange={(e) => setSecurityAlerts(e.target.checked)}
-                className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                className="h-4 w-4 rounded border-line bg-soft text-royal focus:ring-royal"
               />
             </label>
           </div>
@@ -127,7 +127,7 @@ export default function SettingsPage() {
           <div className="pt-2">
             <button
               onClick={handleDownloadData}
-              className="w-full flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-slate-50 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-100 transition"
+              className="w-full flex items-center justify-center gap-2 rounded-xl border border-line bg-soft py-2.5 text-xs font-bold text-navy-text transition hover:bg-line dark:border-slate-800 dark:bg-slate-800/60 dark:text-slate-300"
             >
               <Download size={14} /> Download My Data (JSON)
             </button>
@@ -138,7 +138,7 @@ export default function SettingsPage() {
       <div className="flex justify-end">
         <button
           onClick={handleSave}
-          className="rounded-xl bg-blue-600 px-6 py-2.5 text-xs font-bold text-white hover:bg-blue-700 transition"
+          className="rounded-xl bg-royal px-6 py-2.5 text-xs font-bold text-white transition hover:bg-bright"
         >
           Save Settings
         </button>

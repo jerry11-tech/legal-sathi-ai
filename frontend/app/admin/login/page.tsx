@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff, Loader2, Lock, Mail, ShieldAlert } from 'lucide-react';
+import { readApiError } from '@/lib/api-error';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -20,24 +21,21 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/auth/admin/login`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Remainder': 'true' },
-          body: JSON.stringify({ admin_email: adminEmail, password }),
-        }
-      );
+      const res = await fetch('/api/auth/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ admin_email: adminEmail, password }),
+      });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || 'Admin authentication failed');
+      const data = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(readApiError((data as any)?.detail) || 'Admin authentication failed');
 
       localStorage.setItem('legalsathi_admin_token', data.access_token);
       localStorage.setItem('legalsathi_user', JSON.stringify(data.user));
 
       router.push('/admin/dashboard');
     } catch (err) {
-      setErrorMsg((err as Error).message);
+      setErrorMsg((err as Error).message || 'Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }

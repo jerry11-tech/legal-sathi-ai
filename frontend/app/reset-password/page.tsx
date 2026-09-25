@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Eye, EyeOff, Loader2, Lock, Shield, CheckCircle2 } from 'lucide-react';
+import { readApiError } from '@/lib/api-error';
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
@@ -37,29 +38,31 @@ export default function ResetPasswordPage() {
         }
       );
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || 'Password reset failed');
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        throw new Error(readApiError((data as any)?.detail) || `Password reset failed (${res.status})`);
+      }
 
       setStatusMsg('Password updated successfully! You can now log in.');
       setTimeout(() => router.push('/login'), 2000);
     } catch (err) {
-      setErrorMsg((err as Error).message);
+      setErrorMsg((err as Error).message || 'Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xl space-y-6">
-        <div className="text-center space-y-2">
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4 dark:bg-navy-deeper">
+      <div className="w-full max-w-md space-y-6 rounded-3xl border border-line bg-white p-6 shadow-panel sm:p-8 dark:border-slate-800 dark:bg-[#0B1331]">
+        <div className="space-y-2 text-center">
           <Link href="/" className="inline-flex items-center gap-2 group">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-600/30">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-navy text-white shadow-soft">
               <Shield size={18} />
             </span>
-            <span className="font-bold text-xl text-slate-900">LegalSathi AI</span>
+            <span className="text-xl font-bold text-navy-text dark:text-white">LegalSathi AI</span>
           </Link>
-          <h2 className="text-xl font-extrabold text-slate-900">Create New Password</h2>
+          <h2 className="text-xl font-extrabold text-navy-text dark:text-white">Create New Password</h2>
         </div>
 
         {errorMsg && (
@@ -76,7 +79,7 @@ export default function ResetPasswordPage() {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">New Password</label>
+              <label className="mb-1 block text-xs font-bold text-navy-text dark:text-slate-300">New Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -84,13 +87,13 @@ export default function ResetPasswordPage() {
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 pl-9 pr-10 text-xs text-slate-900 outline-none focus:border-blue-500 focus:bg-white"
+                  className="w-full rounded-xl border border-line bg-slate-50 px-3.5 py-2.5 pl-9 pr-10 text-xs text-navy-text outline-none transition focus:border-royal focus:bg-white dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:focus:bg-[#0B1331]"
                 />
-                <Lock size={16} className="absolute left-3 top-2.5 text-slate-400" />
+                <Lock size={16} className="absolute left-3 top-2.5 text-bodytext/70" />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3 top-2.5 text-bodytext hover:text-navy-text dark:text-slate-400"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -98,21 +101,21 @@ export default function ResetPasswordPage() {
             </div>
 
             <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Confirm New Password</label>
+              <label className="mb-1 block text-xs font-bold text-navy-text dark:text-slate-300">Confirm New Password</label>
               <input
                 type={showPassword ? 'text' : 'password'}
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-xs text-slate-900 outline-none focus:border-blue-500 focus:bg-white"
+                className="w-full rounded-xl border border-line bg-slate-50 px-3.5 py-2.5 text-xs text-navy-text outline-none transition focus:border-royal focus:bg-white dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:focus:bg-[#0B1331]"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-xs font-bold text-white shadow-md hover:bg-blue-700 disabled:opacity-50 transition"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-royal py-3 text-xs font-bold text-white shadow-md transition hover:bg-bright disabled:opacity-50"
             >
               {loading ? <Loader2 size={16} className="animate-spin" /> : null}
               Update Password

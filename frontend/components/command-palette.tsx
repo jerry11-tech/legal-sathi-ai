@@ -56,7 +56,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
         {
           label: 'Ask AI Legal Assistant',
           desc: 'Get instant legal guidance in plain language under Indian laws',
-          icon: <MessageSquare size={16} className="text-blue-600" />,
+          icon: <MessageSquare size={16} className="text-royal" />,
           action: () => {
             router.push(query ? `/chat?q=${encodeURIComponent(query)}` : '/chat');
             onClose();
@@ -65,7 +65,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
         {
           label: 'Launch Case Navigator Studio',
           desc: 'Convert complex legal problems into structured roadmaps & checklists',
-          icon: <Sparkles size={16} className="text-indigo-600" />,
+          icon: <Sparkles size={16} className="text-accentpurple" />,
           action: () => {
             router.push('/navigator');
             onClose();
@@ -106,7 +106,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
         {
           label: 'Rental Deposit & Tenant Eviction Dispute',
           desc: 'Model Tenancy Act, rent agreements & security deposit refund',
-          icon: <Building2 size={16} className="text-blue-600" />,
+          icon: <Building2 size={16} className="text-royal" />,
           action: () => {
             router.push('/chat?q=Rent+Deposit+Tenant+Dispute');
             onClose();
@@ -146,11 +146,11 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
     .filter((group) => group.items.length > 0);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-slate-950/60 backdrop-blur-md p-4 pt-16 sm:pt-24 animate-in fade-in duration-150">
-      <div className="w-full max-w-2xl rounded-3xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 shadow-2xl overflow-hidden transition-all">
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-navy-deeper/70 p-4 pt-16 backdrop-blur-md animate-in fade-in duration-150 sm:pt-24">
+      <div className="w-full max-w-2xl overflow-hidden rounded-3xl border border-line bg-white shadow-2xl transition-all dark:border-slate-800 dark:bg-[#0B1331]">
         {/* Search Header */}
-        <div className="flex items-center gap-3 border-b border-slate-100 dark:border-slate-800 px-4 py-3.5 bg-slate-50/70 dark:bg-slate-850">
-          <Search size={18} className="text-slate-400 shrink-0" />
+        <div className="flex items-center gap-3 border-b border-line bg-slate-50/70 px-4 py-3.5 dark:border-slate-800 dark:bg-slate-900">
+          <Search size={18} className="shrink-0 text-bodytext" />
           <input
             type="text"
             value={query}
@@ -161,28 +161,28 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
               }
             }}
             placeholder="Type to search commands, legal topics, or acts... (Press Enter to launch)"
-            className="flex-1 bg-transparent text-sm font-medium text-slate-900 dark:text-white placeholder:text-slate-400 outline-none"
+            className="flex-1 bg-transparent text-sm font-medium text-navy-text outline-none placeholder:text-bodytext/70 dark:text-white"
             autoFocus
           />
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition"
+            className="rounded-lg p-1.5 text-bodytext transition hover:bg-soft dark:text-slate-400 dark:hover:bg-slate-800"
           >
             <X size={16} />
           </button>
         </div>
 
         {/* Results List */}
-        <div className="max-h-[60vh] overflow-y-auto p-3 space-y-4">
+        <div className="max-h-[60vh] space-y-4 overflow-y-auto p-3">
           {filteredGroups.length === 0 ? (
-            <div className="py-8 text-center space-y-2">
-              <p className="text-xs text-slate-500 font-medium">No direct matching commands found for "{query}".</p>
+            <div className="space-y-2 py-8 text-center">
+              <p className="text-xs font-medium text-bodytext">No direct matching commands found for "{query}".</p>
               <button
                 onClick={() => {
                   router.push(`/chat?q=${encodeURIComponent(query)}`);
                   onClose();
                 }}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-blue-700"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-royal px-4 py-2 text-xs font-bold text-white shadow-xs transition hover:bg-bright"
               >
                 <span>Ask AI Chat: "{query}"</span>
                 <ArrowRight size={14} />
@@ -191,27 +191,27 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
           ) : (
             filteredGroups.map((group, idx) => (
               <div key={idx} className="space-y-1">
-                <p className="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                <p className="px-3 text-[10px] font-extrabold uppercase tracking-wider text-bodytext dark:text-slate-500">
                   {group.category}
                 </p>
                 {group.items.map((item, i) => (
                   <button
                     key={i}
                     onClick={item.action}
-                    className="w-full flex items-center justify-between gap-3 rounded-2xl px-3 py-2.5 text-left transition hover:bg-slate-100 dark:hover:bg-slate-800 group"
+                    className="group flex w-full items-center justify-between gap-3 rounded-2xl px-3 py-2.5 text-left transition hover:bg-soft dark:hover:bg-slate-800"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-800">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-soft dark:border-slate-800 dark:bg-slate-800">
                         {item.icon}
                       </div>
                       <div>
-                        <p className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-blue-600 transition">
+                        <p className="text-xs font-bold text-navy-text transition group-hover:text-royal dark:text-white">
                           {item.label}
                         </p>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">{item.desc}</p>
+                        <p className="line-clamp-1 text-[11px] text-bodytext dark:text-slate-400">{item.desc}</p>
                       </div>
                     </div>
-                    <ArrowRight size={14} className="text-slate-300 dark:text-slate-600 group-hover:text-blue-600 group-hover:translate-x-0.5 transition" />
+                    <ArrowRight size={14} className="text-line transition group-hover:translate-x-0.5 group-hover:text-royal dark:text-slate-600" />
                   </button>
                 ))}
               </div>
@@ -220,8 +220,8 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
         </div>
 
         {/* Footer info */}
-        <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-850 px-4 py-2.5 text-[11px] text-slate-400">
-          <span>Tip: Press <kbd className="rounded bg-slate-200 px-1 font-mono text-slate-600 dark:bg-slate-800 dark:text-slate-300">Enter</kbd> to execute selection</span>
+        <div className="flex items-center justify-between border-t border-line bg-slate-50/50 px-4 py-2.5 text-[11px] text-bodytext dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+          <span>Tip: Press <kbd className="rounded bg-line px-1 font-mono text-navy-text dark:bg-slate-800 dark:text-slate-300">Enter</kbd> to execute selection</span>
           <span className="font-mono">LegalSathi AI v1.0</span>
         </div>
       </div>

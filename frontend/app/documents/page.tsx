@@ -176,42 +176,42 @@ export default function DocumentsPage() {
   );
 
   return (
-    <div className="mx-auto max-w-7xl w-full px-4 py-8 sm:px-6 lg:px-8 sm:py-10 space-y-8 text-slate-900 dark:text-slate-100">
+    <div className="mx-auto w-full max-w-7xl space-y-8 px-4 py-8 text-navy-text sm:px-6 sm:py-10 lg:px-8 dark:text-white">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between border-b border-slate-200/80 pb-6 dark:border-slate-800">
+      <div className="flex flex-col gap-4 border-b border-line pb-6 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700 ring-1 ring-blue-200 dark:bg-blue-950 dark:text-blue-300">
+          <div className="inline-flex items-center gap-2 rounded-full bg-soft px-3 py-1 text-xs font-bold text-royal ring-1 ring-royal/25 dark:bg-slate-800 dark:text-blue-300">
             <FileText size={14} /> Automated Legal Document & Evidence Studio
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-2">Legal Document & Proof Vault</h1>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">Generate legal notices, FIR complaints, manage uploaded evidence proofs, and store case files.</p>
+          <h1 className="mt-2 text-2xl font-extrabold text-navy-text dark:text-white sm:text-3xl">Legal Document & Proof Vault</h1>
+          <p className="text-xs text-bodytext sm:text-sm dark:text-slate-400">Generate legal notices, FIR complaints, manage uploaded evidence proofs, and store case files.</p>
         </div>
         <button
           onClick={() => router.push('/navigator')}
-          className="flex items-center justify-center gap-2 rounded-2xl bg-blue-600 px-5 py-3 text-xs font-bold text-white shadow-md hover:bg-blue-700 transition"
+          className="flex items-center justify-center gap-2 rounded-2xl bg-royal px-5 py-3 text-xs font-bold text-white shadow-md transition hover:bg-bright"
         >
           <Sparkles size={16} /> Launch Case Navigator Studio
         </button>
       </div>
 
       {/* Main Tabs */}
-      <div className="flex items-center gap-4 border-b border-slate-200 dark:border-slate-800">
+      <div className="flex items-center gap-4 border-b border-line dark:border-slate-800">
         <button
           onClick={() => setActiveTab('templates')}
-          className={`flex items-center gap-2 pb-3.5 text-xs font-extrabold transition border-b-2 ${
+          className={`flex items-center gap-2 border-b-2 pb-3.5 text-xs font-extrabold transition ${
             activeTab === 'templates'
-              ? 'border-blue-600 text-blue-600 dark:text-blue-400'
-              : 'border-transparent text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+              ? 'border-royal text-royal dark:text-blue-400'
+              : 'border-transparent text-bodytext hover:text-navy-text dark:text-slate-400 dark:hover:text-white'
           }`}
         >
           <FileText size={16} /> Ready Legal Templates & Generators ({templates.length})
         </button>
         <button
           onClick={() => setActiveTab('vault')}
-          className={`flex items-center gap-2 pb-3.5 text-xs font-extrabold transition border-b-2 ${
+          className={`flex items-center gap-2 border-b-2 pb-3.5 text-xs font-extrabold transition ${
             activeTab === 'vault'
-              ? 'border-blue-600 text-blue-600 dark:text-blue-400'
-              : 'border-transparent text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+              ? 'border-royal text-royal dark:text-blue-400'
+              : 'border-transparent text-bodytext hover:text-navy-text dark:text-slate-400 dark:hover:text-white'
           }`}
         >
           <FolderOpen size={16} /> My Uploaded Evidence Vault ({uploadedDocs.length})
@@ -219,28 +219,28 @@ export default function DocumentsPage() {
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
-          <Search size={16} className="absolute left-3.5 top-3.5 text-slate-400" />
+          <Search size={16} className="absolute left-3.5 top-3.5 text-bodytext/70" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={activeTab === 'templates' ? "Search legal templates (FIR, Rent Notice, Consumer, Cyber)..." : "Search uploaded documents in vault..."}
-            className="w-full rounded-2xl border border-slate-200/80 bg-white py-3 pl-10 pr-4 text-xs sm:text-sm outline-none focus:border-blue-500 dark:border-slate-800 dark:bg-slate-900"
+            className="w-full rounded-2xl border border-line bg-white py-3 pl-10 pr-4 text-xs text-navy-text outline-none transition focus:border-royal sm:text-sm dark:border-slate-800 dark:bg-[#0B1331] dark:text-white"
           />
         </div>
 
         {activeTab === 'templates' && (
-          <div className="flex overflow-x-auto gap-2 pb-1 sm:pb-0">
+          <div className="flex gap-2 overflow-x-auto pb-1 sm:pb-0">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
                 className={`whitespace-nowrap rounded-xl px-4 py-2.5 text-xs font-bold transition ${
                   selectedCategory === cat
-                    ? 'bg-blue-600 text-white shadow-sm'
-                    : 'bg-white border border-slate-200/80 text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300'
+                    ? 'bg-royal text-white shadow-sm'
+                    : 'border border-line bg-white text-bodytext hover:bg-soft dark:border-slate-800 dark:bg-[#0B1331] dark:text-slate-300'
                 }`}
               >
                 {cat}
@@ -252,30 +252,30 @@ export default function DocumentsPage() {
 
       {/* Tab 1: Templates Grid */}
       {activeTab === 'templates' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
           {filteredTemplates.map((t, idx) => (
             <div
               key={idx}
-              className="group flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-6 shadow-2xs hover:border-blue-300 hover:shadow-lg transition dark:border-slate-800 dark:bg-slate-900"
+              className="group flex flex-col justify-between rounded-2xl border border-line bg-white p-6 shadow-soft transition hover:border-royal/40 hover:shadow-card dark:border-slate-800 dark:bg-[#0B1331]"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-400">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-soft text-royal dark:bg-slate-800 dark:text-blue-400">
                     <FileText size={20} />
                   </span>
-                  <span className="rounded-full bg-slate-100 dark:bg-slate-800 px-3 py-1 text-[11px] font-bold text-slate-600 dark:text-slate-300">
+                  <span className="rounded-full bg-soft px-3 py-1 text-[11px] font-bold text-royal dark:bg-slate-800 dark:text-slate-300">
                     {t.cat}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="font-bold text-base text-slate-900 dark:text-white group-hover:text-blue-600 transition">{t.title}</h3>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">{t.desc}</p>
+                  <h3 className="text-base font-bold text-navy-text transition group-hover:text-royal dark:text-white">{t.title}</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-bodytext dark:text-slate-400">{t.desc}</p>
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-600">
+              <div className="flex items-center justify-between border-t border-line pt-6 dark:border-slate-800">
+                <span className="flex items-center gap-1 text-[11px] font-bold text-mint">
                   <CheckCircle2 size={13} /> Official Standard
                 </span>
                 <button
@@ -286,7 +286,7 @@ export default function DocumentsPage() {
                       router.push(`/navigator?q=${encodeURIComponent(t.title)}`);
                     }
                   }}
-                  className="flex items-center gap-1.5 rounded-xl bg-blue-50 px-3.5 py-2 text-xs font-bold text-blue-600 hover:bg-blue-100 transition dark:bg-blue-950 dark:text-blue-300"
+                  className="flex items-center gap-1.5 rounded-xl bg-soft px-3.5 py-2 text-xs font-bold text-royal transition hover:bg-line dark:bg-slate-800 dark:text-blue-300"
                 >
                   <span>Draft Now</span>
                   <ArrowRight size={14} />
@@ -301,11 +301,11 @@ export default function DocumentsPage() {
       {activeTab === 'vault' && (
         <div className="space-y-6">
           {/* Drag & Drop Upload Card */}
-          <div className="rounded-3xl border-2 border-dashed border-blue-200 bg-blue-50/40 p-8 text-center space-y-3 dark:border-blue-900/50 dark:bg-blue-950/20">
-            <Upload size={32} className="mx-auto text-blue-600 dark:text-blue-400" />
+          <div className="space-y-3 rounded-3xl border-2 border-dashed border-line bg-soft p-8 text-center dark:border-slate-800 dark:bg-slate-900/40">
+            <Upload size={32} className="mx-auto text-royal dark:text-blue-400" />
             <div>
-              <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">Upload Legal Documents & Proofs</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Upload Aadhaar, Rent Agreements, Bank Statements, FIR Copies, or Screenshots</p>
+              <h3 className="text-sm font-extrabold text-navy-text dark:text-white">Upload Legal Documents & Proofs</h3>
+              <p className="mt-1 text-xs text-bodytext dark:text-slate-400">Upload Aadhaar, Rent Agreements, Bank Statements, FIR Copies, or Screenshots</p>
             </div>
             <input
               type="file"
@@ -316,7 +316,7 @@ export default function DocumentsPage() {
             />
             <label
               htmlFor="vault-file-input"
-              className="inline-flex cursor-pointer items-center gap-2 rounded-2xl bg-blue-600 px-5 py-3 text-xs font-bold text-white shadow-md hover:bg-blue-700 transition disabled:opacity-60"
+              className="inline-flex cursor-pointer items-center gap-2 rounded-2xl bg-royal px-5 py-3 text-xs font-bold text-white shadow-md transition hover:bg-bright disabled:opacity-60"
             >
               <Plus size={16} /> {uploading ? 'Uploading...' : 'Select & Upload Evidence Files'}
             </label>
@@ -328,49 +328,49 @@ export default function DocumentsPage() {
           {/* Uploaded Documents List */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                <FileCheck size={16} className="text-emerald-600" /> Received Evidence Documents ({filteredVault.length})
+              <h3 className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider text-bodytext dark:text-slate-400">
+                <FileCheck size={16} className="text-mint" /> Received Evidence Documents ({filteredVault.length})
               </h3>
-              <span className="text-xs text-slate-500">End-to-End Encrypted Storage</span>
+              <span className="text-xs text-bodytext">End-to-End Encrypted Storage</span>
             </div>
 
             {filteredVault.length === 0 ? (
-              <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-900">
+              <div className="rounded-2xl border border-line bg-white p-8 text-center text-xs text-bodytext dark:border-slate-800 dark:bg-[#0B1331] dark:text-slate-400">
                 No uploaded evidence documents match your search. Upload files above to store them in your vault.
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 {filteredVault.map((doc) => (
                   <div
                     key={doc.id}
-                    className="flex items-center justify-between rounded-2xl border border-slate-200/80 bg-white p-4 shadow-2xs dark:border-slate-800 dark:bg-slate-900"
+                    className="flex items-center justify-between rounded-2xl border border-line bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-[#0B1331]"
                   >
                     <div className="flex items-center gap-3 truncate">
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-mint/10 text-mint dark:bg-emerald-950 dark:text-emerald-400">
                         <File size={20} />
                       </span>
-                      <div className="truncate space-y-0.5">
-                        <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">{doc.name}</h4>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                      <div className="space-y-0.5 truncate">
+                        <h4 className="truncate text-xs font-bold text-navy-text dark:text-white">{doc.name}</h4>
+                        <p className="text-[11px] text-bodytext dark:text-slate-400">
                           {doc.size} • Uploaded: {doc.uploadedAt}
                         </p>
-                        <span className="inline-block rounded-full bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[10px] font-semibold text-slate-600 dark:text-slate-300">
+                        <span className="inline-block rounded-full bg-soft px-2 py-0.5 text-[10px] font-semibold text-royal dark:bg-slate-800 dark:text-slate-300">
                           {doc.category}
                         </span>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2 shrink-0">
+                    <div className="flex shrink-0 items-center gap-2">
                       <button
                         onClick={() => handleDownloadDoc(doc.id, doc.name)}
-                        className="rounded-xl border border-slate-200 p-2 text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                        className="rounded-xl border border-line p-2 text-bodytext transition hover:bg-soft dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
                         title="Download Document"
                       >
                         <Download size={16} />
                       </button>
                       <button
                         onClick={() => handleDeleteDoc(doc.id)}
-                        className="rounded-xl border border-red-200 p-2 text-red-600 hover:bg-red-50 dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-950"
+                        className="rounded-xl border border-red-200 p-2 text-red-600 transition hover:bg-red-50 dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-950"
                         title="Delete Document"
                       >
                         <Trash2 size={16} />

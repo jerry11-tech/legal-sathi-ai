@@ -41,10 +41,10 @@ function Section({ icon, title, children, className = '' }: SectionProps) {
   return (
     <section className={`mb-6 last:mb-0 ${className}`}>
       <div className="flex items-center gap-2.5 mb-2.5">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-soft text-royal">
           {icon}
         </span>
-        <h3 className="text-[15px] font-bold tracking-tight text-slate-900 uppercase">
+        <h3 className="text-[15px] font-bold tracking-tight text-navy-text uppercase">
           {title}
         </h3>
       </div>
@@ -66,7 +66,7 @@ function CheckList({ items }: { items: string[] }) {
     <ul className="space-y-2.5">
       {items.map((item, i) => (
         <li key={i} className="flex items-start gap-2.5">
-          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-mint/10 text-mint">
             <svg viewBox="0 0 20 20" fill="currentColor" className="h-3.5 w-3.5">
               <path
                 fillRule="evenodd"
@@ -87,7 +87,7 @@ function NumberedList({ items }: { items: string[] }) {
     <ol className="space-y-2.5">
       {items.map((item, i) => (
         <li key={i} className="flex items-start gap-2.5">
-          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-600 text-[11px] font-bold text-white">
+          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-royal text-[11px] font-bold text-white">
             {i + 1}
           </span>
           <Markdown content={item} compact />
@@ -102,7 +102,7 @@ function BulletList({ items }: { items: string[] }) {
     <ul className="space-y-2.5">
       {items.map((item, i) => (
         <li key={i} className="flex items-start gap-2.5">
-          <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-400" />
+          <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-line" />
           <Markdown content={item} compact />
         </li>
       ))}
@@ -195,20 +195,20 @@ export default function LegalResponseCard({ response }: { response: LegalRespons
             href={rawUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center gap-2.5 rounded-xl border border-blue-200 bg-blue-50/60 px-4 py-3 text-sm font-medium text-blue-700 transition-colors hover:bg-blue-100/70 hover:underline"
+            className="group flex items-center gap-2.5 rounded-xl border border-line bg-soft px-4 py-3 text-sm font-medium text-royal transition-colors hover:bg-line hover:underline"
           >
-            <Globe size={16} className="shrink-0 text-blue-600" />
+            <Globe size={16} className="shrink-0 text-royal" />
             <span className="break-all underline-offset-2">{rawUrl}</span>
             <span
               aria-hidden
-              className="ml-auto text-blue-500 opacity-0 transition-opacity group-hover:opacity-100"
+              className="ml-auto text-royal opacity-0 transition-opacity group-hover:opacity-100"
             >
               ↗
             </span>
           </a>
         ) : (
-          <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3.5 text-xs sm:text-sm leading-relaxed text-slate-600">
-            <p className="font-semibold text-slate-800">
+          <div className="rounded-xl border border-line bg-slate-50/80 p-3.5 text-xs leading-relaxed text-bodytext sm:text-sm">
+            <p className="font-semibold text-navy-text">
               No verified official government webpage was found for this specific topic.
             </p>
             <p className="mt-1">
@@ -217,7 +217,7 @@ export default function LegalResponseCard({ response }: { response: LegalRespons
                 href="https://www.indiacode.nic.in"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium text-blue-600 underline hover:text-blue-700"
+                className="font-medium text-royal underline hover:text-bright"
               >
                 https://www.indiacode.nic.in
               </a>{' '}
@@ -242,11 +242,11 @@ export default function LegalResponseCard({ response }: { response: LegalRespons
       )}
 
       {typeof response.confidence_score === 'number' && (
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-3 dark:border-slate-800">
           <div className="flex flex-wrap items-center gap-2">
             <Link
               href={`/navigator?q=${encodeURIComponent(response.summary || '')}`}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-3.5 py-1.5 text-xs font-bold text-blue-600 transition-colors hover:bg-blue-100 dark:bg-blue-950 dark:text-blue-300"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-soft px-3.5 py-1.5 text-xs font-bold text-royal transition-colors hover:bg-line dark:bg-slate-800 dark:text-blue-300"
             >
               <Sparkles size={14} />
               <span>Analyze in Case Navigator</span>
@@ -254,7 +254,7 @@ export default function LegalResponseCard({ response }: { response: LegalRespons
             <button
               onClick={handleSpeak}
               className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
-                speaking ? 'bg-amber-100 text-amber-800 animate-pulse' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'
+                speaking ? 'bg-amber-100 text-amber-800 animate-pulse' : 'bg-soft text-navy-text hover:bg-line dark:bg-slate-800 dark:text-slate-300'
               }`}
             >
               <Volume2 size={14} />
@@ -262,13 +262,13 @@ export default function LegalResponseCard({ response }: { response: LegalRespons
             </button>
             <button
               onClick={handleCopyText}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 transition"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-soft px-3 py-1.5 text-xs font-semibold text-navy-text hover:bg-line dark:bg-slate-800 dark:text-slate-300 transition"
             >
               {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
               <span>{copied ? 'Copied!' : 'Copy Summary'}</span>
             </button>
           </div>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-soft px-3 py-1 text-xs font-medium text-bodytext dark:bg-slate-800 dark:text-slate-400">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
             Confidence {confidence}%
           </span>

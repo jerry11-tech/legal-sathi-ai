@@ -67,7 +67,7 @@ interface SmartSuggestionsProps {
 export default function SmartSuggestions({ onSelect, className = '' }: SmartSuggestionsProps) {
   return (
     <div className={`space-y-2 ${className}`}>
-      <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+      <p className="text-xs font-semibold uppercase tracking-wider text-bodytext">
         Suggested Legal Topics
       </p>
       <div className="flex flex-wrap gap-2">
@@ -76,7 +76,7 @@ export default function SmartSuggestions({ onSelect, className = '' }: SmartSugg
             key={idx}
             type="button"
             onClick={() => onSelect(s.query)}
-            className="group flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 shadow-sm transition hover:border-blue-300 hover:bg-blue-50/70 hover:text-blue-700 active:scale-95"
+            className="group flex items-center gap-1.5 rounded-full border border-line bg-white px-3 py-1.5 text-xs font-medium text-navy-text shadow-sm transition hover:border-royal/40 hover:bg-soft hover:text-royal active:scale-95 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"
           >
             <span className="text-sm">{s.icon}</span>
             <span>{s.label}</span>

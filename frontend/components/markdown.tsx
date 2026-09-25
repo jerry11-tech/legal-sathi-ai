@@ -17,7 +17,7 @@ function ExternalLink({
       href={safe}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-blue-600 underline underline-offset-2 decoration-blue-400/60 hover:text-blue-700 hover:decoration-blue-600 break-all transition-colors"
+      className="text-royal underline underline-offset-2 decoration-royal/40 hover:text-bright hover:decoration-bright break-all transition-colors"
       {...rest}
     >
       {children}
@@ -28,60 +28,60 @@ function ExternalLink({
 const components: Components = {
   a: ExternalLink,
   h1: ({ children }) => (
-    <h1 className="mt-6 mb-3 text-2xl font-bold leading-tight text-slate-900 first:mt-0">
+    <h1 className="mt-6 mb-3 text-2xl font-bold leading-tight text-navy-text first:mt-0 dark:text-white">
       {children}
     </h1>
   ),
   h2: ({ children }) => (
-    <h2 className="mt-6 mb-3 text-xl font-bold leading-tight text-slate-900 first:mt-0">
+    <h2 className="mt-6 mb-3 text-xl font-bold leading-tight text-navy-text first:mt-0 dark:text-white">
       {children}
     </h2>
   ),
   h3: ({ children }) => (
-    <h3 className="mt-5 mb-2 text-lg font-semibold leading-snug text-slate-900 first:mt-0">
+    <h3 className="mt-5 mb-2 text-lg font-semibold leading-snug text-navy-text first:mt-0 dark:text-white">
       {children}
     </h3>
   ),
   h4: ({ children }) => (
-    <h4 className="mt-4 mb-2 text-base font-semibold leading-snug text-slate-900 first:mt-0">
+    <h4 className="mt-4 mb-2 text-base font-semibold leading-snug text-navy-text first:mt-0 dark:text-white">
       {children}
     </h4>
   ),
   p: ({ children }) => (
-    <p className="my-3 leading-7 text-slate-700 first:mt-0 last:mb-0">{children}</p>
+    <p className="my-3 leading-7 text-bodytext first:mt-0 last:mb-0 dark:text-slate-300">{children}</p>
   ),
   strong: ({ children }) => (
-    <strong className="font-semibold text-slate-900">{children}</strong>
+    <strong className="font-semibold text-navy-text dark:text-white">{children}</strong>
   ),
-  em: ({ children }) => <em className="italic text-slate-700">{children}</em>,
+  em: ({ children }) => <em className="italic text-bodytext dark:text-slate-300">{children}</em>,
   ul: ({ children }) => (
-    <ul className="my-3 space-y-2 list-disc pl-5 marker:text-blue-500">{children}</ul>
+    <ul className="my-3 space-y-2 list-disc pl-5 marker:text-royal">{children}</ul>
   ),
   ol: ({ children }) => (
-    <ol className="my-3 space-y-2 list-decimal pl-5 marker:font-semibold marker:text-blue-600">
+    <ol className="my-3 space-y-2 list-decimal pl-5 marker:font-semibold marker:text-royal">
       {children}
     </ol>
   ),
   li: ({ children }) => (
-    <li className="leading-relaxed text-slate-700 pl-1">{children}</li>
+    <li className="leading-relaxed text-bodytext pl-1 dark:text-slate-300">{children}</li>
   ),
   blockquote: ({ children }) => (
-    <blockquote className="my-4 border-l-4 border-blue-300 bg-blue-50/70 rounded-r-lg px-4 py-3 text-slate-700 italic">
+    <blockquote className="my-4 border-l-4 border-royal/40 bg-soft rounded-r-lg px-4 py-3 text-navy-text italic dark:bg-slate-800/60 dark:text-slate-300">
       {children}
     </blockquote>
   ),
-  hr: () => <hr className="my-6 border-slate-200" />,
+  hr: () => <hr className="my-6 border-line dark:border-slate-800" />,
   code: ({ className, children }) => {
     const isBlock = Boolean(className && className.includes('language-'));
     if (isBlock) {
       return (
-        <code className="block bg-slate-900 text-slate-100 rounded-lg px-4 py-3 text-sm leading-6 overflow-x-auto">
+        <code className="block bg-navy-deeper text-slate-100 rounded-lg px-4 py-3 text-sm leading-6 overflow-x-auto">
           {children}
         </code>
       );
     }
     return (
-      <code className="bg-slate-100 text-blue-700 rounded px-1.5 py-0.5 text-[0.85em] font-mono">
+      <code className="bg-soft text-royal rounded px-1.5 py-0.5 text-[0.85em] font-mono">
         {children}
       </code>
     );
@@ -90,18 +90,18 @@ const components: Components = {
     <pre className="my-4 overflow-hidden rounded-lg">{children}</pre>
   ),
   table: ({ children }) => (
-    <div className="my-4 overflow-x-auto rounded-lg border border-slate-200">
-      <table className="min-w-full divide-y divide-slate-200 text-sm">{children}</table>
+    <div className="my-4 overflow-x-auto rounded-lg border border-line">
+      <table className="min-w-full divide-y divide-line text-sm">{children}</table>
     </div>
   ),
-  thead: ({ children }) => <thead className="bg-slate-50">{children}</thead>,
+  thead: ({ children }) => <thead className="bg-soft">{children}</thead>,
   th: ({ children }) => (
-    <th className="px-4 py-2.5 text-left font-semibold text-slate-900 whitespace-nowrap">
+    <th className="px-4 py-2.5 text-left font-semibold text-navy-text whitespace-nowrap">
       {children}
     </th>
   ),
   td: ({ children }) => (
-    <td className="px-4 py-2.5 text-slate-700 align-top border-t border-slate-100">
+    <td className="px-4 py-2.5 text-bodytext align-top border-t border-line">
       {children}
     </td>
   ),
@@ -110,13 +110,13 @@ const components: Components = {
 const compactComponents: Components = {
   ...components,
   p: ({ children }) => (
-    <span className="leading-relaxed text-slate-700">{children}</span>
+    <span className="leading-relaxed text-bodytext dark:text-slate-300">{children}</span>
   ),
   ul: ({ children }) => (
-    <ul className="my-1 space-y-1 list-disc pl-5 marker:text-blue-500">{children}</ul>
+    <ul className="my-1 space-y-1 list-disc pl-5 marker:text-royal">{children}</ul>
   ),
   ol: ({ children }) => (
-    <ol className="my-1 space-y-1 list-decimal pl-5 marker:font-semibold marker:text-blue-600">
+    <ol className="my-1 space-y-1 list-decimal pl-5 marker:font-semibold marker:text-royal">
       {children}
     </ol>
   ),
@@ -130,7 +130,7 @@ export default function Markdown({
   compact?: boolean;
 }) {
   return (
-    <div className={compact ? '' : 'prose prose-slate max-w-none'}>
+    <div className={compact ? '' : 'prose prose-slate max-w-none dark:prose-invert'}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkBreaks]}
         components={compact ? compactComponents : components}

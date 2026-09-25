@@ -103,9 +103,13 @@ export default function ChatPage() {
     }
 
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('legalsathi_token') : null;
       const res = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({ query: userMsg.content, language: 'en' }),
       });
 
@@ -141,14 +145,14 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] bg-slate-50 dark:bg-slate-950 overflow-hidden">
-      {/* Left Chat History Panel (ChatGPT Style) */}
-      <aside className="hidden lg:flex w-72 flex-col border-r border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900 p-4 space-y-4">
+    <div className="flex h-[calc(100vh-4rem)] overflow-hidden bg-slate-50 dark:bg-navy-deeper">
+      {/* Left Chat History Panel */}
+      <aside className="hidden w-72 flex-col space-y-4 border-r border-line bg-white p-4 dark:border-slate-800 dark:bg-[#0B1331] lg:flex">
         <button
           onClick={() => {
             setMessages([{ role: 'assistant', content: WELCOME }]);
           }}
-          className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-blue-700 transition"
+          className="flex items-center justify-center gap-2 rounded-xl bg-royal px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-bright"
         >
           <Plus size={16} />
           <span>New Chat Session</span>
@@ -156,7 +160,7 @@ export default function ChatPage() {
 
         <div className="flex-1 space-y-4 overflow-y-auto pr-1">
           <div>
-            <div className="flex items-center gap-1.5 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+            <div className="mb-2 flex items-center gap-1.5 px-2 text-[10px] font-bold uppercase tracking-wider text-bodytext">
               <Pin size={12} /> Pinned Consultations
             </div>
             <div className="space-y-1">
@@ -164,7 +168,7 @@ export default function ChatPage() {
                 <button
                   key={i}
                   onClick={() => handleSend(chat)}
-                  className="w-full text-left truncate rounded-xl px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition"
+                  className="w-full truncate rounded-xl px-3 py-2 text-left text-xs font-medium text-navy-text transition hover:bg-soft dark:text-slate-300 dark:hover:bg-slate-800"
                 >
                   {chat}
                 </button>
@@ -173,7 +177,7 @@ export default function ChatPage() {
           </div>
 
           <div>
-            <div className="flex items-center gap-1.5 px-2 text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+            <div className="mb-2 flex items-center gap-1.5 px-2 text-[10px] font-bold uppercase tracking-wider text-bodytext">
               <History size={12} /> Recent History
             </div>
             <div className="space-y-1">
@@ -182,7 +186,7 @@ export default function ChatPage() {
                   <button
                     key={idx}
                     onClick={() => handleSend(item)}
-                    className="w-full text-left truncate rounded-xl px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 transition"
+                    className="w-full truncate rounded-xl px-3 py-2 text-left text-xs font-medium text-bodytext transition hover:bg-soft dark:text-slate-400 dark:hover:bg-slate-800"
                   >
                     {item}
                   </button>
@@ -192,10 +196,10 @@ export default function ChatPage() {
           </div>
         </div>
 
-        <div className="border-t border-slate-100 dark:border-slate-800 pt-3">
+        <div className="border-t border-line pt-3 dark:border-slate-800">
           <button
             onClick={handleExportChat}
-            className="w-full flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 transition"
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-line bg-soft py-2 text-xs font-semibold text-navy-text transition hover:bg-line dark:border-slate-800 dark:bg-slate-800 dark:text-slate-300"
           >
             <Download size={14} /> Export Chat (TXT)
           </button>
@@ -205,26 +209,26 @@ export default function ChatPage() {
       {/* Main Chat Workspace */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top Header */}
-        <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-slate-200/80 bg-white/90 backdrop-blur-md px-4 sm:px-6 dark:border-slate-800 dark:bg-slate-900/90">
+        <header className="sticky top-[68px] z-20 flex h-14 items-center justify-between border-b border-line bg-white/95 px-4 backdrop-blur sm:px-6 dark:border-slate-800 dark:bg-[#0B1331]/90">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-600 text-white shadow-xs">
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-royal text-white shadow-xs">
               <Scale size={16} />
             </span>
             <div>
-              <h1 className="text-sm font-bold text-slate-900 dark:text-white">LegalSathi AI Consultation</h1>
-              <p className="text-[10px] text-slate-500 font-medium">Enterprise Indian Legal Intelligence</p>
+              <h1 className="text-sm font-bold text-navy-text dark:text-white">LegalSathi AI Consultation</h1>
+              <p className="text-[10px] font-medium text-bodytext">Enterprise Indian Legal Intelligence</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={handleExportChat}
-              className="flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+              className="flex items-center gap-1.5 rounded-xl border border-line px-3 py-1.5 text-xs font-semibold text-navy-text transition hover:bg-soft dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800"
             >
               <Download size={13} /> Export
             </button>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-950 dark:text-emerald-300">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
               Online
             </span>
           </div>
@@ -232,12 +236,12 @@ export default function ChatPage() {
 
         {/* Conversation Feed */}
         <div className="flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-6xl w-full space-y-5 px-3 py-5 sm:px-6 sm:py-6">
+          <div className="mx-auto w-full max-w-6xl space-y-5 px-3 py-5 sm:px-6 sm:py-6">
             {messages.map((msg, idx) => {
               if (msg.role === 'user') {
                 return (
                   <div key={idx} className="flex justify-end">
-                    <div className="max-w-[85%] sm:max-w-[75%] rounded-2xl rounded-br-md bg-blue-600 px-4 py-3 text-sm leading-relaxed text-white shadow-md shadow-blue-600/20">
+                    <div className="max-w-[85%] rounded-2xl rounded-br-md bg-royal px-4 py-3 text-sm leading-relaxed text-white shadow-md shadow-royal/20 sm:max-w-[75%]">
                       {msg.content}
                     </div>
                   </div>
@@ -247,7 +251,7 @@ export default function ChatPage() {
               if (msg.role === 'error') {
                 return (
                   <div key={idx} className="flex justify-start">
-                    <div className="max-w-[95%] sm:max-w-[90%] rounded-2xl rounded-bl-md border border-red-200 bg-red-50 dark:border-red-900/50 dark:bg-red-950 px-4 py-3.5 text-sm text-red-800 dark:text-red-300 shadow-xs">
+                    <div className="max-w-[95%] rounded-2xl rounded-bl-md border border-red-200 bg-red-50 px-4 py-3.5 text-sm text-red-800 shadow-xs dark:border-red-900/50 dark:bg-red-950 dark:text-red-300 sm:max-w-[90%]">
                       {msg.content}
                     </div>
                   </div>
@@ -256,7 +260,7 @@ export default function ChatPage() {
 
               return (
                 <div key={idx} className="flex justify-start">
-                  <div className="max-w-[95%] sm:max-w-[90%] w-full rounded-2xl rounded-bl-md border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900 px-4 py-4 sm:px-5 sm:py-5 shadow-sm">
+                  <div className="w-full max-w-[95%] rounded-2xl rounded-bl-md border border-line bg-white px-4 py-4 shadow-sm sm:max-w-[90%] sm:px-5 sm:py-5 dark:border-slate-800 dark:bg-[#0B1331]">
                     {msg.response ? (
                       <LegalResponseCard response={msg.response} />
                     ) : (
@@ -269,8 +273,8 @@ export default function ChatPage() {
 
             {loading && (
               <div className="flex justify-start">
-                <div className="inline-flex items-center gap-2.5 rounded-2xl rounded-bl-md border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3.5 text-sm text-slate-500 shadow-sm">
-                  <Loader2 size={16} className="animate-spin text-blue-600" />
+                <div className="inline-flex items-center gap-2.5 rounded-2xl rounded-bl-md border border-line bg-white px-4 py-3.5 text-sm text-bodytext shadow-sm dark:border-slate-800 dark:bg-[#0B1331]">
+                  <Loader2 size={16} className="animate-spin text-royal" />
                   Analyzing query against Indian legal database...
                 </div>
               </div>
@@ -281,18 +285,18 @@ export default function ChatPage() {
         </div>
 
         {/* Sticky Bottom Input Bar */}
-        <div className="sticky bottom-0 border-t border-slate-200/80 bg-white/95 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/95">
-          <div className="mx-auto max-w-6xl w-full px-3 py-3 sm:px-6 sm:py-4 space-y-2.5">
+        <div className="sticky bottom-0 border-t border-line bg-white/95 backdrop-blur dark:border-slate-800 dark:bg-[#0B1331]/95">
+          <div className="mx-auto w-full max-w-6xl space-y-2.5 px-3 py-3 sm:px-6 sm:py-4">
             {/* Guest Progress Counter */}
             {!isLoggedIn && (
-              <div className="flex items-center justify-between text-xs px-1 text-slate-500 font-semibold">
+              <div className="flex items-center justify-between px-1 text-xs font-semibold text-bodytext">
                 <span className="flex items-center gap-2">
-                  <span className="text-slate-600 dark:text-slate-400">Guest Limit:</span>
-                  <span className="tracking-widest font-mono text-blue-600 font-bold text-sm">
+                  <span className="text-bodytext dark:text-slate-400">Guest Limit:</span>
+                  <span className="font-mono text-sm font-bold tracking-widest text-royal">
                     {'●'.repeat(Math.min(guestCount, 5))}{'○'.repeat(Math.max(0, 5 - guestCount))}
                   </span>
                 </span>
-                <span className="text-slate-600 dark:text-slate-400 font-bold">
+                <span className="font-bold text-bodytext dark:text-slate-400">
                   {guestCount >= 5 ? '0 of 5 free chats remaining' : `${5 - guestCount} of 5 free chats remaining`}
                 </span>
               </div>
@@ -313,12 +317,12 @@ export default function ChatPage() {
                 e.preventDefault();
                 handleSend();
               }}
-              className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-2 focus-within:border-blue-500 focus-within:bg-white dark:border-slate-800 dark:bg-slate-850 dark:focus-within:bg-slate-900 shadow-xs transition"
+              className="flex items-center gap-2 rounded-2xl border border-line bg-slate-50 p-2 shadow-xs transition focus-within:border-royal focus-within:bg-white dark:border-slate-800 dark:bg-slate-900 dark:focus-within:bg-[#0B1331]"
             >
               <button
                 type="button"
                 onClick={() => alert('Voice input activated. Speak your query...')}
-                className="rounded-xl p-2 text-slate-400 hover:bg-slate-200/70 hover:text-slate-700 dark:hover:bg-slate-800 transition"
+                className="rounded-xl p-2 text-bodytext transition hover:bg-soft hover:text-navy-text dark:text-slate-500 dark:hover:bg-slate-800"
                 title="Voice Input"
               >
                 <Mic size={18} />
@@ -331,19 +335,19 @@ export default function ChatPage() {
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Ask any legal question (e.g., Landlord deposit dispute, POSH complaint, FIR rights)..."
                 disabled={loading}
-                className="flex-1 bg-transparent px-2 text-xs sm:text-sm outline-none placeholder:text-slate-400 text-slate-900 dark:text-white"
+                className="flex-1 bg-transparent px-2 text-xs text-navy-text outline-none placeholder:text-bodytext/70 sm:text-sm dark:text-white"
               />
 
               <button
                 type="submit"
                 disabled={loading || !query.trim()}
-                className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white transition hover:bg-blue-700 disabled:opacity-40 disabled:hover:bg-blue-600"
+                className="flex h-9 w-9 items-center justify-center rounded-xl bg-royal text-white transition hover:bg-bright disabled:opacity-40 disabled:hover:bg-royal"
               >
                 {loading ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
               </button>
             </form>
 
-            <p className="text-center text-[10px] text-slate-400 dark:text-slate-500">
+            <p className="text-center text-[10px] text-bodytext dark:text-slate-500">
               LegalSathi AI provides general legal information. For official legal representation, consult a licensed advocate.
             </p>
           </div>

@@ -1,0 +1,40 @@
+import { NextRequest, NextResponse } from 'next/server';
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const targetBackend = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+
+    try {
+      const backendRes = await fetch(`${targetBackend.replace(/\/$/, '')}/api/auth/admin/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Bypass-Tunnel-Remainder': 'true',
+        },
+        body: JSON.stringify(body),
+      });
+
+      const backendData = await backendRes.json();
+
+      if (backendRes.ok) {
+        return NextResponse.json(backendData);
+      } else {
+        return NextResponse.json(
+          { detail: backendData.detail || 'Admin authentication failed' },
+          { status: backendRes.status }
+        );
+      }
+    } catch {
+      return NextResponse.json(
+        { detail: 'Admin authentication service is temporarily unavailable. Please try again later.' },
+        { status: 503 }
+      );
+    }
+  } catch (error) {
+    return NextResponse.json(
+      { detail: (error as Error).message || 'Failed to authenticate administrator' },
+      { status: 500 }
+    );
+  }
+}

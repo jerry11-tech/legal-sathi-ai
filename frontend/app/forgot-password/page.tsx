@@ -35,17 +35,17 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xl space-y-6">
-        <div className="text-center space-y-2">
+    <div className="flex min-h-screen items-center justify-center bg-slate-50 p-4 dark:bg-navy-deeper">
+      <div className="w-full max-w-md space-y-6 rounded-3xl border border-line bg-white p-6 shadow-panel sm:p-8 dark:border-slate-800 dark:bg-[#0B1331]">
+        <div className="space-y-2 text-center">
           <Link href="/" className="inline-flex items-center gap-2 group">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-600/30">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-navy text-white shadow-soft">
               <Shield size={18} />
             </span>
-            <span className="font-bold text-xl text-slate-900">LegalSathi AI</span>
+            <span className="text-xl font-bold text-navy-text dark:text-white">LegalSathi AI</span>
           </Link>
-          <h2 className="text-xl font-extrabold text-slate-900">Reset Your Password</h2>
-          <p className="text-xs text-slate-500">
+          <h2 className="text-xl font-extrabold text-navy-text dark:text-white">Reset Your Password</h2>
+          <p className="text-xs text-bodytext dark:text-slate-400">
             Enter your account email to receive a password reset link (expires in 30 mins).
           </p>
         </div>
@@ -68,7 +68,7 @@ export default function ForgotPasswordPage() {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Email Address</label>
+              <label className="mb-1 block text-xs font-bold text-navy-text dark:text-slate-300">Email Address</label>
               <div className="relative">
                 <input
                   type="email"
@@ -76,16 +76,16 @@ export default function ForgotPasswordPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 pl-9 text-xs text-slate-900 outline-none focus:border-blue-500 focus:bg-white"
+                  className="w-full rounded-xl border border-line bg-slate-50 px-3.5 py-2.5 pl-9 text-xs text-navy-text outline-none transition focus:border-royal focus:bg-white dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:focus:bg-[#0B1331]"
                 />
-                <Mail size={16} className="absolute left-3 top-2.5 text-slate-400" />
+                <Mail size={16} className="absolute left-3 top-2.5 text-bodytext/70" />
               </div>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-xs font-bold text-white shadow-md hover:bg-blue-700 disabled:opacity-50 transition"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-royal py-3 text-xs font-bold text-white shadow-md transition hover:bg-bright disabled:opacity-50"
             >
               {loading ? <Loader2 size={16} className="animate-spin" /> : null}
               Send Reset Link
@@ -93,8 +93,8 @@ export default function ForgotPasswordPage() {
           </form>
         )}
 
-        <div className="text-center text-xs text-slate-500 border-t border-slate-100 pt-3">
-          <Link href="/login" className="font-semibold text-blue-600 hover:underline">
+        <div className="border-t border-line pt-3 text-center text-xs text-bodytext dark:border-slate-800">
+          <Link href="/login" className="font-semibold text-royal hover:underline">
             Back to Login
           </Link>
         </div>

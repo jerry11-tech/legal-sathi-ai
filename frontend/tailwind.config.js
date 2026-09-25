@@ -16,6 +16,9 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["Inter", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -50,6 +53,30 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // LegalSathi brand palette
+        navy: {
+          DEFAULT: "#0B2E6F",
+          dark: "#082654",
+          deeper: "#061D3F",
+          text: "#102A56",
+        },
+        royal: {
+          DEFAULT: "#1554B7",
+          dark: "#11479e",
+        },
+        bright: "#2563EB",
+        soft: "#EEF6FF",
+        hero: "#F5F9FF",
+        bodytext: "#526784",
+        line: "#DCE7F5",
+        mint: "#16A085",
+        accentpurple: "#635BDB",
+      },
+      boxShadow: {
+        soft: "0 1px 2px rgba(16, 42, 86, 0.04), 0 2px 8px rgba(16, 42, 86, 0.06)",
+        card: "0 1px 3px rgba(16, 42, 86, 0.05), 0 8px 24px -12px rgba(21, 84, 183, 0.14)",
+        navy: "0 10px 30px -12px rgba(11, 46, 111, 0.30)",
+        panel: "0 1px 2px rgba(16, 42, 86, 0.05), 0 16px 40px -24px rgba(11, 46, 111, 0.35)",
       },
       borderRadius: {
         lg: "var(--radius)",
