@@ -80,6 +80,12 @@ def send_otp(req: SendOtpRequest, db: Session = Depends(get_db)):
     _validate_phone(phone)
     now = datetime.utcnow()
 
+    # A phone number can only be used for one account
+    if req.purpose == "register":
+        existing_user = db.query(User).filter(User.phone == phone).first()
+        if existing_user:
+            raise HTTPException(status_code=400, detail="An account already exists with this mobile number")
+
     existing = (
         db.query(PhoneOtp)
         .filter(PhoneOtp.phone == phone)
@@ -89,12 +95,6 @@ def send_otp(req: SendOtpRequest, db: Session = Depends(get_db)):
     if existing and existing.resend_at and now < existing.resend_at:
         wait_secs = int((existing.resend_at - now).total_seconds()) + 1
         raise HTTPException(status_code=429, detail=f"Please wait {wait_secs} seconds before requesting a new OTP")
-
-    # A phone number can only be used for one account
-    if req.purpose == "register":
-        existing_user = db.query(User).filter(User.phone == phone).first()
-        if existing_user:
-            raise HTTPException(status_code=400, detail="An account already exists with this mobile number")
 
     code = generate_otp()
     for old in db.query(PhoneOtp).filter(PhoneOtp.phone == phone).all():
