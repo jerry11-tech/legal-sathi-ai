@@ -6,11 +6,11 @@
 ---
 
 Student Name: **Dhiraj Nimje**  
-Class: **[To be provided]**  
+Class: **MCA**  
 Enrollment Number: **[To be provided]**
 Guide: **[To be provided]**
 University / Institution: **[To be provided]**
-Academic Year / Semester: **[To be provided]**
+Academic Year / Semester: **2026–27 (Final Year)**
 
 ---
 
@@ -200,10 +200,11 @@ Legalsathi AI demonstrates how modern generative AI can be applied to a pressing
 
 ## Placeholders to Complete before Submission
 
-- Student name / enrollment number: **[To be provided]**
+- Student Name: **Dhiraj Nimje**
+- Project Type: **Final Year Project (MCA)**
+- Academic Year / Semester: **2026–27**
+- Enrollment Number: **[To be provided]**
 - University / Institution: **[To be provided]**
 - Project guide: **[To be provided]**
-- Academic year / semester: **[To be provided]**
-- Project type (Mini/Major/Final Year): **[To be provided]**
 - Dataset annexure details (if the guide requires explicit dataset documentation): **[To be provided]**
 - References formatted per the institution's citation standard: **[To be provided]**
