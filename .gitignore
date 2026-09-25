@@ -39,3 +39,5 @@ Thumbs.db
 .idea/
 LegalSathi-AI/
 *.log
+
+.vercel
