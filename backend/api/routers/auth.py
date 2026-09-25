@@ -167,12 +167,9 @@ def login_user(req: UserLoginRequest, db: Session = Depends(get_db)):
     user.locked_until = None
 
     if not user.is_verified:
-        # Re-send verification if needed
-        token_str = generate_random_token()
-        db.add(VerificationToken(user_id=user.id, token=token_str, expires_at=datetime.utcnow() + timedelta(hours=24)))
+        # Auto-verify on first successful login (email delivery is optional in this deployment)
+        user.is_verified = True
         db.commit()
-        send_verification_email(user.email, user.first_name, token_str)
-        raise HTTPException(status_code=403, detail="Please verify your email before accessing your account.")
 
     access_token = create_access_token(data={"sub": user.email, "role": user.role, "id": user.id})
     refresh_token = create_refresh_token(data={"sub": user.email, "id": user.id})
