@@ -1,0 +1,37 @@
+{
+  "examples": 1765,
+  "categories": {
+    "citation_drill": 392,
+    "concept_distinction": 150,
+    "followup_dialogue": 150,
+    "hindi_basic": 6,
+    "legal_aid_navigation": 1,
+    "procedure_hint": 120,
+    "refusal_out_of_scope": 6,
+    "rights_explainer": 17,
+    "safety_disclaimer": 4,
+    "source_transparency": 2,
+    "statute_qa": 917
+  },
+  "synthetic_flagged_for_review": 169,
+  "deterministic": 1596,
+  "splits": {
+    "train": 1578,
+    "val": 95,
+    "test": 92
+  },
+  "validation": {
+    "examples": 1765,
+    "unique_ids": 1765,
+    "error_count": 0,
+    "errors": [],
+    "valid": true
+  },
+  "citation_check": {
+    "cited_ids_checked": 1968,
+    "missing_citations": 0,
+    "missing_sample": [],
+    "valid": true
+  },
+  "format": "openai messages JSONL; apply Qwen3 chat template at train time"
+}

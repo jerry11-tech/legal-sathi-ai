@@ -16,14 +16,15 @@ export default function EmergencyHelpline() {
 
   return (
     <>
-      {/* Floating Emergency Button */}
+      {/* Sleek Emergency Button in Header / Toolbar */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+        className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs font-bold text-red-700 shadow-xs hover:bg-red-100 dark:border-red-900/50 dark:bg-red-950/40 dark:text-red-300 dark:hover:bg-red-950/80 transition"
         title="Emergency Legal Helplines"
       >
-        <PhoneCall size={18} className="animate-pulse" />
-        <span>Emergency Helplines</span>
+        <PhoneCall size={14} className="text-red-600 animate-pulse" />
+        <span className="hidden sm:inline">Emergency Helplines</span>
+        <span className="sm:hidden">Help</span>
       </button>
 
       {/* Emergency Modal */}
@@ -32,14 +33,14 @@ export default function EmergencyHelpline() {
           <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl dark:bg-slate-900 border border-red-200 dark:border-red-900/50">
             <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
-                <ShieldAlert size={24} />
-                <h3 className="text-lg font-bold">Emergency Legal Helplines</h3>
+                <ShieldAlert size={22} />
+                <h3 className="text-base font-bold">Emergency Legal Helplines</h3>
               </div>
               <button
                 onClick={() => setOpen(false)}
                 className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-200"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
 

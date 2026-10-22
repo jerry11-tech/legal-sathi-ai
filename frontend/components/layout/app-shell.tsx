@@ -281,6 +281,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               <kbd className="rounded bg-slate-200 px-1.5 py-0.5 text-[10px] font-mono dark:bg-slate-800">⌘K</kbd>
             </button>
 
+            {/* Emergency Helplines Button */}
+            <EmergencyHelpline />
+
             {/* Notification Bell */}
             <button className="relative rounded-xl border border-slate-200/80 p-2 text-slate-600 hover:bg-slate-100 dark:border-slate-800 dark:text-slate-400 dark:hover:bg-slate-800 transition">
               <Bell size={16} />
@@ -334,8 +337,6 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Command Palette Modal */}
       <CommandPalette isOpen={cmdOpen} onClose={() => setCmdOpen(false)} />
-      {/* Emergency Helplines Widget */}
-      <EmergencyHelpline />
     </div>
   );
 }

@@ -158,13 +158,32 @@ class RealRAGEngine:
         gov_url = f"https://indiacode.gov.in/handle/{handle}" if handle else "https://indiacode.gov.in"
 
         text = top_doc.get("text", "")
-        summary = text[:300] + ("..." if len(text) > 300 else "")
+        
+        # Try local Ollama LLM enhancement if running
+        enhanced_explanation = text
+        try:
+            import urllib.request
+            import json as json_lib
+            payload = json_lib.dumps({
+                "model": "qwen2.5",
+                "prompt": f"You are LegalSathi AI, an expert Indian legal assistant. Based on the statutory section below, provide a clear explanation for the user query: '{query}'\n\nStatute: {act_title} Section {sec_no} - {sec_title}\nText: {text}\n\nExplanation:",
+                "stream": False
+            }).encode('utf-8')
+            req = urllib.request.Request("http://localhost:11434/api/generate", data=payload, headers={'Content-Type': 'application/json'}, method='POST')
+            with urllib.request.urlopen(req, timeout=3.0) as resp:
+                res_data = json_lib.loads(resp.read().decode('utf-8'))
+                if "response" in res_data:
+                    enhanced_explanation = res_data["response"].strip()
+        except Exception:
+            pass # Fallback to raw statutory text if local LLM is offline
+
+        summary = enhanced_explanation[:300] + ("..." if len(enhanced_explanation) > 300 else "")
         confidence = min(0.95, 0.55 + 0.08 * top_score)
 
         return {
             "summary": f"Under section {sec_no} ({sec_title}) of the {act_title}: {summary}",
             "applicable_law": f"{act_title} - Section {sec_no}",
-            "explanation": text,
+            "explanation": enhanced_explanation,
             "rights": f"You are protected under the provisions of the {act_title}. See section {sec_no} for exact statutory scope.",
             "next_steps": f"Verify the provision on India Code ({gov_url}) and consult an advocate or District Legal Services Authority for your specific case.",
             "required_documents": "Relevant records, notices, or identity documents pertaining to the matter.",
