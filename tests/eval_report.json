@@ -1,0 +1,125 @@
+{
+  "evaluation_timestamp": "2026-10-22",
+  "dataset": "golden_dataset.json",
+  "cases_evaluated": 3,
+  "summary": {
+    "base_model": {
+      "mean_correctness": 0.0,
+      "mean_latency_sec": 0.0,
+      "citation_validity_rate": 1.0
+    },
+    "base_rag": {
+      "mean_correctness": 0.0,
+      "mean_latency_sec": 0.002,
+      "citation_validity_rate": 1.0
+    },
+    "tuned_model": {
+      "mean_correctness": 0.0,
+      "mean_latency_sec": 0.0,
+      "citation_validity_rate": 1.0
+    },
+    "tuned_rag": {
+      "mean_correctness": 0.0,
+      "mean_latency_sec": 0.003,
+      "citation_validity_rate": 1.0
+    }
+  },
+  "detailed_results": [
+    {
+      "case_id": "GOLD-001",
+      "mode": "base_model",
+      "latency_sec": 0.0,
+      "correctness": 0.0,
+      "citation_valid": true,
+      "answer_preview": "General response to: What is an FIR and under which act is it registered? (Base model)"
+    },
+    {
+      "case_id": "GOLD-002",
+      "mode": "base_model",
+      "latency_sec": 0.0,
+      "correctness": 0.0,
+      "citation_valid": true,
+      "answer_preview": "General response to: What is the penalty for cyber fraud and phishing under IT Act? (Base model)"
+    },
+    {
+      "case_id": "GOLD-003",
+      "mode": "base_model",
+      "latency_sec": 0.0,
+      "correctness": 0.0,
+      "citation_valid": true,
+      "answer_preview": "General response to: Landlord is refusing to return security deposit after notice period. (Base model)"
+    },
+    {
+      "case_id": "GOLD-001",
+      "mode": "base_rag",
+      "latency_sec": 0.003,
+      "correctness": 0.0,
+      "citation_valid": true,
+      "answer_preview": "15. Special provision regarding Copyright in designs registered or Capable of being registered under the 1*** 2[Designs Act, 2000 (16 of 2000)].--(1) Copyright shall not subsist un..."
+    },
+    {
+      "case_id": "GOLD-002",
+      "mode": "base_rag",
+      "latency_sec": 0.003,
+      "correctness": 0.0,
+      "citation_valid": true,
+      "answer_preview": "(1) The Central Government may, by notification, amend the Schedule, subject to the restriction that no such notification shall have the effect of increasing any penalty specified ..."
+    },
+    {
+      "case_id": "GOLD-003",
+      "mode": "base_rag",
+      "latency_sec": 0.001,
+      "correctness": 0.0,
+      "citation_valid": true,
+      "answer_preview": "(1) (a) If any person ordered to give security under section 125 or section 136 does not give such security on or before the date on which the period for which such security is to ..."
+    },
+    {
+      "case_id": "GOLD-001",
+      "mode": "tuned_model",
+      "latency_sec": 0.0,
+      "correctness": 0.0,
+      "citation_valid": true,
+      "answer_preview": "General response to: What is an FIR and under which act is it registered? (Base model)"
+    },
+    {
+      "case_id": "GOLD-002",
+      "mode": "tuned_model",
+      "latency_sec": 0.0,
+      "correctness": 0.0,
+      "citation_valid": true,
+      "answer_preview": "General response to: What is the penalty for cyber fraud and phishing under IT Act? (Base model)"
+    },
+    {
+      "case_id": "GOLD-003",
+      "mode": "tuned_model",
+      "latency_sec": 0.0,
+      "correctness": 0.0,
+      "citation_valid": true,
+      "answer_preview": "General response to: Landlord is refusing to return security deposit after notice period. (Base model)"
+    },
+    {
+      "case_id": "GOLD-001",
+      "mode": "tuned_rag",
+      "latency_sec": 0.003,
+      "correctness": 0.0,
+      "citation_valid": true,
+      "answer_preview": "15. Special provision regarding Copyright in designs registered or Capable of being registered under the 1*** 2[Designs Act, 2000 (16 of 2000)].--(1) Copyright shall not subsist un..."
+    },
+    {
+      "case_id": "GOLD-002",
+      "mode": "tuned_rag",
+      "latency_sec": 0.003,
+      "correctness": 0.0,
+      "citation_valid": true,
+      "answer_preview": "(1) The Central Government may, by notification, amend the Schedule, subject to the restriction that no such notification shall have the effect of increasing any penalty specified ..."
+    },
+    {
+      "case_id": "GOLD-003",
+      "mode": "tuned_rag",
+      "latency_sec": 0.002,
+      "correctness": 0.0,
+      "citation_valid": true,
+      "answer_preview": "(1) (a) If any person ordered to give security under section 125 or section 136 does not give such security on or before the date on which the period for which such security is to ..."
+    }
+  ]
+}
