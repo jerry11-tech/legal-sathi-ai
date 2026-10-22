@@ -60,6 +60,25 @@ def _cmd_stats(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_instruct(args: argparse.Namespace) -> int:
+    from .instruct import generate
+
+    report = generate(
+        corpus_path=Path(args.corpus),
+        out_dir=Path(args.out),
+        verbose=not args.quiet,
+    )
+    print(json.dumps({
+        "examples": report["examples"],
+        "categories": report["categories"],
+        "synthetic_flagged_for_review": report["synthetic_flagged_for_review"],
+        "splits": report["splits"],
+        "validation": report["validation"]["valid"],
+        "citation_check": report["citation_check"]["valid"],
+    }, indent=2))
+    return 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="python -m ml", description="LegalSathi dataset pipeline")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -80,6 +99,12 @@ def main(argv=None) -> int:
     p_stats = sub.add_parser("stats", help="summary stats for a sections.jsonl")
     p_stats.add_argument("--file", default=str(config.PROCESSED_DIR / "sections.jsonl"))
     p_stats.set_defaults(func=_cmd_stats)
+
+    p_instruct = sub.add_parser("instruct", help="build the instruction-tuning dataset")
+    p_instruct.add_argument("--corpus", default=str(config.PROCESSED_DIR / "sections.jsonl"))
+    p_instruct.add_argument("--out", default=str(config.PROCESSED_DIR / "instruct"))
+    p_instruct.add_argument("--quiet", action="store_true")
+    p_instruct.set_defaults(func=_cmd_instruct)
 
     args = parser.parse_args(argv)
     return args.func(args)
