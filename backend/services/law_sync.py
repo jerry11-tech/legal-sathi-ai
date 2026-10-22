@@ -72,6 +72,10 @@ def extract_rule_comparison(text_content: str) -> Dict[str, str]:
         "key_citizen_impact": impact,
     }
 
+# NOTE: These entries are unverified DRAFT placeholders (is_verified_source=False).
+# They must NOT be presented to users as confirmed gazette notifications until each
+# official_pdf_url and pdf_sha256 has been checked against the actual e-Gazette /
+# ministry publication. Never fabricate or auto-promote legal documents to "verified".
 INITIAL_VERIFIED_ANNOUNCEMENTS: List[Dict[str, Any]] = [
     {
         "id": 1,
@@ -82,7 +86,7 @@ INITIAL_VERIFIED_ANNOUNCEMENTS: List[Dict[str, Any]] = [
         "effective_date": "2026-02-01",
         "official_pdf_url": "https://egazette.gov.in/WriteReadData/2026/248912.pdf",
         "pdf_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-        "is_verified_source": True,
+        "is_verified_source": False,
         "act_affected": "Bharatiya Nagarik Suraksha Sanhita, 2023 (BNSS)",
         "summary_old_rule": "Under former CrPC Section 154, FIR registration required physical presence at jurisdictional police station.",
         "summary_new_rule": "Under BNSS Section 173, Zero FIR & e-FIR can be registered electronically at any police station regardless of jurisdiction.",
@@ -97,7 +101,7 @@ INITIAL_VERIFIED_ANNOUNCEMENTS: List[Dict[str, Any]] = [
         "effective_date": "2026-03-01",
         "official_pdf_url": "https://www.meity.gov.in/content/dpdp-act-2023-gazette-notification.pdf",
         "pdf_sha256": "811c9db51d02d334e022f4628e938927011d8d3f6687a41280327f300624e548",
-        "is_verified_source": True,
+        "is_verified_source": False,
         "act_affected": "Digital Personal Data Protection Act, 2023",
         "summary_old_rule": "Unregulated personal data collection without explicit consent mechanisms or mandatory data breach notifications.",
         "summary_new_rule": "Strict requirement for itemized consent in English and regional languages, mandatory 72-hour breach reporting, and right to erase personal data.",
@@ -112,7 +116,7 @@ INITIAL_VERIFIED_ANNOUNCEMENTS: List[Dict[str, Any]] = [
         "effective_date": "2026-02-15",
         "official_pdf_url": "https://mohua.gov.in/upload/uploadfiles/files/Model_Tenancy_Act_Gazette.pdf",
         "pdf_sha256": "9b12a21e428d0034a8e03e481109a63212879a022e38914619b0271389012489",
-        "is_verified_source": True,
+        "is_verified_source": False,
         "act_affected": "Model Tenancy Act, 2021 & State Rent Control Rules",
         "summary_old_rule": "Landlords frequently demanded 6 to 10 months security deposit with arbitrary delay in deposit refunds.",
         "summary_new_rule": "Security deposit capped at maximum 2 months for residential premises and 1 month for commercial premises. Mandatory deposit refund within 30 days of lease expiry.",
