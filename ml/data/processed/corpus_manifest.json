@@ -1,0 +1,231 @@
+{
+  "generated_at": "2026-10-22T05:27:14+00:00",
+  "manifest": "corpus_manifest.json",
+  "manifest_version": "1.0",
+  "source": "indiacode.gov.in (DSpace 9.1 REST API)",
+  "acts_requested": 17,
+  "acts_fetched": 17,
+  "fetch_errors": [],
+  "per_act": {
+    "bns_2023": {
+      "title": "The Bharatiya Nyaya Sanhita, 2023",
+      "act_id": "AC_CEN_5_23_00048_2023-45_1719292564123",
+      "sections_fetched": 358,
+      "sections_with_text": 358,
+      "sections_dropped_empty": 0,
+      "chunks": 380,
+      "retrieved_at": "2026-10-22T05:02:03+00:00",
+      "act_number": "45",
+      "enforced_on": "1-7-2024"
+    },
+    "bnss_2023": {
+      "title": "The Bharatiya Nagarik Suraksha Sanhita, 2023",
+      "act_id": "AC_CEN_5_23_00049_202346_1719552320687",
+      "sections_fetched": 531,
+      "sections_with_text": 531,
+      "sections_dropped_empty": 0,
+      "chunks": 549,
+      "retrieved_at": "2026-10-22T05:09:00+00:00",
+      "act_number": "46",
+      "enforced_on": "01-07-2024"
+    },
+    "bsa_2023": {
+      "title": "The Bharatiya Sakshya Adhiniyam, 2023",
+      "act_id": "AC_CEN_5_23_00049_2023-47_1719292804654",
+      "sections_fetched": 170,
+      "sections_with_text": 170,
+      "sections_dropped_empty": 0,
+      "chunks": 179,
+      "retrieved_at": "2026-10-22T05:09:52+00:00",
+      "act_number": "47",
+      "enforced_on": "1-7-2024"
+    },
+    "cpc_1908": {
+      "title": "The Code of Civil Procedure, 1908",
+      "act_id": "AC_CEN_3_20_00051_190805_1523340333624",
+      "sections_fetched": 171,
+      "sections_with_text": 171,
+      "sections_dropped_empty": 0,
+      "chunks": 183,
+      "retrieved_at": "2026-10-22T05:12:15+00:00",
+      "act_number": "5",
+      "enforced_on": "1909-01-01"
+    },
+    "contract_1872": {
+      "title": "The Indian Contract Act, 1872",
+      "act_id": "AC_CEN_3_20_00035_187209_1523268996428",
+      "sections_fetched": 268,
+      "sections_with_text": 268,
+      "sections_dropped_empty": 0,
+      "chunks": 268,
+      "retrieved_at": "2026-10-22T05:12:34+00:00",
+      "act_number": "9",
+      "enforced_on": "1872-09-01"
+    },
+    "pvdva_2005": {
+      "title": "The Protection of Women from Domestic Violence Act, 2005",
+      "act_id": "AC_CEN_13_14_00008_200543_1517807325788",
+      "sections_fetched": 37,
+      "sections_with_text": 37,
+      "sections_dropped_empty": 0,
+      "chunks": 38,
+      "retrieved_at": "2026-10-22T05:12:59+00:00",
+      "act_number": "43",
+      "enforced_on": "26-10-2006"
+    },
+    "dowry_1961": {
+      "title": "The Dowry Prohibition Act, 1961",
+      "act_id": "AC_CEN_13_14_00003_196128_1517807322681",
+      "sections_fetched": 13,
+      "sections_with_text": 13,
+      "sections_dropped_empty": 0,
+      "chunks": 13,
+      "retrieved_at": "2026-10-22T05:13:18+00:00",
+      "act_number": "28",
+      "enforced_on": "01-07-1961"
+    },
+    "posh_2013": {
+      "title": "The Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013",
+      "act_id": "AC_CEN_13_14_00009_201314_1517807327213",
+      "sections_fetched": 30,
+      "sections_with_text": 30,
+      "sections_dropped_empty": 0,
+      "chunks": 31,
+      "retrieved_at": "2026-10-22T05:13:52+00:00",
+      "act_number": "14",
+      "enforced_on": "09-12-2013"
+    },
+    "dpdp_2023": {
+      "title": "The Digital Personal Data Protection Act, 2023.",
+      "act_id": "AC_CEN_45_0_00003_2023-22_1763464807080",
+      "sections_fetched": 44,
+      "sections_with_text": 44,
+      "sections_dropped_empty": 0,
+      "chunks": 51,
+      "retrieved_at": "2026-10-22T05:14:27+00:00",
+      "act_number": "22",
+      "enforced_on": null
+    },
+    "ita_2000": {
+      "title": "The Information Technology Act, 2000",
+      "act_id": "AC_CEN_45_76_00001_200021_1517807324077",
+      "sections_fetched": 125,
+      "sections_with_text": 125,
+      "sections_dropped_empty": 0,
+      "chunks": 131,
+      "retrieved_at": "2026-10-22T05:24:09+00:00",
+      "act_number": "21",
+      "enforced_on": "17-10-2000"
+    },
+    "cpa_2019": {
+      "title": "The Consumer Protection Act, 2019",
+      "act_id": "AC_CEN_21_44_00007_201935_1596441164903",
+      "sections_fetched": 107,
+      "sections_with_text": 107,
+      "sections_dropped_empty": 0,
+      "chunks": 118,
+      "retrieved_at": "2026-10-22T05:24:55+00:00",
+      "act_number": "35",
+      "enforced_on": "24th July, 2020.-- S. 2 clauses (4), (13), (14), (16), (40), s. 10 to 27 (both inclusive), sub-clause (iv) of clause (a) of sub-section (1) of section 58, s. 88, 89, 92 and 93, 94, 96, 97 and 99, clause (f) to (m) of sub-section 2 and clauses (zg), (zh) and (zi) of sub-section 2 of s. 101, 104, vide notification No. S.O. 2421(E), dated 23rd July 2020, see Gazette of India, Extraordinary, Part II, sec. 3(ii)."
+    },
+    "senior_2007": {
+      "title": "The Maintenance and Welfare of Parents and Senior Citizens Act, 2007",
+      "act_id": "AC_CEN_25_35_00007_200756_1517807326382",
+      "sections_fetched": 32,
+      "sections_with_text": 32,
+      "sections_dropped_empty": 0,
+      "chunks": 32,
+      "retrieved_at": "2026-10-22T05:25:18+00:00",
+      "act_number": "56",
+      "enforced_on": null
+    },
+    "jj_act_2015": {
+      "title": "The Juvenile Justice (Care and Protection of Children) Act, 2015.",
+      "act_id": "AC_CEN_13_14_000010_201602_1517807328168",
+      "sections_fetched": 112,
+      "sections_with_text": 112,
+      "sections_dropped_empty": 0,
+      "chunks": 124,
+      "retrieved_at": "2026-10-22T05:25:54+00:00",
+      "act_number": "2",
+      "enforced_on": "15-01-2016"
+    },
+    "pocso_2012": {
+      "title": "The Protection of Children from Sexual Offences Act, 2012",
+      "act_id": "AC_CEN_13_14_00005_201232_1517807323686",
+      "sections_fetched": 47,
+      "sections_with_text": 47,
+      "sections_dropped_empty": 0,
+      "chunks": 49,
+      "retrieved_at": "2026-10-22T05:26:07+00:00",
+      "act_number": "32",
+      "enforced_on": "14-11-2012"
+    },
+    "copyright_1957": {
+      "title": "The Copyright Act, 1957",
+      "act_id": "AC_CEN_9_30_00006_195714_1517807321712",
+      "sections_fetched": 105,
+      "sections_with_text": 105,
+      "sections_dropped_empty": 0,
+      "chunks": 118,
+      "retrieved_at": "2026-10-22T05:26:35+00:00",
+      "act_number": "14",
+      "enforced_on": "21-01-1958"
+    },
+    "lsa_1987": {
+      "title": "The Legal Services Authorities Act, 1987",
+      "act_id": "AC_CEN_3_46_00003_198739_1517807322718",
+      "sections_fetched": 40,
+      "sections_with_text": 40,
+      "sections_dropped_empty": 0,
+      "chunks": 40,
+      "retrieved_at": "2026-10-22T05:26:53+00:00",
+      "act_number": "39",
+      "enforced_on": "09-11-1995"
+    },
+    "rti_2005": {
+      "title": "The Right to Information Act, 2005",
+      "act_id": "AC_CEN_26_36_00004_200522_1517807322955",
+      "sections_fetched": 31,
+      "sections_with_text": 31,
+      "sections_dropped_empty": 0,
+      "chunks": 35,
+      "retrieved_at": "2026-10-22T05:27:03+00:00",
+      "act_number": "22",
+      "enforced_on": "Ss. 4(1), 5(1) (2), 12, 13, 15, 16, 24, 27, 28 (15-06-2005) and rest provisions on 120th day of its enactment."
+    }
+  },
+  "dedup": {
+    "input_chunks": 2339,
+    "exact_duplicates_removed": 3,
+    "near_duplicate_pairs": 4,
+    "clusters": 2333,
+    "output_chunks": 2336
+  },
+  "split": {
+    "train": 1872,
+    "val": 234,
+    "test": 230,
+    "clusters": 2333,
+    "cross_split_leakage_clusters": 0,
+    "leakage_sample": [],
+    "method": "sha256(cluster_root) -> buckets train<0.8<=val<0.9<=test"
+  },
+  "validation": {
+    "records": 2336,
+    "unique_ids": 2336,
+    "duplicate_ids": 0,
+    "error_count": 0,
+    "errors": [],
+    "valid": true
+  },
+  "outputs": {
+    "sections_jsonl": "ml\\data\\processed\\sections.jsonl",
+    "sections_sha256": "ea57a4d732ba23b9f5e6decef87eecf3402b876617dad83bf723ec8808f015b3",
+    "train_sha256": "592f3c8a5a575358f801dfcfc39e919b4ad56a892b67a8584583d1b3b9963a2c",
+    "val_sha256": "d53360615a2334a917a6a26dcbb6b992dd13b51bfd85154980babf29ddb37e65",
+    "test_sha256": "bbacd22d580d153e501abbc622a5ab8f52b04915212e6a78de349987f64f8745"
+  },
+  "chunks_total": 2336,
+  "pipeline_version": "0.1.0"
+}

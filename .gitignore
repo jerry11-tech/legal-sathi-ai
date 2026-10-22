@@ -37,3 +37,8 @@ Thumbs.db
 .idea/
 LegalSathi-AI/
 *.log
+
+# ML pipeline artifacts (regenerable via `python -m ml build`; keep reports only)
+ml/data/raw/
+ml/data/processed/*.jsonl
+ml/**/__pycache__/

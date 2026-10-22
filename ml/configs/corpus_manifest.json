@@ -1,0 +1,110 @@
+{
+  "version": "1.0",
+  "source": "indiacode.gov.in (DSpace 9.1 REST API)",
+  "license_note": "Indian statutes published by Government of India. Text retrieved verbatim from India Code for research/training; cite the source. Verify reuse terms before redistribution.",
+  "legacy_acts_note": "IPC 1860 / CrPC 1973 / Evidence Act 1872 were repealed by BNS/BNSS/BSA 2023 (effective 1 July 2024). India Code retains only repeal tombstones and state stubs for them - no central section text - so they are NOT ingested. Answers about pre-2024 conduct must rely on BNS/BNSS/BSA continuity plus human review; the assistant should say the historical text was unavailable rather than quote it.",
+  "acts": [
+    {
+      "key": "bns_2023",
+      "title": "The Bharatiya Nyaya Sanhita, 2023",
+      "expected_min_sections": 300,
+      "tags": ["criminal", "police", "ipc-replacement"]
+    },
+    {
+      "key": "bnss_2023",
+      "title": "The Bharatiya Nagarik Suraksha Sanhita, 2023",
+      "expected_min_sections": 400,
+      "tags": ["criminal-procedure", "police", "fir", "crpc-replacement"]
+    },
+    {
+      "key": "bsa_2023",
+      "title": "The Bharatiya Sakshya Adhiniyam, 2023",
+      "expected_min_sections": 150,
+      "tags": ["evidence", "evidence-replacement"]
+    },
+    {
+      "key": "cpc_1908",
+      "title": "The Code of Civil Procedure, 1908",
+      "expected_min_sections": 100,
+      "tags": ["civil-procedure"]
+    },
+    {
+      "key": "contract_1872",
+      "title": "The Indian Contract Act, 1872",
+      "expected_min_sections": 200,
+      "tags": ["civil", "contract"]
+    },
+    {
+      "key": "pvdva_2005",
+      "title": "The Protection of Women from Domestic Violence Act, 2005",
+      "expected_min_sections": 30,
+      "tags": ["women", "domestic-violence"]
+    },
+    {
+      "key": "dowry_1961",
+      "title": "The Dowry Prohibition Act, 1961",
+      "expected_min_sections": 5,
+      "tags": ["women", "dowry"]
+    },
+    {
+      "key": "posh_2013",
+      "title": "The Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013",
+      "expected_min_sections": 20,
+      "tags": ["women", "workplace"]
+    },
+    {
+      "key": "dpdp_2023",
+      "title": "The Digital Personal Data Protection Act, 2023",
+      "expected_min_sections": 20,
+      "tags": ["privacy", "cyber"]
+    },
+    {
+      "key": "ita_2000",
+      "title": "The Information Technology Act, 2000",
+      "expected_min_sections": 80,
+      "tags": ["cyber", "electronics"]
+    },
+    {
+      "key": "cpa_2019",
+      "title": "The Consumer Protection Act, 2019",
+      "expected_min_sections": 80,
+      "tags": ["consumer"]
+    },
+    {
+      "key": "senior_2007",
+      "title": "The Maintenance and Welfare of Parents and Senior Citizens Act, 2007",
+      "expected_min_sections": 20,
+      "tags": ["senior-citizens"]
+    },
+    {
+      "key": "jj_act_2015",
+      "title": "The Juvenile Justice (Care and Protection of Children) Act, 2015",
+      "expected_min_sections": 80,
+      "tags": ["children"]
+    },
+    {
+      "key": "pocso_2012",
+      "title": "The Protection of Children from Sexual Offences Act, 2012",
+      "expected_min_sections": 30,
+      "tags": ["children"]
+    },
+    {
+      "key": "copyright_1957",
+      "title": "The Copyright Act, 1957",
+      "expected_min_sections": 50,
+      "tags": ["copyright", "ip"]
+    },
+    {
+      "key": "lsa_1987",
+      "title": "The Legal Services Authorities Act, 1987",
+      "expected_min_sections": 20,
+      "tags": ["legal-aid"]
+    },
+    {
+      "key": "rti_2005",
+      "title": "The Right to Information Act, 2005",
+      "expected_min_sections": 25,
+      "tags": ["transparency", "rti"]
+    }
+  ]
+}
