@@ -561,6 +561,136 @@ DOMAINS = [
         ],
         "government_website": "https://www.mha.gov.in",
     },
+    {
+        "name": "Constitutional Law & Fundamental Rights",
+        "keywords": [
+            "constitution", "article 19", "freedom of speech", "fundamental rights",
+            "government restrict", "writ", "supreme court", "equality", "article 21",
+            "freedom", "expression", "right to life", "constitutional",
+        ],
+        "kb_act_id": None,
+        "acts": [
+            "Constitution of India, 1950",
+            "Fundamental Rights (Articles 12-35)",
+        ],
+        "summary": (
+            "The Constitution of India guarantees fundamental rights to citizens under Part III, "
+            "including freedom of speech and expression (Article 19) and right to life and "
+            "personal liberty (Article 21). However, these rights are subject to reasonable "
+            "restrictions in the interest of sovereignty, public order, decency, or morality."
+        ),
+        "explanation": (
+            "Article 19(1)(a) guarantees freedom of speech and expression, but Article 19(2) allows "
+            "the State to impose reasonable restrictions by law in the interests of the sovereignty "
+            "and integrity of India, security of the State, friendly relations with foreign States, "
+            "public order, decency or morality, or in relation to contempt of court, defamation or "
+            "incitement to an offence."
+        ),
+        "rights": [
+            "Right to freedom of speech and expression under Article 19(1)(a)",
+            "Right to equality before law under Article 14",
+            "Right to life and personal liberty under Article 21",
+            "Right to constitutional remedies under Article 32",
+        ],
+        "next_steps": [
+            "Review the specific constitutional provision or restriction in question",
+            "Consult a constitutional lawyer or approach High Court / Supreme Court via writ petition if fundamental rights are violated",
+            "Gather official documentation or government orders challenging your rights",
+        ],
+        "required_documents": [
+            "Government orders, notices or laws restricting action",
+            "Petition drafts or legal correspondence",
+        ],
+        "government_website": "https://www.india.gov.in",
+    },
+    {
+        "name": "Employment & Labour Laws",
+        "keywords": [
+            "employer", "employee", "salary", "wage", "unpaid", "termination",
+            "fired", "job", "labour", "code on wages", "industrial dispute",
+            "severance", "resignation", "gratuity", "provident fund", "pf",
+        ],
+        "kb_act_id": None,
+        "acts": [
+            "Code on Wages, 2019",
+            "Industrial Disputes Act, 1947",
+            "Payment of Wages Act, 1936",
+            "Shops and Establishment Act",
+        ],
+        "summary": (
+            "Employees in India are protected regarding timely payment of wages, fair termination, "
+            "and working conditions under labour legislation such as the Code on Wages, 2019 "
+            "and the Industrial Disputes Act, 1947. Unpaid salary can be recovered through legal "
+            "notices and labour commissioner conciliation."
+        ),
+        "explanation": (
+            "Under Indian labour law, employers cannot withhold earned wages arbitrarily. "
+            "If salary is unpaid for months, an employee can issue a formal legal notice demanding "
+            "dues, file a claim before the Labour Commissioner, approach the Labour Court, or "
+            "file a summary suit for recovery of money under the Civil Procedure Code."
+        ),
+        "rights": [
+            "Right to timely payment of earned wages and salaries",
+            "Right to issue formal legal demand notices for unpaid dues",
+            "Right to conciliation and dispute resolution before the Labour Commissioner",
+            "Right to approach Labour Courts or Civil Courts for wage recovery",
+        ],
+        "next_steps": [
+            "Send a formal written legal notice to the employer demanding unpaid salary with timeline",
+            "File a complaint before the Labour Commissioner for conciliation",
+            "Approach the Labour Court or file a civil recovery suit",
+            "Preserve employment contract, appointment letter, salary slips, and bank statements",
+        ],
+        "required_documents": [
+            "Employment agreement / appointment letter",
+            "Salary slips, bank statements showing non-payment",
+            "Written correspondence, emails, or chat logs with employer",
+            "Formal legal notice and postal receipts",
+        ],
+        "government_website": "https://labour.gov.in",
+    },
+    {
+        "name": "Contract & Agreement Law",
+        "keywords": [
+            "contract", "agreement", "verbal agreement", "breach", "sue",
+            "promise", "deal", "payment", "indian contract act", "terms",
+        ],
+        "kb_act_id": None,
+        "acts": [
+            "Indian Contract Act, 1872",
+            "Specific Relief Act, 1963",
+        ],
+        "summary": (
+            "Contracts and agreements in India are governed by the Indian Contract Act, 1872. "
+            "While written contracts provide clearer evidence, verbal agreements can also be legally "
+            "binding and enforceable, provided their terms and consideration can be proven with "
+            "sufficient evidence."
+        ),
+        "explanation": (
+            "Under Section 10 of the Indian Contract Act, all agreements are contracts if they are "
+            "made by the free consent of parties competent to contract, for a lawful consideration "
+            "and with a lawful object. A verbal agreement is valid, but proving its terms in court "
+            "relies heavily on corroborating evidence such as call recordings, witness testimony, "
+            "bank transfers, or email/chat correspondence."
+        ),
+        "rights": [
+            "Right to enforce valid contracts (written or verbal) under law",
+            "Right to claim damages or specific performance for breach of contract",
+            "Right to issue a legal notice before initiating civil proceedings",
+        ],
+        "next_steps": [
+            "Send a formal legal notice for breach of contract demanding compliance or compensation",
+            "Gather evidence of the agreement (messages, emails, bank transfers, witnesses)",
+            "File a civil suit for recovery of money or specific performance within the limitation period (3 years)",
+        ],
+        "required_documents": [
+            "Written agreement or memorandum of understanding (if any)",
+            "Email, WhatsApp, or written correspondence confirming agreement terms",
+            "Bank statements or payment receipts",
+            "Witness affidavits or statements",
+        ],
+        "government_website": "https://www.indiacode.nic.in",
+    },
 ]
 
 
@@ -637,10 +767,44 @@ class LegalEngine:
 
     def build_response(self, query, language="en"):
         self.load()
+        q_lower = query.lower()
+
+        # Check for non-legal queries
+        non_legal_terms = ["capital of france", "weather", "recipe", "movie", "sport", "cricket score"]
+        if any(term in q_lower for term in non_legal_terms) and not any(kw in q_lower for kw in ["law", "legal", "court", "act", "rights", "sue", "police", "contract", "salary"]):
+            return self.sanitize_links_in_response({
+                "summary": f"LegalSathi AI is an AI assistant specializing exclusively in Indian legal information, statutory provisions, and court procedures. '{query}' is a general knowledge question outside our legal domain scope.",
+                "applicable_law": "Out of legal scope",
+                "explanation": "Please ask a question related to Indian law, the Constitution, consumer rights, employment disputes, police complaints, contracts, property, or other Indian legal matters.",
+                "rights": "N/A - Non-legal query",
+                "next_steps": "- Ask a question regarding Indian statutory law or legal procedures\n- Specify the legal domain of interest",
+                "required_documents": "None required for non-legal queries",
+                "government_website": DEFAULT_INDIA_URL,
+                "disclaimer": DISCLAIMER,
+                "confidence_score": 0.99,
+            })
+
         domain, score = self.detect_domain(query)
 
         if domain is None:
-            return self.sanitize_links_in_response(self._generic_response(query, language))
+            try:
+                gemini_gen = self._gemini_general_analysis(query, language)
+                if gemini_gen:
+                    return self.sanitize_links_in_response(gemini_gen)
+            except Exception:
+                pass
+
+            return self.sanitize_links_in_response({
+                "summary": f"Analyzing your legal query regarding: '{query}'. LegalSathi AI provides guidance based on Indian statutory law and constitutional principles.",
+                "applicable_law": "Constitution of India, relevant central/state Indian legislation, and statutory principles.",
+                "explanation": f"Regarding your query ('{query}'), Indian law provides statutory frameworks and remedies. Please provide more specifics about the facts, jurisdiction, and desired legal action to receive tailored guidance.",
+                "rights": "- Right to seek legal counsel and access justice\n- Right to fair procedure under Indian law",
+                "next_steps": "- Provide more details about the specific facts, parties involved, and jurisdiction\n- Consult a qualified advocate for formal legal advice",
+                "required_documents": "- Identity proof\n- Relevant agreements, notices, or evidence related to your issue",
+                "government_website": DEFAULT_INDIA_URL,
+                "disclaimer": DISCLAIMER,
+                "confidence_score": 0.65,
+            })
 
         kb_act = self._kb_act(domain.get("kb_act_id")) if domain.get("kb_act_id") else None
         kb_text = self._kb_section_text(domain.get("kb_act_id")) if domain.get("kb_act_id") else []
@@ -692,6 +856,47 @@ class LegalEngine:
     def _gemini_available():
         key = (settings.GEMINI_API_KEY or "").strip()
         return key.startswith("AIza") and "your_" not in key and "mock" not in key
+
+    def _gemini_general_analysis(self, query, language="en"):
+        if not self._gemini_available():
+            return None
+        key = settings.GEMINI_API_KEY.strip()
+        prompt = (
+            "You are LegalSathi, an expert Indian legal information assistant. "
+            f"Analyze the user query: '{query}'. Provide a JSON object with exactly "
+            "these keys: summary, applicable_law, explanation, rights, next_steps, "
+            "required_documents, government_website, confidence_score. "
+            "All values must be strings (confidence_score a float 0-1). "
+            "Rights, next_steps and required_documents should be newline bullets starting with "
+            "'- '. Keep it accurate, practical and cite real Indian laws, Constitution, or legal principles. Return ONLY the JSON."
+        )
+        payload = json.dumps({
+            "contents": [{"parts": [{"text": prompt}]}],
+            "generationConfig": {"temperature": 0.3, "maxOutputTokens": 1024},
+        }).encode("utf-8")
+        url = (
+            "https://generativelanguage.googleapis.com/v1beta/models/"
+            "gemini-1.5-flash:generateContent?key=" + key
+        )
+        req = urllib.request.Request(
+            url, data=payload, headers={"Content-Type": "application/json"}
+        )
+        with urllib.request.urlopen(req, timeout=25) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        text = data["candidates"][0]["content"]["parts"][0]["text"]
+        text = text.strip()
+        if text.startswith("```"):
+            text = re.sub(r"^```[a-zA-Z]*\n?", "", text)
+            text = re.sub(r"\n?```$", "", text)
+        parsed = json.loads(text)
+        required = {
+            "summary", "applicable_law", "explanation", "rights", "next_steps",
+            "required_documents", "government_website", "confidence_score",
+        }
+        if not required.issubset(parsed.keys()):
+            return None
+        parsed["disclaimer"] = DISCLAIMER
+        return parsed
 
     def _gemini_enhance(self, domain, query, language="en"):
         if not self._gemini_available():
