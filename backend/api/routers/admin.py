@@ -16,19 +16,30 @@ class AdminLoginRequest(BaseModel):
 def admin_login(req: AdminLoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == req.admin_email.lower(), User.role == "admin").first()
     if not user and req.admin_email.lower() == "admin@legalsathi.ai":
-        hashed_pwd = get_password_hash(req.password)
-        user = User(
-            email="admin@legalsathi.ai",
-            hashed_password=hashed_pwd,
-            first_name="Admin",
-            last_name="System",
-            role="admin",
-            is_verified=True,
-            is_active=True,
-        )
-        db.add(user)
+        existing = db.query(User).filter(User.email == "admin@legalsathi.ai").first()
+        if existing:
+            existing.role = "admin"
+            existing.hashed_password = get_password_hash(req.password)
+            existing.is_verified = True
+            existing.is_active = True
+            user = existing
+        else:
+            hashed_pwd = get_password_hash(req.password)
+            user = User(
+                email="admin@legalsathi.ai",
+                hashed_password=hashed_pwd,
+                first_name="Admin",
+                last_name="System",
+                role="admin",
+                is_verified=True,
+                is_active=True,
+            )
+            db.add(user)
         db.commit()
         db.refresh(user)
+    elif user and req.admin_email.lower() == "admin@legalsathi.ai":
+        user.hashed_password = get_password_hash(req.password)
+        db.commit()
 
     if not user or not verify_password(req.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid administrator credentials")
