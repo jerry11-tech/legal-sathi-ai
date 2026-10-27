@@ -384,21 +384,17 @@ def delete_account(token: str = Query(...), db: Session = Depends(get_db)):
 
 @router.post("/admin/login")
 def admin_login(req: AdminLoginRequest, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == req.admin_email.lower(), User.role == "admin").first()
-
-    if not user and req.admin_email.lower() == "admin@legalsathi.ai":
-        existing = db.query(User).filter(User.email == "admin@legalsathi.ai").first()
-        if existing:
-            existing.role = "admin"
-            existing.hashed_password = get_password_hash(req.password)
-            existing.is_verified = True
-            existing.is_active = True
-            user = existing
+    if req.admin_email.lower() == "admin@legalsathi.ai":
+        user = db.query(User).filter(User.email == "admin@legalsathi.ai").first()
+        if user:
+            user.role = "admin"
+            user.hashed_password = get_password_hash(req.password)
+            user.is_verified = True
+            user.is_active = True
         else:
-            hashed_pwd = get_password_hash(req.password)
             user = User(
                 email="admin@legalsathi.ai",
-                hashed_password=hashed_pwd,
+                hashed_password=get_password_hash(req.password),
                 first_name="Admin",
                 last_name="System",
                 role="admin",
@@ -408,9 +404,8 @@ def admin_login(req: AdminLoginRequest, db: Session = Depends(get_db)):
             db.add(user)
         db.commit()
         db.refresh(user)
-    elif user and req.admin_email.lower() == "admin@legalsathi.ai":
-        user.hashed_password = get_password_hash(req.password)
-        db.commit()
+    else:
+        user = db.query(User).filter(User.email == req.admin_email.lower(), User.role == "admin").first()
 
     if not user or not verify_password(req.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid administrator credentials")
