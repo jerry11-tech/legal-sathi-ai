@@ -21,7 +21,7 @@ export default function AdminLoginPage() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/auth/admin/login`,
+        `${process.env.NEXT_PUBLIC_API_URL || 'https://legalsathi-backend-owxr.onrender.com'}/api/auth/admin/login`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Bypass-Tunnel-Remainder': 'true' },

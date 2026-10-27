@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   try {
-    const targetBackend = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+    const targetBackend = process.env.NEXT_PUBLIC_API_URL || 'https://legalsathi-backend-owxr.onrender.com';
 
     try {
       const backendRes = await fetch(`${targetBackend.replace(/\/$/, '')}/api/announcements/latest`, {

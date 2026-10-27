@@ -19,7 +19,7 @@ export default function VerifyPage() {
     const doVerify = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/auth/verify-email?token=${encodeURIComponent(token)}`
+          `${process.env.NEXT_PUBLIC_API_URL || 'https://legalsathi-backend-owxr.onrender.com'}/api/auth/verify-email?token=${encodeURIComponent(token)}`
         );
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || 'Verification failed');

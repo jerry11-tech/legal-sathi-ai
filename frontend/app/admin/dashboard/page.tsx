@@ -73,9 +73,9 @@ export default function AdminDashboardPage() {
     setLoading(true);
     try {
       const [resStats, resUsers, resSettings] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/admin/stats?token=${encodeURIComponent(authToken)}`),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/admin/users?token=${encodeURIComponent(authToken)}`),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/admin/settings?token=${encodeURIComponent(authToken)}`),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://legalsathi-backend-owxr.onrender.com'}/api/admin/stats?token=${encodeURIComponent(authToken)}`),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://legalsathi-backend-owxr.onrender.com'}/api/admin/users?token=${encodeURIComponent(authToken)}`),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://legalsathi-backend-owxr.onrender.com'}/api/admin/settings?token=${encodeURIComponent(authToken)}`),
       ]);
 
       if (resStats.ok) setStats(await resStats.json());
@@ -89,7 +89,7 @@ export default function AdminDashboardPage() {
     if (!token) return;
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/admin/users/action?token=${encodeURIComponent(token)}`,
+        `${process.env.NEXT_PUBLIC_API_URL || 'https://legalsathi-backend-owxr.onrender.com'}/api/admin/users/action?token=${encodeURIComponent(token)}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -107,7 +107,7 @@ export default function AdminDashboardPage() {
     if (!token) return;
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'}/api/admin/settings?token=${encodeURIComponent(token)}`,
+        `${process.env.NEXT_PUBLIC_API_URL || 'https://legalsathi-backend-owxr.onrender.com'}/api/admin/settings?token=${encodeURIComponent(token)}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
