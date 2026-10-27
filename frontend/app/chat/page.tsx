@@ -50,6 +50,7 @@ export default function ChatPage() {
   const [showGuestModal, setShowGuestModal] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [guestCount, setGuestCount] = useState(0);
+  const [language, setLanguage] = useState('en');
   const [pinnedChats, setPinnedChats] = useState<string[]>([
     'Cyber Fraud Recovery Process',
     'Tenant Security Deposit Dispute',
@@ -106,7 +107,7 @@ export default function ChatPage() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: userMsg.content, language: 'en' }),
+        body: JSON.stringify({ query: userMsg.content, language }),
       });
 
       if (!res.ok) throw new Error(`Request failed: ${res.status}`);
@@ -217,6 +218,18 @@ export default function ChatPage() {
           </div>
 
           <div className="flex items-center gap-2">
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              className="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 px-2.5 py-1.5 text-xs font-bold text-slate-700 dark:text-slate-300 outline-none"
+            >
+              <option value="en">English (EN)</option>
+              <option value="hi">हिन्दी (HI)</option>
+              <option value="mr">मराठी (MR)</option>
+              <option value="ta">தமிழ் (TA)</option>
+              <option value="te">తెలుగు (TE)</option>
+              <option value="bn">বাংলা (BN)</option>
+            </select>
             <button
               onClick={handleExportChat}
               className="flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
